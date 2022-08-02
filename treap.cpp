@@ -5,8 +5,8 @@ class treap {
       int key, pr, sz;
       node *left, *right;
       node() {}
-      node(int _key) : key(_key), pr(rand()), left(nullptr), right(nullptr) {}
-      node(int _key, int _pr) : key(_key), pr(_pr), left(nullptr), right(nullptr) {}
+      node(int _key) : key(_key), pr(rand()), sz(1), left(nullptr), right(nullptr) {}
+      node(int _key, int _pr) : key(_key), pr(_pr), sz(1), left(nullptr), right(nullptr) {}
     } *root;
 
     int sz(node *cur) {
@@ -50,6 +50,14 @@ class treap {
       else return 1 + sz(cur->left) + lower_bound(cur->right, x);
     }
 
+    int kth_element(node *cur, int k) {
+      if (cur == nullptr) return -1;
+      int l_sz = sz(cur->left);
+      if (l_sz == k) return cur->key;
+      else if (k < l_sz) return kth_element(cur->left, k);
+      else return kth_element(cur->right, k - l_sz - 1);
+    }
+
     int count(node *cur, int x) {
       if (cur == nullptr) return 0;
       else if (cur->key == x) return 1;
@@ -68,6 +76,15 @@ class treap {
       merge(root, r, root);
     }
 
+    void erase(int x) {
+      node *l, *r;
+      split(root, x - 1, l, root);
+      split(root, x, root, r);
+      node *tmp = root;
+      merge(l, r, root);
+      if (tmp != nullptr) delete tmp;
+    }
+
     /** Returns number of elements strictly less than x */
     int lower_bound(int x) {
       return lower_bound(root, x);
@@ -75,5 +92,14 @@ class treap {
 
     int count(int x) {
       return count(root, x);
+    }
+
+    /** Returns kth largest element. -1 if there are not enough elements */
+    int kth_element(int k) {
+      return kth_element(root, k);
+    }
+
+    size_t size() {
+      return (size_t) sz(root);
     }
 };
