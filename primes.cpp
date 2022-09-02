@@ -1,12 +1,20 @@
-bitset<(int) 1e5 + 1> is_prime;
+vector<int> pf, phi, mu;
 vector<int> primes;
 
-void gen_primes() {
-  is_prime.set();
-  is_prime[0] = is_prime[1] = false;
-  for (int i = 2; i <= (int) 1e5; i++) {
-    if (!is_prime[i]) continue;
+void gen_primes(int n) {
+  pf.assign(n + 1, -1);
+  phi.resize(n + 1);
+  mu.assign(n + 1, 1);
+  for (int i = 1; i <= n; i++) phi[i] = i;
+  pf[0] = pf[1] = -1;
+  for (int i = 2; i <= (int) n; i++) {
+    if (pf[i] != -1) continue;
     primes.push_back(i);
-    for (int j = 2 * i; j <= (int) 1e5; j += i) is_prime[j] = false;
+    for (int j = i; j <= n; j += i) {
+      pf[j] = i;
+      phi[j] -= phi[j] / i;
+      mu[j] = -mu[j / i];
+    }
+    if (i <= n / i) for (int j = i * i; j <= n; j += i * i) mu[j] = 0;
   }
 }
