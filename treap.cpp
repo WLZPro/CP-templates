@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 /** No duplicate elements allowed */
 class treap {
   private:

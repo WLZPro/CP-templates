@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 class dsu {
   private: vector<int> p, rank, sz;
   public:

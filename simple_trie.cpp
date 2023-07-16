@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 /** Simple trie implementation. Values stored are -1 by default */
 class trie {
   private:

@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 /** 1-indexed LCA class */
 class least_common_ancestor {
   private:

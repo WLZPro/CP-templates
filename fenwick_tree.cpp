@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 /** Does not work with 0-based indexing */
 class fenwick_tree {
   private: 

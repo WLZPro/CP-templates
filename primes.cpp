@@ -1,3 +1,11 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/**
+ * pf: largest prime factor
+ * phi: Euler phi function
+ * mu: Mobius function
+ */
 vector<int> pf, phi, mu;
 vector<int> primes;
 
