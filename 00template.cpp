@@ -2,7 +2,7 @@
 using namespace std;
 
 #ifdef DEBUG
-#include "debug.h"
+#include "templates/debug.h"
 #else
 #define debug(...) 0
 #endif
@@ -12,10 +12,13 @@ using namespace std;
 #define pb push_back
 #define mt make_tuple
 #define mp make_pair
-#define all(x) x.begin(), x.end()
+#define all(x) (x).begin(), (x).end()
 #define SZ(x) (int) x.size()
 
 using ll = long long;
+using ull = unsigned ll;
+using lll = __int128_t;
+using ulll = __uint128_t;
 using ld = long double;
 using ii = pair<int, int>;
 using vi = vector<int>;
@@ -26,6 +29,7 @@ template <class T> using mn_pq = priority_queue<T, vector<T>, greater<T>>;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = (ll) 1e18;
+const double DINF = 1.0 / 0.0;
 const double pi = acos(-1);
 const double EPS = 1e-9;
 
@@ -35,7 +39,7 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
   int t = 1;
-  //cin >> t
+  //cin >> t;
   for (int q = 1; q <= t; q++) solve(q);
   return 0;
 }
