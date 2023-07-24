@@ -10,8 +10,6 @@ using namespace std;
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define eb emplace_back
 #define pb push_back
-#define mt make_tuple
-#define mp make_pair
 #define all(x) (x).begin(), (x).end()
 #define SZ(x) (int) x.size()
 
@@ -24,8 +22,11 @@ using ii = pair<int, int>;
 using vi = vector<int>;
 using vll = vector<ll>;
 using vii = vector<ii>;
-template <class T> using mx_pq = priority_queue<T>;
-template <class T> using mn_pq = priority_queue<T, vector<T>, greater<T>>;
+template<typename T> using mx_pq = priority_queue<T>;
+template<typename T> using mn_pq = priority_queue<T, vector<T>, greater<T>>;
+
+template<typename T> void cmax(T &a, const T &b) { a = max(a, b); }
+template<typename T> void cmin(T &a, const T &b) { a = min(a, b); }
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = (ll) 1e18;
@@ -43,6 +44,8 @@ int main() {
   for (int q = 1; q <= t; q++) solve(q);
   return 0;
 }
+
+
 
 void solve(int current_case) {
   
