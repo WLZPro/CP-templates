@@ -22,19 +22,62 @@ string to_string(pair<T1, T2> p) {
   return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";
 }
 
+template<typename T>
+string to_string(const priority_queue<T> &pq) {
+  priority_queue<T> tmp = pq;
+  string ans = "{";
+  bool first = true;
+  while (!tmp.empty()) {
+    if (!first) ans += ", ";
+    first = false;
+    ans += to_string(tmp.top());
+    tmp.pop();
+  }
+  ans += '}';
+  return ans;
+}
+
+template<typename T>
+string to_string(const stack<T> &st) {
+  stack<T> tmp = st;
+  string ans = "{";
+  bool first = true;
+  while (!tmp.empty()) {
+    if (!first) ans += ", ";
+    first = false;
+    ans += to_string(tmp.top());
+    tmp.pop();
+  }
+  ans += '}';
+  return ans;
+}
+
+template<typename T>
+string to_string(const queue<T> &q) {
+  queue<T> tmp = q;
+  string ans = "{";
+  bool first = true;
+  while (!tmp.empty()) {
+    if (!first) ans += ", ";
+    first = false;
+    ans += to_string(tmp.top());
+    tmp.pop();
+  }
+  ans += '}';
+  return ans;
+}
+
 template <typename A>
 string to_string(A v) {
   bool first = true;
-  string res = "{";
+  string ans = "{";
   for (const auto &x : v) {
-    if (!first) {
-      res += ", ";
-    }
+    if (!first) ans += ", ";
     first = false;
-    res += to_string(x);
+    ans += to_string(x);
   }
-  res += "}";
-  return res;
+  ans += "}";
+  return ans;
 }
 
 void debug_out() { cerr << endl; }
