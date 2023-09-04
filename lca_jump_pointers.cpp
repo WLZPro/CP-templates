@@ -4,7 +4,7 @@ using namespace std;
 /**
  * @brief LCA with jump pointers (uses linear memory)
  */
-class least_common_ancestor {
+class lowest_common_ancestor {
   private:
     int n;
     vector< vector<int> > g;

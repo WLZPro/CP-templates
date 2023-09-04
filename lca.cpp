@@ -2,7 +2,7 @@
 using namespace std;
 
 /** 1-indexed LCA class */
-class least_common_ancestor {
+class lowest_common_ancestor {
   private:
     int n, max_log, dfs_cnt = 0, root;
     vector< vector< pair<int, int> > > g;
