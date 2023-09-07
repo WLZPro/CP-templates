@@ -1,3 +1,4 @@
+#include "modint.cpp"
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -65,6 +66,11 @@ string to_string(const queue<T> &q) {
   }
   ans += '}';
   return ans;
+}
+
+template<const int MOD>
+string to_string(const modint<MOD> &x) {
+    return to_string(x.val());
 }
 
 template <typename A>
