@@ -1,4 +1,4 @@
-#include "templates/modint.cpp"
+#include "modint.cpp"
 #include <bits/stdc++.h>
 using namespace std;
 
