@@ -45,7 +45,7 @@ class modint {
     }
 
     template<typename T>
-    modint<MOD>(const T &_x, bool raw = false) {
+    modint(const T &_x, bool raw = false) {
         set(_x, raw);
     }
 

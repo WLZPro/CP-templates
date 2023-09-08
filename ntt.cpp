@@ -49,19 +49,3 @@ vector<mint> poly_mul(const vector<mint> &_a, const vector<mint> &_b) {
   for (int i = 0; i < 2 * n; i++) c[i] = a[i] * b[i];
   return ntt(c, true);
 }
-
-int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
-  int n, m; // poly_mul example
-  cin >> n >> m;
-  vector<mint> a(n), b(m);
-  for (int i = 0; i < n; i++) cin >> a[i];
-  for (int i = 0; i < m; i++) cin >> b[i];
-  vector<mint> c = poly_mul(a, b);
-  while (!c.empty() && c.back() == 0) c.pop_back();
-  while ((int) c.size() < n + m - 1) c.push_back(0);
-  for (auto &x : c) cout << x << ' ';
-  cout << '\n';
-  return 0;
-}
