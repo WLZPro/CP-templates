@@ -39,16 +39,16 @@ const double EPS = 1e-9;
 void solve(int current_case);
 
 int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
-  int t = 1;
-  //cin >> t;
-  for (int q = 1; q <= t; q++) solve(q);
-  return 0;
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int t = 1;
+    //cin >> t;
+    for (int q = 1; q <= t; q++) solve(q);
+    return 0;
 }
 
 
 
 void solve(int current_case) {
-  
+    
 }
