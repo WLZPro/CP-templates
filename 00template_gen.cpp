@@ -17,13 +17,13 @@ int rand(int a) {
     return rand(1, a);
 }
 
-double randreadl(double a, double b) {
+double randreal(double a, double b) {
     return uniform_real_distribution<double>(a, b)(rng);
 }
 
 int main(int argc, char **argv) {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
+    ios::sync_with_stdio(false); cin.tie(nullptr);
+    seed(atoi(argv[1]));
     
     return 0;
 }
