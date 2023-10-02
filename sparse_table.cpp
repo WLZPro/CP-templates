@@ -1,14 +1,11 @@
 #include <vector>
+#include <functional>
 
-/**
- * @brief Sparse table implementation.
- * Supports static RMQ with O(n log n) precomputation time, O(n log n) memory, and O(1) queries.
- * 
- * @tparam T Value type
- * @tparam T&(*f)(const T &, const T &) Combiner function (usually std::min/std::max)
- */
-template<typename T, const T&(*f)(const T&, const T&)>
+template<typename T, auto f>
 class sparse_table {
+
+    static_assert(std::is_convertible_v<decltype(f), std::function<T(T, T)> >);
+
     private:
     unsigned int n;
     std::vector< std::vector<T> > st;
@@ -16,10 +13,9 @@ class sparse_table {
 
     public:
     sparse_table() {}
-        
-    sparse_table(const std::vector<T> &a) {
-        n = a.size();
-        lg.resize(n + 1); lg[1] = 0;
+
+    explicit sparse_table(const std::vector<T> &a) : n(a.size()), lg(n + 1) {
+        lg[1] = 0;
         for (unsigned int i = 2; i <= n; i++) lg[i] = lg[i >> 1] + 1;
         
         st.resize(lg[n] + 1);
@@ -31,18 +27,9 @@ class sparse_table {
         }
     }
 
-    sparse_table(const unsigned int &_n) : n(_n) {
-        sparse_table(std::vector<T>(n, 0));
-    }
+    explicit sparse_table(const unsigned int &_n) : sparse_table(std::vector<T>(_n)) {}
 
-    /**
-     * @brief Range minimum/maximum query on interval [l, r)
-     * 
-     * @param l Left endpoint (included)
-     * @param r Right endpoint (excluded)
-     * @return const T& f(a[l], ..., a[r - 1])
-     */
-    const T &query(unsigned int l, unsigned int r) const {
+    T query(unsigned int l, unsigned int r) const {
         unsigned int k = lg[r - l];
         return f(st[k][l], st[k][r - (1 << k)]);
     }

@@ -1,55 +1,47 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
+#include <functional>
 
-/** Does not work with 0-based indexing */
+template<typename T> inline T add(T a, T b) { return a + b; }
+
+template<typename T> inline T sub(T a, T b) { return a - b; }
+
+template<typename T, auto f = add<T>, const T e = 0, auto f_rev = sub<T> >
 class fenwick_tree {
+
+    static_assert(std::is_convertible_v<decltype(f), std::function<T(T, T)> >);
+    static_assert(std::is_convertible_v<decltype(f_rev), std::function<T(T, T)> >);
+
     private: 
-    int n;
-    vector<int> fenw;
+    size_t n;
+    std::vector<T> fenw;
     #ifdef DEBUG
-    vector<int> debug;
+    std::vector<T> debug;
     #endif
     
     public:
-    fenwick_tree() {}
+    fenwick_tree() : n(0) {}
 
-    fenwick_tree(int _n) : n(_n) {
-        fenw.assign(n, 0);
+    explicit fenwick_tree(int _n) : n(_n) {
+        fenw.assign(n, e);
         #ifdef DEBUG
-        debug.assign(n, 0);
+        debug.assign(n, e);
         #endif
     }
 
-    /** Updates fenw[idx] to x. Gets stuck in infinite loop if idx = 0 */
-    void update(int idx, int x) {
+    void update(unsigned idx, T x) {
         #ifdef DEBUG
-        debug[idx] += x;
+        debug[idx] = f(debug[idx], x);
         #endif
-        while (idx < n) {
-            fenw[idx] += x;
-            idx += (idx & -idx);
-        }
+        for (; idx < n; idx |= (idx + 1)) fenw[idx] = f(fenw[idx], x);
     }
 
-    /** Returns sum of all elements in fenw[1..idx]. Returns 0 if idx = 0 */
-    int query(int idx) {
-        int ans = 0;
-        while (idx > 0) {
-            ans += fenw[idx];
-            idx -= (idx & -idx);
-        }
+    T query(unsigned int _idx) const {
+        T ans = e;
+        for (int idx = _idx; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = f(ans, fenw[idx]);
         return ans;
     }
 
-    /** Returns smallest idx such that fenw[idx] >= x. Returns n if there is no such element. Assumes all current elements are nonnegative */
-    int lower_bound(int x) {
-        int idx = 0, cur = 0;
-        for (int i = ceil(log2(n + 1)); i >= 0; i--) {
-            if (idx + (1 << i) < n && cur + fenw[idx + (1 << i)] < x) {
-            idx += (1 << i);
-            cur += fenw[idx];
-            }
-        }
-        return idx + 1;
-    }
+    T query(unsigned int l, unsigned int r) const { return f_rev(query(r), l > 0 ? query(l - 1) : e); }
+
+    size_t size() const { return n; }
 };

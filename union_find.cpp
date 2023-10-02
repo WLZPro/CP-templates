@@ -7,7 +7,7 @@ class union_find {
 
     public:
     union_find() : n(0) {}
-    union_find(size_t _n) : n(_n), p(n, -1) {}
+    explicit union_find(size_t _n) : n(_n), p(n, -1) {}
 
     unsigned int root(unsigned int a) { return p[a] < 0 ? a : (p[a] = root(p[a])); }
 
