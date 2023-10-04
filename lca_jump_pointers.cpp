@@ -1,60 +1,64 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include "graphs.cpp"
 
-/**
- * @brief LCA with jump pointers (uses linear memory)
- */
+#include <vector>
+
+namespace graphs {
+
+template<typename T = unsigned int>
 class lowest_common_ancestor {
     private:
-    int n;
-    vector< vector<int> > g;
-    vector<int> p, jump, d;
+    graph<T> g;
+    std::vector<unsigned int> p, jump, d;
+    std::vector<T> wd;
 
-    void dfs(int u) {
+    void dfs(unsigned int u) {
         if (d[p[u]] - d[jump[p[u]]] == d[jump[p[u]]] - d[jump[jump[p[u]]]]) jump[u] = jump[jump[p[u]]];
-        else jump[u] = p[u];
-        for (auto &v : g[u]) {
-            if (v != p[u]) {
-                d[v] = d[u] + 1;
-                p[v] = u;
+
+        for (auto &[v, w] : g[u]) {
+            if (v == p[u]) continue;
+            jump[v] = p[v] = u;
+            d[v] = d[u] + 1;
+            wd[v] = wd[u] + w;
             dfs(v);
-            }
         }
     }
-    
+
     public:
-    lowest_common_ancestor(const vector< vector<int> > &_g, int root = 1) : g(_g) {
-        n = (int) g.size();
-        p.resize(n); jump.resize(n); d.resize(n);
-        p[root] = root; jump[root] = root; d[root] = 0;
-        dfs(root);
+    lowest_common_ancestor() {}
+
+    explicit lowest_common_ancestor(const graph<T> &_g, const std::vector<unsigned int> roots = {1}) : g(_g) {
+        std::size_t n = g.size();
+        p.resize(n); jump.resize(n); d.assign(n, 0); wd.assign(n, 0);
+        for (const auto &root : roots) {
+            p[root] = root;
+            dfs(root);
+        }
     }
-  
-    int kth_ancestor(int u, int k) {
-        int v = u;
-        while (d[v] > d[u] - k) {
-            if (d[jump[v]] >= d[u] - k) v = jump[v];
+
+    unsigned int kth_ancestor(unsigned int u, unsigned int k) const {
+        unsigned int v = u;
+        while (d[u] - d[v] < k) {
+            if (d[u] - d[jump[v]] < k) v = jump[v];
             else v = p[v];
         }
         return v;
     }
 
-    int query(int u, int v) {
-        if (d[u] < d[v]) swap(u, v);
+    unsigned int query(unsigned int u, unsigned int v) const {
+        if (d[u] < d[v]) return query(v, u);
         u = kth_ancestor(u, d[u] - d[v]);
-        if (u == v) return u;
-        while (p[u] != p[v]) {
-            if (jump[u] != jump[v]) u = jump[u], v = jump[v];
-            else u = p[u], v = p[v];
+        while (u != v) {
+            if (jump[u] == jump[v]) u = p[u], v = p[v];
+            else u = jump[u], v = jump[v];
         }
-        return p[u];
+        return u;
     }
 
-    int depth(int u) {
-        return d[u];
-    }
+    // Note: hasn't been tested yet
+    T depth(unsigned int u) const { return wd[u]; }
 
-    int dist(int u, int v) {
-        return d[u] + d[v] - 2 * d[query(u, v)];
-    }
+    // Note: hasn't been tested yet
+    T dist(unsigned int u, unsigned int v) const { return wd[u] + wd[v] - 2 * wd[query(u, v)]; }
 };
+
+}
