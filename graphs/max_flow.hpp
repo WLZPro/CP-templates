@@ -5,26 +5,6 @@
 
 namespace graphs {
 
-template<typename T>
-T _edmonds_karp_bfs(unsigned int s, unsigned int t, std::vector<unsigned int> &p, const graph<unsigned int> &g, const std::vector< std::vector<T> > &cap) {
-    std::size_t n = g.size();
-    p.assign(n, n); p[s] = n + 1;
-    std::queue< std::pair<unsigned int, T> > q; q.emplace(s, std::numeric_limits<T>::max());
-
-    while (!q.empty()) {
-        auto [from, flow] = q.front(); q.pop();
-        for (auto &[to, w] : g[from]) {
-            if (p[to] == n && cap[from][to]) {
-                p[to] = from;
-                T nf = std::min(flow, cap[from][to]);
-                if (to == t) return nf;
-                q.emplace(to, nf);
-            }
-        }
-    }
-    return 0;
-}
-
 // Tested on https://cses.fi/problemset/task/1694/
 template<typename T>
 T max_flow(const graph<T> &g, unsigned int s, unsigned int t) {
@@ -37,7 +17,25 @@ T max_flow(const graph<T> &g, unsigned int s, unsigned int t) {
     }
     T flow = 0;
     std::vector<unsigned int> p(n);
-    for (T nf; (nf = _edmonds_karp_bfs(s, t, p, tg, cap)); ) {
+
+    auto bfs = [&]() {
+        p.assign(n, n); p[s] = n + 1;
+        std::queue< std::pair<unsigned int, T> > q; q.emplace(s, std::numeric_limits<T>::max());
+        while (!q.empty()) {
+            auto [from, flow] = q.front(); q.pop();
+            for (auto &[to, w] : tg[from]) {
+                if (p[to] == n && cap[from][to]) {
+                    p[to] = from;
+                    T nf = std::min(flow, cap[from][to]);
+                    if (to == t) return nf;
+                    q.emplace(to, nf);
+                }
+            }
+        }
+        return (T) 0;
+    };
+
+    for (T nf; (nf = bfs()); ) {
         flow += nf;
         unsigned int cur = t;
         while (cur != s) {
