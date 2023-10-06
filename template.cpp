@@ -2,7 +2,7 @@
 using namespace std;
 
 #ifdef DEBUG
-#include "templates/debug.h"
+#include "debug.hpp"
 #else
 #define debug(...) 0
 #endif
