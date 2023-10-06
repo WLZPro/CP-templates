@@ -1,4 +1,4 @@
-#include "graphs.cpp"
+#include "graphs.hpp"
 
 #include <vector>
 
