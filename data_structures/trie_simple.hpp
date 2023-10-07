@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_TRIE_SIMPLE
+#define DATA_STRUCTURES_TRIE_SIMPLE 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -43,3 +46,5 @@ class trie {
         return s.back();
     }
 };
+
+#endif // DATA_STRUCTURES_TRIE_SIMPLE

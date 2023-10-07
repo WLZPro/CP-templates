@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_UNION_FIND_HPP
+#define DATA_STRUCTURES_UNION_FIND_HPP 1
+
 #include <vector>
 
 class union_find {
@@ -25,3 +28,5 @@ class union_find {
 
     size_t size(unsigned int a) { return -p[root(a)]; }
 };
+
+#endif // DATA_STRUCTURES_UNION_FIND_HPP

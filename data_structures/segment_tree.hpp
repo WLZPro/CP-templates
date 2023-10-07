@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_SEGMENT_TREE_HPP
+#define DATA_STRUCTURES_SEGMENT_TREE_HPP 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -42,3 +45,5 @@ void update(node *cur, int l, int r, int val) { // add
     update(cur->left, l, r, val); update(cur->right, l, r, val);
     cur->val = min(cur->left->val, cur->right->val);
 }
+
+#endif // DATA_STRUCTURES_SEGMENT_TREE_HPP

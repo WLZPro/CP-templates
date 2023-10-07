@@ -1,3 +1,6 @@
+#ifndef MATH_MOD_SIMPLE_HPP
+#define MATH_MOD_SIMPLE_HPP 1
+
 const int MOD = (int) 1e9 + 7;
 
 /** Assumes 1 <= a, b < MOD */
@@ -40,3 +43,5 @@ int inv(int x) {
     extgcd(x, MOD, x1, y1);
     return x1;
 }
+
+#endif // MATH_MOD_SIMPLE_HPP

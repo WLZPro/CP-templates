@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_SPARSE_TABLE_HPP
+#define DATA_STRUCTURES_SPARSE_TABLE_HPP 1
+
 #include <vector>
 #include <functional>
 
@@ -34,3 +37,5 @@ class sparse_table {
         return f(st[k][l], st[k][r - (1 << k)]);
     }
 };
+
+#endif // DATA_STRUCTURES_SPARSE_TABLE_HPP

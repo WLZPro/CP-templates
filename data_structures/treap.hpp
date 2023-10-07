@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_TREAP_HPP
+#define DATA_STRUCTURES_TREAP_HPP 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -107,3 +110,5 @@ class treap {
         return (size_t) sz(root);
     }
 };
+
+#endif // DATA_STRUCTURES_TREAP_HPP

@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_FENWICK_TREE_HPP
+#define DATA_STRUCTURES_FENWICK_TREE_HPP 1
+
 #include <vector>
 #include <functional>
 
@@ -45,3 +48,5 @@ class fenwick_tree {
 
     size_t size() const { return n; }
 };
+
+#endif // DATA_STRUCTURES_FENWICK_TREE_HPP

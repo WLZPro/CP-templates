@@ -1,3 +1,6 @@
+#ifndef MATH_NTT_HPP
+#define MATH_NTT_HPP 1
+
 #include "modint.hpp"
 
 #include <bits/stdc++.h>
@@ -50,3 +53,5 @@ vector<mint> poly_mul(const vector<mint> &_a, const vector<mint> &_b) {
     for (int i = 0; i < 2 * n; i++) c[i] = a[i] * b[i];
     return ntt(c, true);
 }
+
+#endif // MATH_NTT_HPP

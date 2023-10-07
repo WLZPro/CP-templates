@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_SEGMENT_TREE_PERSISTENT_HPP
+#define DATA_STRUCTURES_SEGMENT_TREE_PERSISTENT_HPP 1
+
 #include <vector>
 #include <functional>
 #include <numeric>
@@ -71,3 +74,5 @@ class persistent_segment_tree {
     // Note: hasn't been tested yet
     size_t size() const { return n; }
 };
+
+#endif // DATA_STRUCTURES_SEGMENT_TREE_PERSISTENT_HPP

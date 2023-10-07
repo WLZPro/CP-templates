@@ -1,3 +1,6 @@
+#ifndef GRAPHS_GRAPHS_HPP
+#define GRAPHS_GRAPHS_HPP 1
+
 #include <vector>
 
 namespace graphs {
@@ -39,3 +42,5 @@ class graph : public std::vector< std::vector< out_edge<T> > > {
 };
 
 }
+
+#endif // GRAPHS_GRAPHS_HPP

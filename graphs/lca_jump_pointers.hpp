@@ -1,3 +1,6 @@
+#ifndef GRAPHS_LCA_JUMP_POINTERS_HPP
+#define GRAPHS_LCA_JUMP_POINTERS_HPP 1
+
 #include "graphs.hpp"
 
 #include <vector>
@@ -62,3 +65,5 @@ class lowest_common_ancestor {
 };
 
 }
+
+#endif // GRAPHS_LCA_JUMP_POINTERS_HPP

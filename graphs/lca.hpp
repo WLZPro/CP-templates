@@ -1,3 +1,6 @@
+#ifndef GRAPHS_LCA_HPP
+#define GRAPHS_LCA_HPP 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -58,3 +61,5 @@ class lowest_common_ancestor {
         return dfs_in[u];
     }
 };
+
+#endif // GRAPHS_LCA_HPP

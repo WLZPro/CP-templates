@@ -1,3 +1,6 @@
+#ifndef MATH_MODINT_HPP
+#define MATH_MODINT_HPP 1
+
 #include <algorithm>
 #include <iostream>
 #include <utility>
@@ -165,3 +168,4 @@ std::ostream &operator<<(std::ostream &os, const modint<MOD> &x) {
 using mint1000000007 = modint<1000000007>;
 using mint998244353 = modint<998244353>;
 
+#endif // MATH_MODINT_HPP

@@ -1,3 +1,6 @@
+#ifndef STRINGS_Z_FUNCTION_HPP
+#define STRINGS_Z_FUNCTION_HPP 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -11,3 +14,5 @@ vector<int> z_function(const string &s) {
     }
     return move(z);
 }
+
+#endif // STRINGS_Z_FUNCTION_HPP

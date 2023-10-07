@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP
+#define DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP 1
+
 #include <vector>
 #include <functional>
 
@@ -46,3 +49,5 @@ class segment_tree {
         return f(ans_l, ans_r);
     }
 };
+
+#endif // DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP

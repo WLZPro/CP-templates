@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_LI_CHAO_TREE_HPP
+#define DATA_STRUCTURES_LI_CHAO_TREE_HPP 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -56,3 +59,5 @@ class li_chao_tree {
         return query(root, x);
     }
 };
+
+#endif // DATA_STRUCTURES_LI_CHAO_TREE_HPP

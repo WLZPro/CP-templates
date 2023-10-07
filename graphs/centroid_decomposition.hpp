@@ -1,3 +1,6 @@
+#ifndef GRAPHS_CENTROID_DECOMPOSITION_HPP
+#define GRAPHS_CENTROID_DECOMPOSITION_HPP 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -38,3 +41,5 @@ class centroid_decomposition {
       return p[x];
     }
 };
+
+#endif // GRAPHS_CENTROID_DECOMPOSITION_HPP

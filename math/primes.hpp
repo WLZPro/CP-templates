@@ -1,3 +1,6 @@
+#ifndef MATH_PRIMES_HPP
+#define MATH_PRIMES_HPP 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -26,3 +29,5 @@ void gen_primes(int n) {
         if (i <= n / i) for (int j = i * i; j <= n; j += i * i) mu[j] = 0;
     }
 }
+
+#endif // MATH_PRIMES_HPP

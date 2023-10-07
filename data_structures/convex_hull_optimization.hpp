@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCTURES_CONVEX_HULL_OPTIMIZATION_HPP
+#define DATA_STRUCTURES_CONVEX_HULL_OPTIMIZATION_HPP 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -39,3 +42,5 @@ class convex_hull_optimization {
         return {id[ptr], a[ptr] * x + b[ptr]};
     }
 };
+
+#endif // DATA_STRUCTURES_CONVEX_HULL_OPTIMIZATION_HPP

@@ -1,3 +1,6 @@
+#ifndef GRAPHS_MAX_FLOW_HPP
+#define GRAPHS_MAX_FLOW_HPP 1
+
 #include "graphs.hpp"
 
 #include <queue>
@@ -48,3 +51,5 @@ T max_flow(const graph<T> &g, unsigned int s, unsigned int t) {
 }
 
 }
+
+#endif // GRAPHS_MAX_FLOW_HPP

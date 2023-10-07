@@ -1,3 +1,6 @@
+#ifndef DEBUG_HPP
+#define DEBUG_HPP 1
+
 #include "math/modint.hpp"
 #include <bits/stdc++.h>
 using namespace std;
@@ -93,3 +96,5 @@ void debug_out(Head H, Tail... T) {
   cerr << " " << to_string(H);
   debug_out(T...);
 }
+
+#endif // DEBUG_HPP
