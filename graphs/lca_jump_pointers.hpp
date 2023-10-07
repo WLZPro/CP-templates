@@ -1,20 +1,18 @@
 #ifndef GRAPHS_LCA_JUMP_POINTERS_HPP
 #define GRAPHS_LCA_JUMP_POINTERS_HPP 1
 
-#include "graphs.hpp"
-
 #include <vector>
 
 namespace graphs {
 
-template<typename T = unsigned int>
+template<typename T = int>
 class lowest_common_ancestor {
     private:
     graph<T> g;
-    std::vector<unsigned int> p, jump, d;
+    std::vector<int> p, jump, d;
     std::vector<T> wd;
 
-    void dfs(unsigned int u) {
+    void dfs(int u) {
         if (d[p[u]] - d[jump[p[u]]] == d[jump[p[u]]] - d[jump[jump[p[u]]]]) jump[u] = jump[jump[p[u]]];
 
         for (auto &[v, w] : g[u]) {
@@ -29,8 +27,8 @@ class lowest_common_ancestor {
     public:
     lowest_common_ancestor() {}
 
-    explicit lowest_common_ancestor(const graph<T> &_g, const std::vector<unsigned int> roots = {1}) : g(_g) {
-        std::size_t n = g.size();
+    explicit lowest_common_ancestor(const graph<T> &_g, const std::vector<int> roots = {1}) : g(_g) {
+        int n = static_cast<int>(g.size());
         p.resize(n); jump.resize(n); d.assign(n, 0); wd.assign(n, 0);
         for (const auto &root : roots) {
             p[root] = root;
@@ -38,8 +36,8 @@ class lowest_common_ancestor {
         }
     }
 
-    unsigned int kth_ancestor(unsigned int u, unsigned int k) const {
-        unsigned int v = u;
+    int kth_ancestor(int u, int k) const {
+        int v = u;
         while (d[u] - d[v] < k) {
             if (d[u] - d[jump[v]] < k) v = jump[v];
             else v = p[v];
@@ -47,7 +45,7 @@ class lowest_common_ancestor {
         return v;
     }
 
-    unsigned int query(unsigned int u, unsigned int v) const {
+    int query(int u, int v) const {
         if (d[u] < d[v]) return query(v, u);
         u = kth_ancestor(u, d[u] - d[v]);
         while (u != v) {
@@ -58,10 +56,10 @@ class lowest_common_ancestor {
     }
 
     // Note: hasn't been tested yet
-    T depth(unsigned int u) const { return wd[u]; }
+    T depth(int u) const { return wd[u]; }
 
     // Note: hasn't been tested yet
-    T dist(unsigned int u, unsigned int v) const { return wd[u] + wd[v] - 2 * wd[query(u, v)]; }
+    T dist(int u, int v) const { return wd[u] + wd[v] - 2 * wd[query(u, v)]; }
 };
 
 }

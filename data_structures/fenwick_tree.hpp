@@ -15,7 +15,7 @@ class fenwick_tree {
     static_assert(std::is_convertible_v<decltype(f_rev), std::function<T(T, T)> >);
 
     private: 
-    size_t n;
+    int n;
     std::vector<T> fenw;
     #ifdef DEBUG
     std::vector<T> debug;
@@ -31,22 +31,22 @@ class fenwick_tree {
         #endif
     }
 
-    void update(unsigned idx, T x) {
+    void update(int idx, T x) {
         #ifdef DEBUG
         debug[idx] = f(debug[idx], x);
         #endif
         for (; idx < n; idx |= (idx + 1)) fenw[idx] = f(fenw[idx], x);
     }
 
-    T query(unsigned int _idx) const {
+    T query(int _idx) const {
         T ans = e;
         for (int idx = _idx; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = f(ans, fenw[idx]);
         return ans;
     }
 
-    T query(unsigned int l, unsigned int r) const { return f_rev(query(r), l > 0 ? query(l - 1) : e); }
+    T query(int l, int r) const { return f_rev(query(r), l > 0 ? query(l - 1) : e); }
 
-    size_t size() const { return n; }
+    int size() const { return n; }
 };
 
 #endif // DATA_STRUCTURES_FENWICK_TREE_HPP
