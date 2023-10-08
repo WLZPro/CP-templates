@@ -37,7 +37,7 @@ class lowest_common_ancestor {
             for (auto &[v, w] : g[u]) {
                 if (v == p) continue;
                 d[v] = d[u] + 1;
-                dfs(v, p);
+                dfs(v, u);
                 euler_tour[euler_tour_sz++] = u;
             }
         };
@@ -85,9 +85,9 @@ class lowest_common_ancestor {
         int l = first_visit[u], r = first_visit[v];
         if (l > r) std::swap(l, r);
 
-        auto internal_query = [&](int b, int l, int r) {
-            return blocks[block_mask[b]][l][r] + b * block_sz;
-        };        
+        auto internal_query = [&](int b, int _l, int _r) {
+            return blocks[block_mask[b]][_l][_r] + b * block_sz;
+        };
 
         int bl = l / block_sz, br = r / block_sz;
         if (bl == br) return euler_tour[internal_query(bl, l % block_sz, r % block_sz)];
