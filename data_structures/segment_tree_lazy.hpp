@@ -8,7 +8,7 @@
 // Main differences: no identity element required, implemented recursively, no static_asserts.
 template<typename T, auto f, typename mp_t, auto apply, auto combine, auto id>
 class segment_tree {
-    private:
+    protected:
     int n; 
     std::vector<T> st;
     std::vector<mp_t> lazy;
@@ -24,6 +24,7 @@ class segment_tree {
     }
 
     void push(int idx) {
+        if (idx >= static_cast<int>(lazy.size())) return;
         st[idx] = apply(lazy[idx], st[idx]);
         if ((idx << 1 | 1) < static_cast<int>(lazy.size())) {
             lazy[idx << 1] = combine(lazy[idx], lazy[idx << 1]);
@@ -58,22 +59,25 @@ class segment_tree {
     public:
     segment_tree() : segment_tree(0) {}
 
-    // Note: hasn't been tested yet
+    // @note hasn't been tested yet
     explicit segment_tree(const int _n, const T &e = 0) : segment_tree(std::vector<T>(_n, e)) {}
 
     explicit segment_tree(const std::vector<T> &a) : n(a.size()), st((n << 2) + 2), lazy((n << 2) + 2, id()) { if (n > 0) build(1, 0, n, a); }
 
     T query(int l, int r) { return query(1, 0, n, l, r); }
 
-    // Note: hasn't been tested yet
+    // @note hasn't been tested yet
     T query(int idx) { return query(1, 0, n, idx, idx + 1); }
 
-    void update(int l, int r, const mp_t &mp) { update(1, 0, n, l, r, mp); }
+    // @note hasn't been tested yet
+    T query() { return query(1, 0, n, 0, n); }
 
-    // Note: hasn't been tested yet
+    void update(int l, int r, const mp_t &mp) { if (l < r) update(1, 0, n, l, r, mp); }
+
+    // @note hasn't been tested yet
     void update(int idx, const mp_t &mp) { update(1, 0, n, idx, idx + 1, mp); }
 
-    // Note: hasn't been tested yet
+    // @note hasn't been tested yet
     int size() const { return n; }
 };
 
@@ -83,11 +87,28 @@ template<typename T> constexpr T _st_max(const T& a, const T &b) { return (a < b
 template<typename T> constexpr T _st_zero() { return 0; }
 
 // Segment tree with `query = max` and `update = +`.
-// Note: hasn't been tested yet
-template<typename T> using max_segment_tree = segment_tree<T, _st_max<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >;
+template<typename T> 
+class max_segment_tree : public segment_tree<T, _st_max<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> > {
+    using segment_tree<T, _st_max<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >::segment_tree;
+
+    private:
+    int lower_bound(int idx, int cl, int cr, const T &x) {
+        this->push(idx); this->push(idx << 1); this->push(idx << 1 | 1);
+        if (cl + 1 == cr) {
+            if (this->st[idx] < x) return -1;
+            return cl;
+        }
+        int cm = (cl + cr) >> 1;
+        if (this->st[idx << 1] >= x) return lower_bound(idx << 1, cl, cm, x);
+        else return lower_bound(idx << 1, cm, cr, x);
+    }
+
+    public:
+    int lower_bound(const T& x) { return lower_bound(1, 0, this->size(), x); }
+};
 
 // Segment tree with `query = min` and `update = +`.
-// Note: hasn't been tested yet
+// @note hasn't been tested yet
 template<typename T> using min_segment_tree = segment_tree<T, _st_min<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >;
 
 #endif // DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP
