@@ -1,5 +1,5 @@
-#ifndef DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP
-#define DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP 1
+#ifndef DATA_STRUCTURES_SEGMENT_TREE_LAZY_BOTTOM_UP_HPP
+#define DATA_STRUCTURES_SEGMENT_TREE_LAZY_BOTTOM_UP_HPP 1
 
 #include <vector>
 #include <functional>
@@ -135,4 +135,4 @@ class max_segment_tree : public segment_tree<T, _st_max<T>, T, _st_add<T>, _st_a
 // Note: hasn't been tested yet
 template<typename T> using min_segment_tree = segment_tree<T, _st_min<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >;
 
-#endif // DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP
+#endif // DATA_STRUCTURES_SEGMENT_TREE_LAZY_BOTTOM_UP_HPP
