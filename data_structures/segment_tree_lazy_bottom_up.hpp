@@ -10,7 +10,7 @@
 template<typename T, auto f, typename mp_t, auto apply, auto combine, auto id>
 class segment_tree {
     protected:
-    int n, lg, len;
+    int n, lg;
     std::vector<T> st;
     std::vector<mp_t> lazy;
 
@@ -34,9 +34,9 @@ class segment_tree {
     // @note Hasn't been tested yet.
     explicit segment_tree(const int _n, const T &e = 0) : segment_tree(std::vector<T>(_n, e)) {}
 
-    explicit segment_tree(const std::vector<T> &a) : len(static_cast<int>(a.size())) {
+    explicit segment_tree(const std::vector<T> &a) : n(static_cast<int>(a.size())) {
         if (a.empty()) return;
-        n = std::bit_ceil(a.size()); lg = std::countr_zero((unsigned int) n);
+        lg = sizeof(int) * 8 - __builtin_clz(n);
         st.resize(n << 1); lazy.assign(n, id());
         for (int i = 0; i < static_cast<int>(a.size()); i++) st[n + i] = a[i];
         for (int i = n - 1; i > 0; i--) update_from_children(i);
@@ -73,7 +73,6 @@ class segment_tree {
 
     T query() const { return st[1]; }
 
-    // @note Hasn't been tested yet.
     T query(int l) {
         l += n;
         for (int i = lg; i > 0; i--) push(l >> i);
@@ -104,7 +103,8 @@ class segment_tree {
         return f(ans_l, ans_r);
     }
 
-    int size() const { return len; }
+    // @note Hasn't been tested yet.
+    int size() const { return n; }
 };
 
 template<typename T> constexpr T _st_add(const T& a, const T &b) { return a + b; }
@@ -113,6 +113,7 @@ template<typename T> constexpr T _st_max(const T& a, const T &b) { return (a < b
 template<typename T> constexpr T _st_zero() { return 0; }
 
 // Segment tree with `query = max` and `update = +`.
+// @note Hasn't been tested yet.
 template<typename T> 
 class max_segment_tree : public segment_tree<T, _st_max<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> > {
     using segment_tree<T, _st_max<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >::segment_tree;
@@ -126,13 +127,12 @@ class max_segment_tree : public segment_tree<T, _st_max<T>, T, _st_add<T>, _st_a
             idx <<= 1;
             if (this->st[idx] < x) idx++;
         }
-        if (this->st[idx] < x) return this->len;
+        if (this->st[idx] < x) return this->n;
         return idx - this->n;
     }
 };
 
 // Segment tree with `query = min` and `update = +`.
-// Note: hasn't been tested yet
 template<typename T> using min_segment_tree = segment_tree<T, _st_min<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >;
 
 #endif // DATA_STRUCTURES_SEGMENT_TREE_LAZY_BOTTOM_UP_HPP
