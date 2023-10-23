@@ -1,20 +1,15 @@
 #ifndef GRAPHS_LCA_FARACH_COLTON_BENDER
 #define GRAPHS_LCA_FARACH_COLTON_BENDER 1
 
-#include "graphs.hpp"
-
 #include <functional>
 #include <algorithm>
 
-namespace graphs {
-
 // LCA using the Farach-Colton and Bender Algorithm
 // See https://cp-algorithms.com/graph/lca_farachcoltonbender.html
-template<typename T>
 class lowest_common_ancestor {
     private:
     int n, block_sz, block_cnt;
-    graph<T> g;
+    std::vector< std::vector<int> > g;
     std::vector<int> first_visit, d, euler_tour, lg, block_mask, st;
     std::vector< std::vector< std::vector<int> > > blocks;
 
@@ -25,7 +20,7 @@ class lowest_common_ancestor {
     public:
     lowest_common_ancestor() {}
 
-    explicit lowest_common_ancestor(const graph<T> &_g, const std::vector<int> roots = {1})
+    explicit lowest_common_ancestor(const std::vector< std::vector<int> > &_g, const std::vector<int> roots = {1})
     : n(static_cast<int>(_g.size())), g(_g), first_visit(n), d(n, 0), euler_tour(n << 1), lg(n << 1) {
 
         int euler_tour_sz = 0;
@@ -34,7 +29,7 @@ class lowest_common_ancestor {
             first_visit[u] = euler_tour_sz;
             euler_tour[euler_tour_sz++] = u;
 
-            for (auto &[v, w] : g[u]) {
+            for (auto v : g[u]) {
                 if (v == p) continue;
                 d[v] = d[u] + 1;
                 dfs(v, u);
@@ -98,8 +93,6 @@ class lowest_common_ancestor {
         }
         return euler_tour[ans];
     }
-};
-
 };
 
 #endif // GRAPHS_LCA_FARACH_COLTON_BENDER
