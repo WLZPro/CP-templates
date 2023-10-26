@@ -1,14 +1,14 @@
-#ifndef DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP
-#define DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP 1
+// https://judge.yosupo.jp/submission/168510
+
+#ifndef DATA_STRUCTURES_SEGMENT_TREE_HPP
+#define DATA_STRUCTURES_SEGMENT_TREE_HPP 1
 
 #include <vector>
 #include <functional>
 
+// https://codeforces.com/blog/entry/18051
 template<typename T, auto f>
 class segment_tree {
-
-    static_assert(std::is_convertible_v<decltype(f), std::function<T(T, T)> >);
-
     private:
     int n;
     std::vector<T> st;
@@ -34,7 +34,7 @@ class segment_tree {
     T query(int l, int r) const {
         T ans_l, ans_r;
         bool l_def = false, r_def = false;
-        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+        for (l += n, r += n + 1; l < r; l >>= 1, r >>= 1) {
             if (l & 1) {
                 if (!l_def) ans_l = st[l++], l_def = true;
                 else ans_l = f(ans_l, st[l++]);
@@ -50,4 +50,4 @@ class segment_tree {
     }
 };
 
-#endif // DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP
+#endif // DATA_STRUCTURES_SEGMENT_TREE_HPP

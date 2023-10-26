@@ -1,14 +1,14 @@
+// https://judge.yosupo.jp/submission/168502
+
 #ifndef DATA_STRUCTURES_SPARSE_TABLE_HPP
 #define DATA_STRUCTURES_SPARSE_TABLE_HPP 1
 
 #include <vector>
 #include <functional>
 
+// https://cp-algorithms.com/data_structures/sparse-table.html
 template<typename T, auto f>
 class sparse_table {
-
-    static_assert(std::is_convertible_v<decltype(f), std::function<T(T, T)> >);
-
     private:
     int n;
     std::vector< std::vector<T> > st;
@@ -33,8 +33,8 @@ class sparse_table {
     explicit sparse_table(const int &_n) : sparse_table(std::vector<T>(_n)) {}
 
     T query(int l, int r) const {
-        int k = lg[r - l];
-        return f(st[k][l], st[k][r - (1 << k)]);
+        int k = lg[r - l + 1];
+        return f(st[k][l], st[k][r - (1 << k) + 1]);
     }
 };
 

@@ -1,19 +1,17 @@
+// https://judge.yosupo.jp/submission/168504
+
 #ifndef DATA_STRUCTURES_FENWICK_TREE_HPP
 #define DATA_STRUCTURES_FENWICK_TREE_HPP 1
 
 #include <vector>
 #include <functional>
 
-template<typename T> inline T add(T a, T b) { return a + b; }
+template<typename T> constexpr T _fenw_add(const T &a, const T &b) { return a + b; }
+template<typename T> constexpr T _fenw_sub(const T &a, const T &b) { return a - b; }
+template<typename T> constexpr T _fenw_zero() { return 0; }
 
-template<typename T> inline T sub(T a, T b) { return a - b; }
-
-template<typename T, auto f = add<T>, const T e = 0, auto f_rev = sub<T> >
+template<typename T, auto f = _fenw_add<T>, auto e = _fenw_zero<T>, auto f_rev = _fenw_sub<T> >
 class fenwick_tree {
-
-    static_assert(std::is_convertible_v<decltype(f), std::function<T(T, T)> >);
-    static_assert(std::is_convertible_v<decltype(f_rev), std::function<T(T, T)> >);
-
     private: 
     int n;
     std::vector<T> fenw;
@@ -25,9 +23,9 @@ class fenwick_tree {
     fenwick_tree() : n(0) {}
 
     explicit fenwick_tree(int _n) : n(_n) {
-        fenw.assign(n, e);
+        fenw.assign(n, e());
         #ifdef DEBUG
-        debug.assign(n, e);
+        debug.assign(n, e());
         #endif
     }
 
@@ -38,13 +36,13 @@ class fenwick_tree {
         for (; idx < n; idx |= (idx + 1)) fenw[idx] = f(fenw[idx], x);
     }
 
-    T query(int _idx) const {
-        T ans = e;
-        for (int idx = _idx; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = f(ans, fenw[idx]);
+    T query(int idx) const {
+        T ans = e();
+        for (; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = f(ans, fenw[idx]);
         return ans;
     }
 
-    T query(int l, int r) const { return f_rev(query(r), l > 0 ? query(l - 1) : e); }
+    T query(int l, int r) const { return f_rev(query(r), l > 0 ? query(l - 1) : e()); }
 
     int size() const { return n; }
 };
