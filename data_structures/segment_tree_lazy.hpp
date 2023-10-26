@@ -1,83 +1,109 @@
-#ifndef DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP
-#define DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP 1
+#ifndef DATA_STRUCTURES_SEGMENT_TREE_LAZY_BOTTOM_UP_HPP
+#define DATA_STRUCTURES_SEGMENT_TREE_LAZY_BOTTOM_UP_HPP 1
 
 #include <vector>
 #include <functional>
+#include <bit>
 
 // Lazy segment tree implementation based on the [AtCoder Library](https://github.com/atcoder/ac-library/blob/master/atcoder/lazysegtree.hpp).
-// Main differences: no identity element required, implemented recursively, no static_asserts.
+// Main differences: no identity element required, no static_asserts.
 template<typename T, auto f, typename mp_t, auto apply, auto combine, auto id>
 class segment_tree {
     protected:
-    int n; 
+    int n, lg;
     std::vector<T> st;
     std::vector<mp_t> lazy;
 
-    void build(int idx, int l, int r, const std::vector<T> &a) {
-        if (l + 1 == r) {
-            st[idx] = a[l];
-            return;
-        }
-        int m = (l + r) >> 1;
-        build(idx << 1, l, m, a); build(idx << 1 | 1, m, r, a);
-        st[idx] = f(st[idx << 1], st[idx << 1 | 1]);
+    inline void update_from_children(int idx) { st[idx] = f(st[idx << 1], st[idx << 1 | 1]); }
+
+    inline void apply_to_node(int idx, const mp_t &mp) {
+        st[idx] = apply(mp, st[idx]);
+        if (idx < n) lazy[idx] = combine(mp, lazy[idx]);
     }
 
-    void push(int idx) {
-        if (idx >= static_cast<int>(lazy.size())) return;
-        st[idx] = apply(lazy[idx], st[idx]);
-        if ((idx << 1 | 1) < static_cast<int>(lazy.size())) {
-            lazy[idx << 1] = combine(lazy[idx], lazy[idx << 1]);
-            lazy[idx << 1 | 1] = combine(lazy[idx], lazy[idx << 1 | 1]);
-        }
+    inline void push(int idx) {
+        apply_to_node(idx << 1, lazy[idx]);
+        apply_to_node(idx << 1 | 1, lazy[idx]);
         lazy[idx] = id();
     }
 
-    T query(int idx, int cl, int cr, int l, int r) {
-        push(idx);
-        if (l <= cl && cr <= r) return st[idx];
-        int cm = (cl + cr) >> 1;
-        if (r <= cm) return query(idx << 1, cl, cm, l, r);
-        if (l >= cm) return query(idx << 1 | 1, cm, cr, l, r);
-        return f(query(idx << 1, cl, cm, l, r), query(idx << 1 | 1, cm, cr, l, r));
-    }
-
-    void update(int idx, int cl, int cr, int l, int r, const mp_t& mp) {
-        push(idx);
-        if (l <= cl && cr <= r) {
-            lazy[idx] = combine(mp, lazy[idx]);
-            push(idx);
-            return;
-        }
-        int cm = (cl + cr) >> 1;
-        if (r <= cm) update(idx << 1, cl, cm, l, r, mp), push(idx << 1 | 1);
-        else if (l >= cm) update(idx << 1 | 1, cm, cr, l, r, mp), push(idx << 1);
-        else update(idx << 1, cl, cm, l, r, mp), update(idx << 1 | 1, cm, cr, l, r, mp);
-        st[idx] = f(st[idx << 1], st[idx << 1 | 1]);
-    }
-
     public:
+    // @note Hasn't been tested yet.
     segment_tree() : segment_tree(0) {}
 
-    // @note hasn't been tested yet
+    // @note Hasn't been tested yet.
     explicit segment_tree(const int _n, const T &e = 0) : segment_tree(std::vector<T>(_n, e)) {}
 
-    explicit segment_tree(const std::vector<T> &a) : n(a.size()), st((n << 2) + 2), lazy((n << 2) + 2, id()) { if (n > 0) build(1, 0, n, a); }
+    explicit segment_tree(const std::vector<T> &a) : n(static_cast<int>(a.size())) {
+        if (a.empty()) return;
+        lg = sizeof(int) * 8 - __builtin_clz(n);
+        st.resize(n << 1); lazy.assign(n, id());
+        for (int i = 0; i < static_cast<int>(a.size()); i++) st[n + i] = a[i];
+        for (int i = n - 1; i > 0; i--) update_from_children(i);
+    }
 
-    T query(int l, int r) { return query(1, 0, n, l, r); }
+    // @note Hasn't been tested yet.
+    void update(int l, const mp_t &mp) {
+        l += n;
+        for (int i = lg; i > 0; i--) push(l >> i);
+        st[l] = apply(mp, st[l]);
+        for (int i = 1; i <= lg; i++) update_from_children(l >> i);
+    }
 
-    // @note hasn't been tested yet
-    T query(int idx) { return query(1, 0, n, idx, idx + 1); }
+    void update(int l, int r, const mp_t &mp) {
+        if (l == r) return;
+        l += n; r += n;
+        for (int i = lg; i > 0; i--) {
+            if (((l >> i) << i) != l) push(l >> i);
+            if (((r >> i) << i) != r) push((r - 1) >> i);
+        }
 
-    // @note hasn't been tested yet
-    T query() { return query(1, 0, n, 0, n); }
+        int tmp_l = l, tmp_r = r;
+        for (; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) apply_to_node(l++, mp);
+            if (r & 1) apply_to_node(--r, mp);
+        }
+        l = tmp_l; r = tmp_r;
 
-    void update(int l, int r, const mp_t &mp) { if (l < r) update(1, 0, n, l, r, mp); }
+        for (int i = 1; i <= lg; i++) {
+            if (((l >> i) << i) != l) update_from_children(l >> i);
+            if (((r >> i) << i) != r) update_from_children((r - 1) >> i);
+        }
+    }
 
-    // @note hasn't been tested yet
-    void update(int idx, const mp_t &mp) { update(1, 0, n, idx, idx + 1, mp); }
+    T query() const { return st[1]; }
 
-    // @note hasn't been tested yet
+    T query(int l) {
+        l += n;
+        for (int i = lg; i > 0; i--) push(l >> i);
+        return st[l];
+    }
+
+    T query(int l, int r) {
+        l += n; r += n;
+        for (int i = lg; i > 0; i--) {
+            if (((l >> i) << i) != l) push(l >> i);
+            if (((r >> i) << i) != r) push((r - 1) >> i);
+        }
+
+        T ans_l, ans_r;
+        bool l_def = false, r_def = false;
+        for (; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) {
+                if (!l_def) ans_l = st[l++], l_def = true;
+                else ans_l = f(ans_l, st[l++]);
+            }
+            if (r & 1) {
+                if (!r_def) ans_r = st[--r], r_def = true;
+                else ans_r = f(st[--r], ans_r);
+            }
+        }
+        if (!l_def) return ans_r;
+        if (!r_def) return ans_l;
+        return f(ans_l, ans_r);
+    }
+
+    // @note Hasn't been tested yet.
     int size() const { return n; }
 };
 
@@ -87,28 +113,26 @@ template<typename T> constexpr T _st_max(const T& a, const T &b) { return (a < b
 template<typename T> constexpr T _st_zero() { return 0; }
 
 // Segment tree with `query = max` and `update = +`.
+// @note Hasn't been tested yet.
 template<typename T> 
 class max_segment_tree : public segment_tree<T, _st_max<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> > {
     using segment_tree<T, _st_max<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >::segment_tree;
 
-    private:
-    int lower_bound(int idx, int cl, int cr, const T &x) {
-        this->push(idx); this->push(idx << 1); this->push(idx << 1 | 1);
-        if (cl + 1 == cr) {
-            if (this->st[idx] < x) return -1;
-            return cl;
-        }
-        int cm = (cl + cr) >> 1;
-        if (this->st[idx << 1] >= x) return lower_bound(idx << 1, cl, cm, x);
-        else return lower_bound(idx << 1, cm, cr, x);
-    }
-
     public:
-    int lower_bound(const T& x) { return lower_bound(1, 0, this->size(), x); }
+    // @return First element less than or equal to `x`. `size()` is there is no such element.
+    int lower_bound(const T& x) {
+        int idx = 1;
+        for (int i = 1; i <= this->lg; i++) {
+            this->push(idx);
+            idx <<= 1;
+            if (this->st[idx] < x) idx++;
+        }
+        if (this->st[idx] < x) return this->n;
+        return idx - this->n;
+    }
 };
 
 // Segment tree with `query = min` and `update = +`.
-// @note hasn't been tested yet
 template<typename T> using min_segment_tree = segment_tree<T, _st_min<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >;
 
-#endif // DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP
+#endif // DATA_STRUCTURES_SEGMENT_TREE_LAZY_BOTTOM_UP_HPP

@@ -1,49 +1,53 @@
-#ifndef DATA_STRUCTURES_SEGMENT_TREE_HPP
-#define DATA_STRUCTURES_SEGMENT_TREE_HPP 1
+#ifndef DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP
+#define DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP 1
 
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
+#include <functional>
 
-const int INF = 0x3f3f3f3f;
+template<typename T, auto f>
+class segment_tree {
 
-struct node {
-    int l, r, val, lazy;
-    node *left ,*right;
+    static_assert(std::is_convertible_v<decltype(f), std::function<T(T, T)> >);
+
+    private:
+    int n;
+    std::vector<T> st;
+    
+    public:
+    segment_tree() {}
+
+    explicit segment_tree(const std::vector<T> &a) : n(static_cast<int>(a.size())), st(n << 1) {
+        for (int i = 0; i < n; i++) st[i + n] = a[i];
+        for (int i = n - 1; i > 0; i--) {
+            st[i] = f(st[i << 1], st[i << 1 | 1]);
+        }
+    }
+
+    explicit segment_tree(int _n) : n(_n), st(n << 1) {}
+
+    void update(int idx, const T &new_val) {
+        for (st[idx += n] = new_val; idx >>= 1; ) st[idx] = f(st[idx << 1], st[idx << 1 | 1]);
+    }
+
+    T query(int l) const { return st[l + n]; }
+
+    T query(int l, int r) const {
+        T ans_l, ans_r;
+        bool l_def = false, r_def = false;
+        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) {
+                if (!l_def) ans_l = st[l++], l_def = true;
+                else ans_l = f(ans_l, st[l++]);
+            }
+            if (r & 1) {
+                if (!r_def) ans_r = st[--r], r_def = true;
+                else ans_r = f(st[--r], ans_r);
+            }
+        }
+        if (!l_def) return ans_r;
+        if (!r_def) return ans_l;
+        return f(ans_l, ans_r);
+    }
 };
 
-node *build(int l, int r) {
-    if (l == r) return new node{l, r, 0, 0, nullptr, nullptr};
-    node *left = build(l, (l + r) / 2), *right = build((l + r) / 2 + 1, r);
-    return new node{l, r, 0, 0, left, right};
-}
-
-void propagate(node *cur) {
-    if (cur->lazy == 0) return;
-    cur->val += cur->lazy;
-    if (cur->left != nullptr) {
-        cur->left->lazy += cur->lazy;
-        cur->right->lazy += cur->lazy;
-    }
-    cur->lazy = 0;
-}
-
-int query(node *cur, int l, int r) { // min
-    propagate(cur);
-    if (l > cur->r || r < cur->l) return INF;
-    if (l <= cur->l && cur->r <= r) return cur->val;
-    return min(query(cur->left, l, r), query(cur->right, l, r));
-}
-
-void update(node *cur, int l, int r, int val) { // add
-    propagate(cur);
-    if (l > cur->r || r < cur->l) return;
-    if (l <= cur->l && cur->r <= r) {
-        cur->lazy += val;
-        propagate(cur);
-        return;
-    }
-    update(cur->left, l, r, val); update(cur->right, l, r, val);
-    cur->val = min(cur->left->val, cur->right->val);
-}
-
-#endif // DATA_STRUCTURES_SEGMENT_TREE_HPP
+#endif // DATA_STRUCTURES_SEGMENT_TREE_BOTTOM_UP_HPP
