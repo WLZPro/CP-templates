@@ -1,18 +1,3 @@
-/**
- * Faster C++ IO using fread and frwite.
- * Use in problems where IO is the bottleneck
- * (usually when the IO size is on the order 
- * of 10^6).
- * 
- * IMPORTANT: Paste/include this file AFTER any 
- * include of iostream, or otherwise the code 
- * won't compile.
- * 
- * Note: ios::sync_with_stdio(false) and cin.tie(0)
- * should be kept, since they are redefined to 
- * initialize the input/output.
- */
-
 #ifndef UTIL_FAST_IO_HPP
 #define UTIL_FAST_IO_HPP 1
 
@@ -38,6 +23,7 @@ namespace fast_input {
         while (!std::isdigit(c = rd)) if (c == '-') sgn = -sgn;
         x = c - '0';
         while (std::isdigit(c = rd)) { x = x * 10 + (c - '0'); }
+        x *= sgn;
     }
 
     fast_reader &getline(fast_reader &in, std::string &s) {
