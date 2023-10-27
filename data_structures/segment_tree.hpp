@@ -1,7 +1,7 @@
 // Static RMQ: https://judge.yosupo.jp/submission/168572
 // Static range sum: https://judge.yosupo.jp/submission/168574
 // Range sum with updates: https://judge.yosupo.jp/submission/168576
-// Custom operations (linear function composition): https://judge.yosupo.jp/submission/168510
+// Custom operations (linear function composition): https://judge.yosupo.jp/submission/168743
 
 #ifndef DATA_STRUCTURES_SEGMENT_TREE_HPP
 #define DATA_STRUCTURES_SEGMENT_TREE_HPP 1
@@ -26,13 +26,21 @@ class segment_tree {
         }
     }
 
-    explicit segment_tree(int _n) : n(_n), st(n << 1) {}
+    // @note Hasn't been tested yet.
+    explicit segment_tree(const int &_n, const T &e = 0) : segment_tree(std::vector<T>(_n, e)) {}
+
+    // @note Hasn't been tested yet.
+    template<typename TBegin, typename TEnd>
+    segment_tree(const TBegin &b, const TEnd &e) : segment_tree(std::vector<T>(b, e)) {}
 
     void update(int idx, const T &new_val) {
         for (st[idx += n] = new_val; idx >>= 1; ) st[idx] = f(st[idx << 1], st[idx << 1 | 1]);
     }
 
-    T query(int l) const { return st[l + n]; }
+    // @note Hasn't been tested yet.
+    const T &query_all() const { return st[1]; }
+
+    const T &query(int idx) const { return st[idx + n]; }
 
     T query(int l, int r) const {
         T ans_l, ans_r;
@@ -51,6 +59,12 @@ class segment_tree {
         if (!r_def) return ans_l;
         return f(ans_l, ans_r);
     }
+
+    // @note Hasn't been tested yet.
+    const T &operator[](int idx) const { return st[idx + n]; }
+
+    // @note Hasn't been tested yet.
+    const int &size() const { return n; }
 };
 
 #endif // DATA_STRUCTURES_SEGMENT_TREE_HPP

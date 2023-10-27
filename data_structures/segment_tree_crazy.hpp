@@ -1,4 +1,4 @@
-// https://judge.yosupo.jp/submission/168647
+// https://judge.yosupo.jp/submission/168740
 
 #ifndef DATA_STRUCTURES_SEGMENT_TREE_CRAZY_HPP
 #define DATA_STRUCTURES_SEGMENT_TREE_CRAZY_HPP 1
@@ -62,7 +62,7 @@ class crazy_segment_tree {
     public:
     crazy_segment_tree() {}
 
-    crazy_segment_tree(const std::vector<T> &a) : n(static_cast<int>(a.size())) {
+    explicit crazy_segment_tree(const std::vector<T> &a) : n(static_cast<int>(a.size())) {
         sz = 1 << ((sizeof(int) << 3) - __builtin_clz(n));
         st = new T[sz << 1];
 
@@ -73,12 +73,14 @@ class crazy_segment_tree {
         st[0] = _id<T, st_type>;
     }
 
-    template<typename _Begin, typename _End>
-    crazy_segment_tree(const _Begin &b, const _End &e) : crazy_segment_tree(std::vector<T>(b, e)) {} 
+    explicit crazy_segment_tree(const int &_n, const T &e = 0) : crazy_segment_tree(std::vector<T>(_n, e)) {}
 
-    T query() const { return st[1]; }
+    template<typename TBegin, typename TEnd>
+    crazy_segment_tree(const TBegin &b, const TEnd &e) : crazy_segment_tree(std::vector<T>(b, e)) {}
 
-    T query(int l) const { return st[l + sz]; }
+    T query_all() const { return st[1]; }
+
+    T query(int idx) const { return st[idx + sz]; }
 
     __attribute__((target("avx2"))) T query(int l, int r) const {
         if (l == r) return st[l + sz];
@@ -148,6 +150,8 @@ class crazy_segment_tree {
     void update(int idx, const T &new_val) {
         for (st[idx += sz] = new_val; idx >>= 1; ) st[idx] = _reduce<T, st_type>(st[idx << 1], st[idx << 1 | 1]);
     }
+
+    const T &operator[](int idx) const { return st[idx + sz]; }
 
     int size() const { return n; }
 };
