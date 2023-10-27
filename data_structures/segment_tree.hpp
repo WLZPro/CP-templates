@@ -1,4 +1,7 @@
-// https://judge.yosupo.jp/submission/168510
+// Static RMQ: https://judge.yosupo.jp/submission/168572
+// Static range sum: https://judge.yosupo.jp/submission/168574
+// Range sum with updates: https://judge.yosupo.jp/submission/168576
+// Custom operations (linear function composition): https://judge.yosupo.jp/submission/168510
 
 #ifndef DATA_STRUCTURES_SEGMENT_TREE_HPP
 #define DATA_STRUCTURES_SEGMENT_TREE_HPP 1
