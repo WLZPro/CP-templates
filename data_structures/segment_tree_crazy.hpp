@@ -43,6 +43,7 @@ __attribute__((target("avx2"))) inline __m256i _reduce<int32_t, crazy_segment_tr
 
 constexpr int _ffs(unsigned int x) { return sizeof(unsigned int) * 8 - 1 - __builtin_clz(x); }
 
+// https://codeforces.com/blog/entry/89399
 template<crazy_segment_tree_type st_type>
 class crazy_segment_tree {
     private: 
