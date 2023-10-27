@@ -1,3 +1,5 @@
+// https://judge.yosupo.jp/submission/168745
+
 #ifndef UTIL_FAST_IO_HPP
 #define UTIL_FAST_IO_HPP 1
 
@@ -13,7 +15,7 @@ namespace fast_input {
     char buf[BUF_SZ];
     int pos = 0, len = 0;
 
-    struct fast_reader { void tie(int *x) {} } fcin;
+    struct fast_reader { void tie(int *x) { (void) x; } } fcin;
 
     #define rd (pos == len ? (pos = 0, (!(len = (int) fread(buf, 1, BUF_SZ, stdin)) ? EOF : buf[pos++])) : buf[pos++])
 
@@ -47,7 +49,7 @@ namespace fast_output {
     struct fast_writer {} fcout;
 
     void flush() { fwrite(buf, 1, pos, stdout); pos = 0; }
-    void sync_with_stdio(bool b) { assert(std::atexit(flush) == 0); }
+    void sync_with_stdio(bool b) { (void) b; assert(std::atexit(flush) == 0); }
 
     #define wt(c) ((pos == BUF_SZ ? flush() : (void) 0), buf[pos++] = (c))
 
