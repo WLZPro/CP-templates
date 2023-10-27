@@ -19,6 +19,8 @@ template<>
 constexpr int32_t _id<int32_t, crazy_segment_tree_type::min> = std::numeric_limits<int32_t>::max();
 template<>
 constexpr int32_t _id<int32_t, crazy_segment_tree_type::max> = std::numeric_limits<int32_t>::min();
+template<>
+constexpr int32_t _id<int32_t, crazy_segment_tree_type::sum> = 0;
 
 template<typename T, crazy_segment_tree_type st_type>
 constexpr T _reduce(T a, T b);
@@ -26,6 +28,8 @@ template<>
 constexpr int32_t _reduce<int32_t, crazy_segment_tree_type::min>(int32_t a, int32_t b) { return std::min(a, b); }
 template<>
 constexpr int32_t _reduce<int32_t, crazy_segment_tree_type::max>(int32_t a, int32_t b) { return std::max(a, b); }
+template<>
+constexpr int32_t _reduce<int32_t, crazy_segment_tree_type::sum>(int32_t a, int32_t b) { return a + b; }
 
 template<typename T, crazy_segment_tree_type st_type>
 __attribute__((target("sse4.1"))) inline __m128i _reduce(__m128i a, __m128i b);
@@ -33,6 +37,8 @@ template<>
 __attribute__((target("sse4.1"))) inline __m128i _reduce<int32_t, crazy_segment_tree_type::min>(__m128i a, __m128i b) { return _mm_min_epi32(a, b); }
 template<>
 __attribute__((target("sse4.1"))) inline __m128i _reduce<int32_t, crazy_segment_tree_type::max>(__m128i a, __m128i b) { return _mm_max_epi32(a, b); }
+template<>
+__attribute__((target("sse4.1"))) inline __m128i _reduce<int32_t, crazy_segment_tree_type::sum>(__m128i a, __m128i b) { return _mm_add_epi32(a, b); }
 
 template<typename T, crazy_segment_tree_type st_type>
 __attribute__((target("avx2"))) inline __m256i _reduce(__m256i a, __m256i b);
@@ -40,6 +46,8 @@ template<>
 __attribute__((target("avx2"))) inline __m256i _reduce<int32_t, crazy_segment_tree_type::min>(__m256i a, __m256i b) { return _mm256_min_epi32(a, b); }
 template<>
 __attribute__((target("avx2"))) inline __m256i _reduce<int32_t, crazy_segment_tree_type::max>(__m256i a, __m256i b) { return _mm256_max_epi32(a, b); }
+template<>
+__attribute__((target("avx2"))) inline __m256i _reduce<int32_t, crazy_segment_tree_type::sum>(__m256i a, __m256i b) { return _mm256_add_epi32(a, b); }
 
 constexpr int _ffs(unsigned int x) { return sizeof(unsigned int) * 8 - 1 - __builtin_clz(x); }
 
@@ -135,6 +143,10 @@ class crazy_segment_tree {
         T ans = _id<T, st_type>;
         for (int i = 0; i < 4; i++) ans = _reduce<T, st_type>(ans, ((T __attribute__((vector_size(16))))ans128)[i]); 
         return ans;
+    }
+
+    void update(int idx, const T &new_val) {
+        for (st[idx += sz] = new_val; idx >>= 1; ) st[idx] = _reduce<T, st_type>(st[idx << 1], st[idx << 1 | 1]);
     }
 
     int size() const { return n; }
