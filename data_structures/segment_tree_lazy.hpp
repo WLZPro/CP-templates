@@ -1,5 +1,3 @@
-// https://judge.yosupo.jp/submission/168738
-
 #ifndef DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP
 #define DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP 1
 

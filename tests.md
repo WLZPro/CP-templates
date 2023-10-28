@@ -1,0 +1,29 @@
+# Tests
+
+## Data Structures
+
+### Fenwick Tree (fenwick_tree.hpp)
+- [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [58 ms](https://judge.yosupo.jp/submission/168504)
+
+### Segment Tree (segment_tree.hpp)
+- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [102 ms](https://judge.yosupo.jp/submission/168572)
+- [Static range sum](https://judge.yosupo.jp/problem/static_range_sum) ($N, Q \leq 5 \times 10^5$): [124 ms](https://judge.yosupo.jp/submission/168574)
+- [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [105 ms](https://judge.yosupo.jp/submission/168576)
+- [Point modification, range linear function composition](https://judge.yosupo.jp/problem/point_set_range_composite) ($N, Q \leq 5 \times 10^5$): [149 ms](https://judge.yosupo.jp/submission/168743)
+
+### crazySegmentTree (segment_tree_crazy.hpp)
+- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [75 ms](https://judge.yosupo.jp/submission/168740)
+
+### Lazy Segment Tree (segment_tree_lazy.hpp)
+- [Range $a_i \leftarrow c \cdot a_i + d$ updates, range sums](https://judge.yosupo.jp/problem/range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [509 ms](https://judge.yosupo.jp/submission/168738)
+
+### Sparse Table (sparse_table.hpp)
+- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [98 ms](https://judge.yosupo.jp/submission/168502)
+
+### Implicit Treap (treap_implicit.hpp)
+- [Point insertion and deletion, range $a_i \leftarrow c \cdot a_i + d$ updates, range reversals, range sum queries](https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [3742 ms](https://judge.yosupo.jp/submission/168888)
+
+## Utilities
+
+### Fast IO (fast_io.hpp)
+- [Many A + B](https://judge.yosupo.jp/problem/many_aplusb) ($N \leq 10^6$): [107 ms](https://judge.yosupo.jp/submission/168745)

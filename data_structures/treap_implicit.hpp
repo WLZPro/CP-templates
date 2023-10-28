@@ -1,5 +1,3 @@
-// https://judge.yosupo.jp/submission/168888
-
 #ifndef DATA_STRUCTURES_TREAP_IMPLICIT_HPP
 #define DATA_STRUCTURES_TREAP_IMPLICIT_HPP 1
 
@@ -7,6 +5,7 @@
 #include <chrono>
 #include <vector>
 
+// https://cp-algorithms.com/data_structures/treap.html
 template<typename T, auto f, typename TMap, auto apply, auto combine, auto id>
 class implicit_treap {
     private:

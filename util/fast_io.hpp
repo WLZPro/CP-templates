@@ -1,5 +1,3 @@
-// https://judge.yosupo.jp/submission/168745
-
 #ifndef UTIL_FAST_IO_HPP
 #define UTIL_FAST_IO_HPP 1
 

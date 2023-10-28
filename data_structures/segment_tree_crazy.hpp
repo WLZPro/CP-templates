@@ -1,5 +1,3 @@
-// https://judge.yosupo.jp/submission/168740
-
 #ifndef DATA_STRUCTURES_SEGMENT_TREE_CRAZY_HPP
 #define DATA_STRUCTURES_SEGMENT_TREE_CRAZY_HPP 1
 

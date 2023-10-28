@@ -1,5 +1,3 @@
-// https://judge.yosupo.jp/submission/168502
-
 #ifndef DATA_STRUCTURES_SPARSE_TABLE_HPP
 #define DATA_STRUCTURES_SPARSE_TABLE_HPP 1
 

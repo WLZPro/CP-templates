@@ -1,5 +1,3 @@
-// https://judge.yosupo.jp/submission/168504
-
 #ifndef DATA_STRUCTURES_FENWICK_TREE_HPP
 #define DATA_STRUCTURES_FENWICK_TREE_HPP 1
 
