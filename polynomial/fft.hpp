@@ -1,5 +1,5 @@
-#ifndef MATH_FFT_HPP
-#define MATH_FFT_HPP 1
+#ifndef POLYNOMIAL_FFT_HPP
+#define POLYNOMIAL_FFT_HPP 1
 
 #include "math/modint.hpp"
 #include "polynomial/polynomial.hpp"
@@ -54,6 +54,7 @@ inline void fft(std::vector<T> &a, bool invert = false) {
 
 template<typename T>
 inline poly<T> &operator*=(poly<T> &lhs, poly<T> rhs) {
+    if (lhs.empty() || rhs.empty()) return lhs = {};
     int n = static_cast<int>(lhs.size()), m = static_cast<int>(rhs.size());
     int sz = 1 << ((sizeof(int) << 3) - __builtin_clz(n + m - 1));
     lhs.expand_to(sz); rhs.expand_to(sz);
@@ -67,4 +68,4 @@ inline poly<T> &operator*=(poly<T> &lhs, poly<T> rhs) {
 template<typename T>
 inline poly<T> operator*(poly<T> lhs, const poly<T> &rhs) { return lhs *= rhs; }
 
-#endif // MATH_FFT_HPP
+#endif // POLYNOMIAL_FFT_HPP

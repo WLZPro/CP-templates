@@ -1,5 +1,5 @@
-#ifndef MATH_POLYNOMIAL_HPP
-#define MATH_POLYNOMIAL_HPP 1
+#ifndef POLYNOMIAL_POLYNOMIAL_HPP
+#define POLYNOMIAL_POLYNOMIAL_HPP 1
 
 #include <vector>
 
@@ -30,7 +30,6 @@ class polynomial : public std::vector<T> {
         return ans;
     }
 
-    // @note Hasn't been tested yet.
     inline poly &operator+=(const poly &rhs) {
         int n = static_cast<int>(this->size()), m = static_cast<int>(rhs.size());
         if (m > n) {
@@ -41,10 +40,8 @@ class polynomial : public std::vector<T> {
         return *this;
     }
 
-    // @note Hasn't been tested yet.
     inline friend poly operator+(poly lhs, const poly &rhs) { return lhs += rhs; }
 
-    // @note Hasn't been tested yet.
     inline poly &operator-=(const poly &rhs) { 
         int n = static_cast<int>(this->size()), m = static_cast<int>(rhs.size());
         if (m > n) {
@@ -55,7 +52,6 @@ class polynomial : public std::vector<T> {
         return *this;
     }
 
-    // @note Hasn't been tested yet.
     inline friend poly operator-(poly lhs, const poly &rhs) { return lhs -= rhs; }
 
     // @note Hasn't been tested yet.
@@ -86,12 +82,14 @@ template<typename T> using poly  = polynomial<T>;
 template<typename T> inline poly<T> &operator*=(poly<T>&, poly<T>);
 template<typename T> inline poly<T>  operator* (poly<T> , const poly<T>&);
 
-// Defined in polynomial/inv.hpp
+// Defined in polynomial/power_series.hpp
 template<typename T> inline poly<T> inv(const poly<T>&, int);
 template<typename T> inline poly<T> inv(const poly<T>&);
 
-// Defined in polynomial/log.hpp
 template<typename T> inline poly<T> log(const poly<T>&, int);
 template<typename T> inline poly<T> log(const poly<T>&);
 
-#endif // MATH_POLYNOMIAL_HPP
+template<typename T> inline poly<T> exp(const poly<T>&, int);
+template<typename T> inline poly<T> exp(const poly<T>&);
+
+#endif // POLYNOMIAL_POLYNOMIAL_HPP
