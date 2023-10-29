@@ -65,10 +65,22 @@ class polynomial : public std::vector<T> {
         return ans;
     }
 
+    inline friend poly deriv(const poly &a) {
+        poly ans(a.size() - 1);
+        for (int i = 1; i < static_cast<int>(a.size()); i++) ans[i - 1] = a[i] * ((T) i);
+        return ans;
+    }
+
+    inline friend poly integr(const poly &a) {
+        poly ans(a.size() + 1); ans[0] = 0;
+        for (int i = 0; i < static_cast<int>(a.size()); i++) ans[i + 1] = a[i] / ((T) (i + 1));
+        return ans;
+    }
+
     static constexpr poly constant(const T &a_0) { return {a_0}; }
 };
 
-template<typename T> using poly = polynomial<T>;
+template<typename T> using poly  = polynomial<T>;
 
 // Defined in polynomial/fft.hpp
 template<typename T> inline poly<T> &operator*=(poly<T>&, poly<T>);
@@ -77,5 +89,9 @@ template<typename T> inline poly<T>  operator* (poly<T> , const poly<T>&);
 // Defined in polynomial/inv.hpp
 template<typename T> inline poly<T> inv(const poly<T>&, int);
 template<typename T> inline poly<T> inv(const poly<T>&);
+
+// Defined in polynomial/log.hpp
+template<typename T> inline poly<T> log(const poly<T>&, int);
+template<typename T> inline poly<T> log(const poly<T>&);
 
 #endif // MATH_POLYNOMIAL_HPP

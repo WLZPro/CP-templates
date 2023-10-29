@@ -31,6 +31,9 @@
 ### Inverse of Formal Power Series (inv.hpp)
 - [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [659 ms](https://judge.yosupo.jp/submission/168989)
 
+### Logarithm of Formal Power Series (log.hpp)
+- [Logarithm of Formal Power Series](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [932 ms](https://judge.yosupo.jp/submission/168990)
+
 ## Utilities
 
 ### Fast IO (fast_io.hpp)
