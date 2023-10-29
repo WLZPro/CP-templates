@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <functional>
+#include <string>
 
 template<typename T> constexpr T _fenw_add(const T &a, const T &b) { return a + b; }
 template<typename T> constexpr T _fenw_sub(const T &a, const T &b) { return a - b; }
@@ -43,6 +44,14 @@ class fenwick_tree {
     T query(int l, int r) const { return f_rev(query(r), l > 0 ? query(l - 1) : e()); }
 
     int size() const { return n; }
+
+    inline friend std::string to_string(const fenwick_tree &fenw) {
+        #ifdef DEBUG
+        return to_string(fenw.debug);
+        #else
+        return "";
+        #endif
+    }
 };
 
 #endif // DATA_STRUCTURES_FENWICK_TREE_HPP

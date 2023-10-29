@@ -1,86 +1,95 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP 1
 
-#include <bits/stdc++.h>
-using namespace std;
+#include <string>
+#include <iostream>
+#include <stack>
+#include <queue>
+
+using std::to_string;
 
 // Copied from tourist
 
-#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
+#define debug(...) std::cerr << "[DEBUG]: " << __FILE__ << ':' << __LINE__ << ": " << "[" << #__VA_ARGS__ << "]: [", debug_out(__VA_ARGS__)
 
-string to_string(const string &s) { return '"' + s + '"'; }
+std::string to_string(const std::string &s) { return '"' + s + '"'; }
 
-string to_string(const char *s) { return to_string((string) s); }
+std::string to_string(const char *s) { return to_string(std::string(s)); }
 
-string to_string(bool b) { return (b ? "true" : "false"); }
+std::string to_string(bool b) { return (b ? "true" : "false"); }
 
 template <typename T1, typename T2>
-string to_string(pair<T1, T2> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
+std::string to_string(std::pair<T1, T2> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
 
 template<typename T>
-string to_string(const priority_queue<T> &pq) {
-  priority_queue<T> tmp = pq;
-  string ans = "{";
-  bool first = true;
-  while (!tmp.empty()) {
-    if (!first) ans += ", ";
-    first = false;
-    ans += to_string(tmp.top());
-    tmp.pop();
-  }
-  ans += '}';
-  return ans;
-}
-
-template<typename T>
-string to_string(const stack<T> &st) {
-  stack<T> tmp = st;
-  string ans = "{";
-  bool first = true;
-  while (!tmp.empty()) {
-    if (!first) ans += ", ";
-    first = false;
-    ans += to_string(tmp.top());
-    tmp.pop();
-  }
-  ans += '}';
-  return ans;
+std::string to_string(const std::priority_queue<T> &pq) {
+    std::priority_queue<T> tmp = pq;
+    std::string ans = "{";
+    bool first = true;
+    while (!tmp.empty()) {
+        if (!first) ans += ", ";
+        first = false;
+        ans += to_string(tmp.top());
+        tmp.pop();
+    }
+    ans += '}';
+    return ans;
 }
 
 template<typename T>
-string to_string(const queue<T> &q) {
-  queue<T> tmp = q;
-  string ans = "{";
-  bool first = true;
-  while (!tmp.empty()) {
-    if (!first) ans += ", ";
-    first = false;
-    ans += to_string(tmp.top());
-    tmp.pop();
-  }
-  ans += '}';
-  return ans;
+std::string to_string(const std::stack<T> &st) {
+    std::stack<T> tmp = st;
+    std::string ans = "{";
+    bool first = true;
+    while (!tmp.empty()) {
+        if (!first) ans += ", ";
+        first = false;
+        ans += to_string(tmp.top());
+        tmp.pop();
+    }
+    ans += '}';
+    return ans;
 }
 
-template <typename A>
-string to_string(A v) {
-  bool first = true;
-  string ans = "{";
-  for (const auto &x : v) {
-    if (!first) ans += ", ";
-    first = false;
-    ans += to_string(x);
-  }
-  ans += "}";
-  return ans;
+template<typename T>
+std::string to_string(const std::queue<T> &q) {
+    std::queue<T> tmp = q;
+    std::string ans = "{";
+    bool first = true;
+    while (!tmp.empty()) {
+        if (!first) ans += ", ";
+        first = false;
+        ans += to_string(tmp.front());
+        tmp.pop();
+    }
+    ans += '}';
+    return ans;
 }
 
-void debug_out() { cerr << endl; }
+template<typename T>
+std::string to_string(const T &v) {
+    bool first = true;
+    std::string ans = "{";
+    for (const auto &x : v) {
+        if (!first) ans += ", ";
+        first = false;
+        ans += to_string(x);
+    }
+    ans += "}";
+    return ans;
+}
 
-template <typename Head, typename... Tail>
+void debug_out() { std::cerr << "[]" << std::endl; }
+
+template<typename Head>
+void debug_out(const Head &H) {
+    std::cerr << to_string(H) << ']' << std::endl;
+}
+
+template<typename Head, typename... Tail>
 void debug_out(Head H, Tail... T) {
-  cerr << " " << to_string(H);
-  debug_out(T...);
+    std::cerr << to_string(H) << ", ";
+    debug_out(T...);
 }
 
 #endif // DEBUG_HPP

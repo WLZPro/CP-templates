@@ -65,8 +65,8 @@ class modint {
     constexpr friend modint operator%(modint lhs, const modint &rhs) { return lhs %= rhs; }
 
     // Unary arithemtic operators
-    constexpr modint operator-() { return modint(MOD - x, true); }
-    constexpr modint operator+() { return *this; }
+    constexpr modint operator-() const { return modint(MOD - x, true); }
+    constexpr modint operator+() const { return modint(*this); }
 
     // Increment/decrement
     constexpr modint &operator++() { if (++x == MOD) x = 0; return *this; }
@@ -111,6 +111,12 @@ class modint {
 
     // Value extraction
     constexpr int val() const { return x; }
+
+    // Debugging
+    inline friend std::string to_string(const modint &m) {
+        using namespace std;
+        return to_string(m.x);
+    }
 };
 
 template<const int MOD, typename T, typename S>

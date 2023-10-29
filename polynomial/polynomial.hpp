@@ -2,6 +2,7 @@
 #define POLYNOMIAL_POLYNOMIAL_HPP 1
 
 #include <vector>
+#include <string>
 
 template<typename T>
 class polynomial : public std::vector<T> {
@@ -74,6 +75,27 @@ class polynomial : public std::vector<T> {
     }
 
     static constexpr poly constant(const T &a_0) { return {a_0}; }
+
+    inline friend std::string to_string(const poly &a) {
+        using std::to_string;
+        std::string ans = "";
+        bool first = true;
+        for (int i = 0; i < static_cast<int>(a.size()); i++) {
+            if (a[i] == 0) continue;
+            if (a[i] < 0) {
+                if (!first) ans += '-';
+                if (a[i] != -1) ans += to_string(-a[i]);
+                first = false;
+            } else {
+                if (!first) ans += '+';
+                if (a[i] != 1) ans += to_string(+a[i]);
+                first = false;
+            }
+            if (i > 0) ans += 'x';
+            if (i > 1) ans += '^' + to_string(i);
+        }
+        return ans;
+    }
 };
 
 template<typename T> using poly  = polynomial<T>;

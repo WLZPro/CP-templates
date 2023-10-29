@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <functional>
+#include <string>
 
 // https://cp-algorithms.com/data_structures/sparse-table.html
 template<typename T, auto f>
@@ -10,12 +11,18 @@ class sparse_table {
     private:
     int n;
     std::vector< std::vector<T> > st;
-    std::vector<int> lg;    
+    std::vector<int> lg;
+    #ifdef DEBUG
+    std::vector<T> debug;
+    #endif
 
     public:
     sparse_table() {}
 
     explicit sparse_table(const std::vector<T> &a) : n(static_cast<int>(a.size())), lg(n + 1) {
+        #ifdef DEBUG
+        debug = a;
+        #endif
         lg[1] = 0;
         for (int i = 2; i <= n; i++) lg[i] = lg[i >> 1] + 1;
         
@@ -33,6 +40,14 @@ class sparse_table {
     T query(int l, int r) const {
         int k = lg[r - l + 1];
         return f(st[k][l], st[k][r - (1 << k) + 1]);
+    }
+
+    inline friend std::string to_string(const sparse_table &st) {
+        #ifdef DEBUG
+        return to_string(st.debug);
+        #else
+        return "";
+        #endif
     }
 };
 
