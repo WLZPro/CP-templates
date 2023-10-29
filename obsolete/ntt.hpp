@@ -6,7 +6,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-using mint = mint998244353;
+using mint = modint998244353;
 
 const mint w_mx = 15311432;
 const mint w_mx_inv = 469870224;

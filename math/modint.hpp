@@ -105,9 +105,6 @@ class modint {
     friend std::istream &operator>>(std::istream &is, modint &m) { is >> m.x; return is; }
     friend std::ostream &operator<<(std::ostream &os, const modint &m) { os << m.x; return os; }
 
-    // Debugging
-    constexpr friend std::string to_string(const modint &m) { return to_string(m.x); }
-
     // Casting
     template<typename T>
     constexpr operator T() const { return x; }
