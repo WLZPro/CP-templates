@@ -31,7 +31,7 @@
 ### Power series (power_series.hpp)
 - [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [659 ms](https://judge.yosupo.jp/submission/168989)
 - [Logarithm of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [932 ms](https://judge.yosupo.jp/submission/168990)
-- [Exponential of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/exp_of_formal_power_series) ($N \leq 5 \times 10^5$): [2239 ms](https://judge.yosupo.jp/submission/169003)
+- [Exponential of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/exp_of_formal_power_series) ($N \leq 5 \times 10^5$): [1278 ms](https://judge.yosupo.jp/submission/169042)
 
 ## Utilities
 
