@@ -64,12 +64,18 @@ class polynomial : public std::vector<T> {
         for (int i = 0; i < static_cast<int>(this->size()); i++) ans *= x, ans += this->operator[](i);
         return ans;
     }
+
+    static constexpr poly constant(const T &a_0) { return {a_0}; }
 };
 
 template<typename T> using poly = polynomial<T>;
 
 // Defined in polynomial/fft.hpp
-template<typename T> inline poly<T> &operator*=(poly<T> &, poly<T>);
-template<typename T> inline poly<T> operator*(poly<T>, poly<T>);
+template<typename T> inline poly<T> &operator*=(poly<T>&, poly<T>);
+template<typename T> inline poly<T>  operator* (poly<T> , const poly<T>&);
+
+// Defined in polynomial/inv.hpp
+template<typename T> inline poly<T> inv(const poly<T>&, int);
+template<typename T> inline poly<T> inv(const poly<T>&);
 
 #endif // MATH_POLYNOMIAL_HPP

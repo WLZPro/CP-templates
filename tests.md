@@ -28,6 +28,9 @@
 ### Fast Fourier Transform (fft.hpp)
 - [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [205 ms](https://judge.yosupo.jp/submission/168967)
 
+### Inverse of Formal Power Series (inv.hpp)
+- [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [659 ms](https://judge.yosupo.jp/submission/168989)
+
 ## Utilities
 
 ### Fast IO (fast_io.hpp)
