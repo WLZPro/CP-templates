@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <functional>
+#include <string>
 
 // https://codeforces.com/blog/entry/18051
 template<typename T, auto f>
@@ -10,15 +11,19 @@ class segment_tree {
     private:
     int n;
     std::vector<T> st;
+    #ifdef DEBUG
+    std::vector<T> debug;
+    #endif
     
     public:
     segment_tree() {}
 
     explicit segment_tree(const std::vector<T> &a) : n(static_cast<int>(a.size())), st(n << 1) {
         for (int i = 0; i < n; i++) st[i + n] = a[i];
-        for (int i = n - 1; i > 0; i--) {
-            st[i] = f(st[i << 1], st[i << 1 | 1]);
-        }
+        for (int i = n - 1; i > 0; i--) st[i] = f(st[i << 1], st[i << 1 | 1]);
+        #ifdef DEBUG
+        debug = a;
+        #endif
     }
 
     // @note Hasn't been tested yet.
@@ -29,6 +34,9 @@ class segment_tree {
     segment_tree(const TBegin &b, const TEnd &e) : segment_tree(std::vector<T>(b, e)) {}
 
     void update(int idx, const T &new_val) {
+        #ifdef DEBUG
+        debug[idx] = new_val;
+        #endif
         for (st[idx += n] = new_val; idx >>= 1; ) st[idx] = f(st[idx << 1], st[idx << 1 | 1]);
     }
 
@@ -60,6 +68,14 @@ class segment_tree {
 
     // @note Hasn't been tested yet.
     const int &size() const { return n; }
+
+    inline friend std::string to_string(const segment_tree &st) {
+        #ifdef DEBUG
+        return to_string(st.debug);
+        #else
+        return "";
+        #endif
+    }
 };
 
 #endif // DATA_STRUCTURES_SEGMENT_TREE_HPP
