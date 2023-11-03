@@ -23,6 +23,12 @@
 ### Implicit Treap (treap_implicit.hpp)
 - [Point insertion and deletion, range $a_i \leftarrow c \cdot a_i + d$ updates, range reversals, range sum queries](https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [3742 ms](https://judge.yosupo.jp/submission/168888)
 
+## Math
+
+### Prime numbers and arithmetic functions (primes.hpp)
+- Correctness of Möbius function: [231246540](https://codeforces.com/contest/1845/submission/231246540)
+- Correctness of Euler phi function: [231246194](https://codeforces.com/contest/1797/submission/231246194)
+
 ## Polynomials
 
 ### Fast Fourier Transform (fft.hpp)

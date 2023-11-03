@@ -1,33 +1,56 @@
 #ifndef MATH_PRIMES_HPP
 #define MATH_PRIMES_HPP 1
 
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
 
-/**
- * pf: largest prime factor
- * phi: Euler phi function
- * mu: Mobius function
- */
-vector<int> pf, phi, mu;
-vector<int> primes;
+namespace primes {
 
-void gen_primes(int n) {
-    pf.assign(n + 1, -1);
-    phi.resize(n + 1);
-    mu.assign(n + 1, 1);
-    for (int i = 1; i <= n; i++) phi[i] = i;
-    pf[0] = pf[1] = -1;
-    for (int i = 2; i <= (int) n; i++) {
-        if (pf[i] != -1) continue;
-        primes.push_back(i);
-        for (int j = i; j <= n; j += i) {
-            pf[j] = i;
-            phi[j] -= phi[j] / i;
-            mu[j] = -mu[j / i];
+    int _sz = -1;
+    std::vector<int> primes;
+    std::vector<bool> is_prime;
+
+    // Smallest prime factor
+    std::vector<int> spf;
+
+    // Möbius function
+    std::vector<int> mu;
+
+    // Euler's totient function
+    std::vector<int> phi;
+
+    // https://cp-algorithms.com/algebra/prime-sieve-linear.html
+    void sieve(int _n) {
+        if (_n <= _sz) return;
+        _n = std::max(_n, 2);
+
+        spf.resize(_n + 1);
+        std::fill(spf.begin() + _sz + 1, spf.end(), 0);
+
+        is_prime.resize(_n + 1); is_prime[0] = is_prime[1] = false;
+        std::fill(is_prime.begin() + _sz + 1, is_prime.end(), false); 
+
+        mu.resize(_n + 1); mu[1] = 1;
+        phi.resize(_n + 1); phi[1] = 1;
+
+        for (int i = std::max(2, _sz + 1); i <= _n; i++) {
+            if (spf[i] == 0) spf[i] = i, primes.push_back(i);
+            for (int j = 0; i * primes[j] <= _n; j++) {
+                spf[i * primes[j]] = primes[j];
+                is_prime[i * primes[j]] = false;
+                if (primes[j] == spf[i]) break;
+            }
+
+            if (spf[i] == spf[i / spf[i]]) {
+                mu[i] = 0;
+                phi[i] = phi[i / spf[i]] * spf[i];
+            } else {
+                mu[i] = -mu[i / spf[i]];
+                phi[i] = phi[i / spf[i]] * (spf[i] - 1);
+            }
         }
-        if (i <= n / i) for (int j = i * i; j <= n; j += i * i) mu[j] = 0;
+
+        _sz = _n;
     }
-}
+};
 
 #endif // MATH_PRIMES_HPP
