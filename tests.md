@@ -29,6 +29,10 @@
 - Correctness of Möbius function: [231246540](https://codeforces.com/contest/1845/submission/231246540)
 - Correctness of Euler phi function: [231246194](https://codeforces.com/contest/1797/submission/231246194)
 
+### Matrices (matrix.hpp)
+- [Matrix multiplication (mod 998244353)](https://judge.yosupo.jp/problem/matrix_product) ($N, M, K \leq 1024$): [1515 ms](https://judge.yosupo.jp/submission/170039)
+- [Correctness of matrix exponentiation (mod 1000000007)](https://cses.fi/problemset/task/1096/): [7595524](https://cses.fi/paste/8ecd1ba48e13c19873e604/)
+
 ## Polynomials
 
 ### Fast Fourier Transform (fft.hpp)
