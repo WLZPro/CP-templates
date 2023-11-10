@@ -1,19 +1,25 @@
-#ifndef DATA_STRUCTURES_FENWICK_TREE_HPP
-#define DATA_STRUCTURES_FENWICK_TREE_HPP 1
+#pragma once
+#line 2 "data_structures/fenwick_tree.hpp"
 
 #include <vector>
-#include <functional>
 #include <string>
+#include <functional>
 
-template<typename T> constexpr T _fenw_add(const T &a, const T &b) { return a + b; }
-template<typename T> constexpr T _fenw_sub(const T &a, const T &b) { return a - b; }
-template<typename T> constexpr T _fenw_zero() { return 0; }
+template<typename T>
+struct _ft_zero {
+    constexpr T operator()() { return 0; };
+};
 
-template<typename T, auto f = _fenw_add<T>, auto e = _fenw_zero<T>, auto f_rev = _fenw_sub<T> >
+template<typename T, typename F = std::plus<T>, typename FRev = std::minus<T>, typename E = _ft_zero<T> >
 class fenwick_tree {
-    private: 
+    private:
+    static constexpr F f = F();
+    static constexpr FRev f_rev = FRev();
+    static constexpr T e = E()();
+
     int n;
     std::vector<T> fenw;
+
     #ifdef DEBUG
     std::vector<T> debug;
     #endif
@@ -22,28 +28,35 @@ class fenwick_tree {
     fenwick_tree() : n(0) {}
 
     explicit fenwick_tree(int _n) : n(_n) {
-        fenw.assign(n, e());
+        fenw.assign(n, e);
+
         #ifdef DEBUG
-        debug.assign(n, e());
+        debug.assign(n, e);
         #endif
     }
 
-    void update(int idx, T x) {
+    void update(int idx, const T &val) {
+        for (; idx < n; idx |= (idx + 1)) fenw[idx] = f(fenw[idx], val);
+
         #ifdef DEBUG
-        debug[idx] = f(debug[idx], x);
+        debug[idx] = f(debug[idx], val);
         #endif
-        for (; idx < n; idx |= (idx + 1)) fenw[idx] = f(fenw[idx], x);
     }
 
     T query(int idx) const {
-        T ans = e();
+        T ans = e;
         for (; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = f(ans, fenw[idx]);
         return ans;
     }
 
-    T query(int l, int r) const { return f_rev(query(r), l > 0 ? query(l - 1) : e()); }
+    T query(int l, int r) const {
+        if (l == 0) return query(r);
+        return f_rev(query(r), query(l - 1));
+    }
 
-    int size() const { return n; }
+    int lower_bound(const T &x); // TO DO
+
+    const int &size() const { return n; }
 
     inline friend std::string to_string(const fenwick_tree &fenw) {
         #ifdef DEBUG
@@ -53,5 +66,3 @@ class fenwick_tree {
         #endif
     }
 };
-
-#endif // DATA_STRUCTURES_FENWICK_TREE_HPP
