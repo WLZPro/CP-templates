@@ -3,7 +3,7 @@
 ## Data Structures
 
 ### Fenwick Tree (fenwick_tree.hpp)
-- [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [57 ms](https://judge.yosupo.jp/submission/171076)
+- [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [58 ms](https://judge.yosupo.jp/submission/168504)
 
 ### Segment Tree (segment_tree.hpp)
 - [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [102 ms](https://judge.yosupo.jp/submission/168572)
