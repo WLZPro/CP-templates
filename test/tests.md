@@ -6,9 +6,9 @@
 - [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [57 ms](https://judge.yosupo.jp/submission/175608)
 
 ### Segment Tree (segment_tree.hpp)
-- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [102 ms](https://judge.yosupo.jp/submission/168572)
-- [Static range sum](https://judge.yosupo.jp/problem/static_range_sum) ($N, Q \leq 5 \times 10^5$): [124 ms](https://judge.yosupo.jp/submission/168574)
-- [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [105 ms](https://judge.yosupo.jp/submission/168576)
+- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [98 ms](https://judge.yosupo.jp/submission/175610)
+- [Static range sum](https://judge.yosupo.jp/problem/static_range_sum) ($N, Q \leq 5 \times 10^5$): [110 ms](https://judge.yosupo.jp/submission/175611)
+- [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [93 ms](https://judge.yosupo.jp/submission/175612)
 - [Point modification, range linear function composition](https://judge.yosupo.jp/problem/point_set_range_composite) ($N, Q \leq 5 \times 10^5$): [149 ms](https://judge.yosupo.jp/submission/168743)
 
 ### crazySegmentTree (segment_tree_crazy.hpp)
