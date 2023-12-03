@@ -18,7 +18,7 @@
 - [Range $a_i \leftarrow c \cdot a_i + d$ updates, range sums](https://judge.yosupo.jp/problem/range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [509 ms](https://judge.yosupo.jp/submission/168738)
 
 ### Sparse Table (sparse_table.hpp)
-- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [98 ms](https://judge.yosupo.jp/submission/168502)
+- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [92 ms](https://judge.yosupo.jp/submission/175614)
 
 ### Implicit Treap (treap_implicit.hpp)
 - [Point insertion and deletion, range $a_i \leftarrow c \cdot a_i + d$ updates, range reversals, range sum queries](https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [3742 ms](https://judge.yosupo.jp/submission/168888)

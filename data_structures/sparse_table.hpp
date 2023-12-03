@@ -1,54 +1,58 @@
-#ifndef DATA_STRUCTURES_SPARSE_TABLE_HPP
-#define DATA_STRUCTURES_SPARSE_TABLE_HPP 1
+#pragma once
+
+#include "util/abstract_types.hpp"
 
 #include <vector>
-#include <functional>
 #include <string>
 
-// https://cp-algorithms.com/data_structures/sparse-table.html
-template<typename T, auto f>
+template<typename _Sg>
 class sparse_table {
-    private:
-    int n;
-    std::vector< std::vector<T> > st;
-    std::vector<int> lg;
-    #ifdef DEBUG
-    std::vector<T> debug;
-    #endif
+    using T = typename _Sg::T;
 
     public:
-    sparse_table() {}
+    using value_type = T;
 
-    explicit sparse_table(const std::vector<T> &a) : n(static_cast<int>(a.size())), lg(n + 1) {
+    sparse_table() : n(0) {}
+
+    template<typename ...Args>
+    explicit sparse_table(Args &&...args) {
+        std::vector<T> a(args...);
+
         #ifdef DEBUG
-        debug = a;
+        _dbg = a;
         #endif
-        lg[1] = 0;
-        for (int i = 2; i <= n; i++) lg[i] = lg[i >> 1] + 1;
-        
-        st.resize(lg[n] + 1);
-        st[0].assign(a.begin(), a.end());
 
-        for (int k = 1, len = 2; k <= lg[n]; k++, len <<= 1) {
+        n = static_cast<int>(a.size());
+        st.resize((sizeof(n) << 3) - __builtin_clz(n)); st[0] = a;
+
+        for (int k = 1, len = 2; len <= n; k++, len <<= 1) {
             st[k].resize(n - len + 1);
-            for (int i = 0; i <= n - len; i++) st[k][i] = f(st[k - 1][i], st[k - 1][i + (len >> 1)]);
+            for (int i = 0; i <= n - len; i++) st[k][i] = _Sg::op(st[k - 1][i], st[k - 1][i + (len >> 1)]);
         }
     }
 
-    explicit sparse_table(const int &_n) : sparse_table(std::vector<T>(_n)) {}
+    const T &operator[](int idx) const { return st[0][idx]; }
 
     T query(int l, int r) const {
-        int k = lg[r - l + 1];
-        return f(st[k][l], st[k][r - (1 << k) + 1]);
+        int k = (sizeof(r) << 3) - __builtin_clz(r - l + 1) - 1;
+        return _Sg::op(st[k][l], st[k][r - (1 << k) + 1]);
     }
 
-    inline friend std::string to_string(const sparse_table &st) {
+    int size() const { return n; }
+
+    friend std::string to_string(const sparse_table &st) {
         #ifdef DEBUG
-        return to_string(st.debug);
+        return to_string(st._dbg);
         #else
         return "";
         #endif
     }
-};
 
-#endif // DATA_STRUCTURES_SPARSE_TABLE_HPP
+    private:
+    int n;
+    std::vector< std::vector<T> > st;
+
+    #ifdef DEBUG
+    std::vector<T> _dbg;
+    #endif
+};
