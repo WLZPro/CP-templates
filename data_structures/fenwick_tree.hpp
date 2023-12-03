@@ -1,68 +1,56 @@
 #pragma once
-#line 2 "data_structures/fenwick_tree.hpp"
+
+#include "util/abstract_types.hpp"
 
 #include <vector>
-#include <string>
-#include <functional>
 
-template<typename T>
-struct _ft_zero {
-    constexpr T operator()() { return 0; };
-};
-
-template<typename T, typename F = std::plus<T>, typename FRev = std::minus<T>, typename E = _ft_zero<T> >
+template<typename _Ag>
 class fenwick_tree {
-    private:
-    static constexpr F f = F();
-    static constexpr FRev f_rev = FRev();
-    static constexpr T e = E()();
-
-    int n;
-    std::vector<T> fenw;
-
-    #ifdef DEBUG
-    std::vector<T> debug;
-    #endif
-    
     public:
+    using T = typename _Ag::T;
+
     fenwick_tree() : n(0) {}
-
-    explicit fenwick_tree(int _n) : n(_n) {
-        fenw.assign(n, e);
-
+    explicit fenwick_tree(int _n) : n(_n), fenw(n, _Ag::e) {
         #ifdef DEBUG
-        debug.assign(n, e);
+        _dbg.assign(n, _Ag::e);
         #endif
     }
-
+    
     void update(int idx, const T &val) {
         #ifdef DEBUG
-        debug[idx] = f(debug[idx], val);
+        _dbg[idx] = _Ag::op(_dbg[idx], val);
         #endif
 
-        for (; idx < n; idx |= (idx + 1)) fenw[idx] = f(fenw[idx], val);
+        for (; idx < n; idx |= (idx + 1)) fenw[idx] = _Ag::op(fenw[idx], val);
     }
 
     T query(int idx) const {
-        T ans = e;
-        for (; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = f(ans, fenw[idx]);
+        T ans = _Ag::e;
+        for (; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = _Ag::op(ans, fenw[idx]);
         return ans;
     }
 
     T query(int l, int r) const {
+        if (l > r) return _Ag::e;
         if (l == 0) return query(r);
-        return f_rev(query(r), query(l - 1));
-    }
+        return _Ag::op(query(r), _Ag::inv(query(l - 1)));
+    };
 
-    int lower_bound(const T &x); // TO DO
+    T operator[](int idx) const { return query(idx, idx); }
 
-    const int &size() const { return n; }
-
-    inline friend std::string to_string(const fenwick_tree &fenw) {
+    friend std::string to_string(const fenwick_tree &ft) {
         #ifdef DEBUG
-        return to_string(fenw.debug);
+        return to_string(ft._dbg);
         #else
         return "";
         #endif
     }
+
+    private:
+    int n;
+    std::vector<T> fenw;
+
+    #ifdef DEBUG
+    std::vector<T> _dbg;
+    #endif
 };

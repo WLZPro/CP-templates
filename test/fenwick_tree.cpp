@@ -3,6 +3,12 @@
 #include <iostream>
 using namespace std;
 
+#ifdef DEBUG
+#include "debug.hpp"
+#else
+#define debug(...)
+#endif
+
 #include "util/fast_io.hpp"
 #include "data_structures/fenwick_tree.hpp"
 
@@ -11,7 +17,7 @@ int main() {
 
     int n, q; cin >> n >> q;
     
-    fenwick_tree<long long> fenw(n);
+    fenwick_tree< addition<long long> > fenw(n);
     for (int i = 0; i < n; i++) {
         int a; cin >> a;
         fenw.update(i, a);
