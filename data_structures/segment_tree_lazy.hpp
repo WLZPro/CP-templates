@@ -1,68 +1,86 @@
-#ifndef DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP
-#define DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP 1
+#pragma once
+
+#include "util/abstract_types.hpp"
 
 #include <vector>
-#include <functional>
+#include <string>
 
-// https://github.com/atcoder/ac-library/blob/master/atcoder/lazysegtree.hpp
-template<typename T, auto f, typename TMap, auto apply, auto combine, auto id>
-class segment_tree {
-    protected:
-    int n, lg;
-    std::vector<T> st;
-    std::vector<TMap> lazy;
-
-    inline void update_from_children(int idx) { st[idx] = f(st[idx << 1], st[idx << 1 | 1]); }
-
-    inline void apply_to_node(int idx, const TMap &mp) {
-        st[idx] = apply(mp, st[idx]);
-        if (idx < n) lazy[idx] = combine(mp, lazy[idx]);
-    }
-
-    inline void push(int idx) {
-        apply_to_node(idx << 1, lazy[idx]);
-        apply_to_node(idx << 1 | 1, lazy[idx]);
-        lazy[idx] = id();
-    }
+template<typename _Mn, typename _Hm>
+class lazy_segment_tree {
+    using T = typename _Mn::T;
+    using F = typename _Hm::T;
 
     public:
-    // @note Hasn't been tested yet.
-    segment_tree() : segment_tree(0) {}
+    using value_type = T;
+    using mapping_type = F;
 
-    explicit segment_tree(const std::vector<T> &a) : n(static_cast<int>(a.size())) {
-        if (a.empty()) return;
-        lg = sizeof(int) * 8 - __builtin_clz(n);
-        st.resize(n << 1); lazy.assign(n, id());
-        for (int i = 0; i < n; i++) st[n + i] = a[i];
-        for (int i = n - 1; i > 0; i--) update_from_children(i);
+    lazy_segment_tree() : n(0) {}
+    
+    explicit lazy_segment_tree(int _n)
+        : lg((sizeof(int) << 3) - __builtin_clz(_n)), n(1 << lg), len(_n),
+          st(n << 1, _Mn::e), lazy(n, _Hm::id) {
+        #ifdef DEBUG
+        _dbg.assign(n << 1, _Mn::e);
+        #endif
     }
 
-    // @note Hasn't been tested yet.
-    explicit segment_tree(const int &_n, const T &e = 0) : segment_tree(std::vector<T>(_n, e)) {}
+    template<typename ...Args>
+    explicit lazy_segment_tree(Args &&...args) {
+        std::vector<T> a(args...);
 
-    template<typename TBegin, typename TEnd>
-    segment_tree(const TBegin &b, const TEnd &e) : segment_tree(std::vector<T>(b, e)) {}
+        #ifdef DEBUG
+        _dbg = a;
+        #endif
 
-    void set(int idx, const T &x) {
+        if (a.empty()) {
+            n = len = 0;
+            st = {}; lazy = {};
+            return;
+        }
+
+        len = static_cast<int>(a.size());
+        lg = (sizeof(int) << 3) - __builtin_clz(len);
+        n = 1 << lg;
+
+        st.resize(n << 1);
+        std::copy(a.begin(), a.end(), st.begin() + n);
+        std::fill(st.begin() + n + len, st.end(), _Mn::e);
+        for (int i = n - 1; i > 0; i--) pull(i);
+
+        lazy.assign(n, _Hm::id);        
+    }
+
+    void set(int idx, const T &val) {
+        #ifdef DEBUG
+        _dbg[idx] = val;
+        #endif
+
         idx += n;
         for (int i = lg; i > 0; i--) push(idx >> i);
-        st[idx] = x;
-        for (int i = 1; i <= lg; i++) update_from_children(idx >> i); 
+        st[idx] = val;
+        for (int i = 1; i <= lg; i++) pull(idx >> i);
     }
 
-    // @note Hasn't been tested yet.
-    void update_all(const TMap &mp) { update(0, n - 1, mp); }
+    void update_all(const F &f) { update(0, len - 1, f); }
 
-    // @note Hasn't been tested yet.
-    void update(int idx, const TMap &mp) {
+    void update(int idx, const F &f) {
+        #ifdef DEBUG
+        _dbg[idx] = _Hm::map(f, _dbg[idx]);
+        #endif
+
         idx += n;
         for (int i = lg; i > 0; i--) push(idx >> i);
-        st[idx] = apply(mp, st[idx]);
-        for (int i = 1; i <= lg; i++) update_from_children(idx >> i);
+        st[idx] = _Hm::map(f, st[idx]);
+        for (int i = 1; i <= lg; i++) pull(idx >> i);
     }
 
-    void update(int l, int r, const TMap &mp) {
+    void update(int l, int r, const F &f) {
+        #ifdef DEBUG
+        for (int i = l; i <= r; i++) _dbg[i] = _Hm::map(f, _dbg[i]);
+        #endif
+
         l += n; r += n + 1;
+
         for (int i = lg; i > 0; i--) {
             if (((l >> i) << i) != l) push(l >> i);
             if (((r >> i) << i) != r) push((r - 1) >> i);
@@ -70,20 +88,20 @@ class segment_tree {
 
         int tmp_l = l, tmp_r = r;
         for (; l < r; l >>= 1, r >>= 1) {
-            if (l & 1) apply_to_node(l++, mp);
-            if (r & 1) apply_to_node(--r, mp);
+            if (l & 1) apply(f, l++);
+            if (r & 1) apply(f, --r);
         }
         l = tmp_l; r = tmp_r;
 
         for (int i = 1; i <= lg; i++) {
-            if (((l >> i) << i) != l) update_from_children(l >> i);
-            if (((r >> i) << i) != r) update_from_children((r - 1) >> i);
+            if (((l >> i) << i) != l) pull(l >> i);
+            if (((r >> i) << i) != r) pull((r - 1) >> i);
         }
     }
 
-    T query_all() const { return st[1]; }
+    const T &query_all() const { return st[1]; }
 
-    T query(int idx) {
+    const T &query(int idx) {
         idx += n;
         for (int i = lg; i > 0; i--) push(idx >> i);
         return st[idx];
@@ -91,6 +109,7 @@ class segment_tree {
 
     T query(int l, int r) {
         l += n; r += n + 1;
+
         for (int i = lg; i > 0; i--) {
             if (((l >> i) << i) != l) push(l >> i);
             if (((r >> i) << i) != r) push((r - 1) >> i);
@@ -101,32 +120,50 @@ class segment_tree {
         for (; l < r; l >>= 1, r >>= 1) {
             if (l & 1) {
                 if (!l_def) ans_l = st[l++], l_def = true;
-                else ans_l = f(ans_l, st[l++]);
+                else ans_l = _Mn::op(ans_l, st[l++]);
             }
             if (r & 1) {
                 if (!r_def) ans_r = st[--r], r_def = true;
-                else ans_r = f(st[--r], ans_r);
+                else ans_r = _Mn::op(st[--r], ans_r);
             }
         }
         if (!l_def) return ans_r;
         if (!r_def) return ans_l;
-        return f(ans_l, ans_r);
+        return _Mn::op(ans_l, ans_r);
     }
 
-    // @note Hasn't been tested yet.
-    T operator[](int idx) { return query(idx); }
+    const T &operator[](int idx) { return query(idx); }
 
-    // @note Hasn't been tested yet.
-    int size() const { return n; }
+    int size() const { return len; }
+
+    friend std::string to_string(const lazy_segment_tree &st) {
+        #ifdef DEBUG
+        return to_string(st._dbg);
+        #else
+        return "";
+        #endif
+    }
+
+    private:
+    int lg, n, len;
+    std::vector<T> st;
+    std::vector<F> lazy;
+
+    #ifdef DEBUG
+    std::vector<T> _dbg;
+    #endif
+
+    inline void pull(int idx) { st[idx] = _Mn::op(st[idx << 1], st[idx << 1 | 1]); }
+
+    inline void apply(const F &f, int idx) {
+        st[idx] = _Hm::map(f, st[idx]);
+        if (idx < n) lazy[idx] = _Hm::comp(f, lazy[idx]);
+    }
+
+    inline void push(int idx) {
+        apply(lazy[idx], idx << 1); apply(lazy[idx], idx << 1 | 1);
+        lazy[idx] = _Hm::id;
+    }
 };
 
-template<typename T> constexpr T _st_add(const T& a, const T &b) { return a + b; }
-template<typename T> constexpr T _st_min(const T& a, const T &b) { return (b < a) ? b : a; }
-template<typename T> constexpr T _st_max(const T& a, const T &b) { return (a < b) ? b : a; }
-template<typename T> constexpr T _st_zero() { return 0; }
-
-// @note Hasn't been tested yet.
-template<typename T> using max_segment_tree = segment_tree<T, _st_max<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >;
-template<typename T> using min_segment_tree = segment_tree<T, _st_min<T>, T, _st_add<T>, _st_add<T>, _st_zero<T> >;
-
-#endif // DATA_STRUCTURES_SEGMENT_TREE_LAZY_HPP
+template<typename _Mn, typename _Hm> using lazy_segtree = lazy_segment_tree<_Mn, _Hm>;
