@@ -26,6 +26,9 @@
 ### Implicit Treap (treap_implicit.hpp)
 - [Point insertion and deletion, range $a_i \leftarrow c \cdot a_i + d$ updates, range reversals, range sum queries](https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [3742 ms](https://judge.yosupo.jp/submission/168888)
 
+### Union Find (union_find.hpp)
+- [Union find](https://judge.yosupo.jp/problem/unionfind) ($N, Q \leq 2 \times 10^5$): [10 ms](https://judge.yosupo.jp/submission/175863)
+
 ## Math
 
 ### Math utilities (math_utils.hpp)
