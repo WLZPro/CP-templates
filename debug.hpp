@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stack>
 #include <queue>
+#include <complex>
 
 using std::to_string;
 
@@ -63,6 +64,15 @@ std::string to_string(const std::queue<T> &q) {
         tmp.pop();
     }
     ans += '}';
+    return ans;
+}
+
+template<typename T>
+std::string to_string(const std::complex<T> &z) {
+    std::string ans = to_string(z.real());
+    if (z.imag() > 0) ans += '+' + to_string(z.imag());
+    else ans += '-' + to_string(-z.imag());
+    ans += 'i';
     return ans;
 }
 
