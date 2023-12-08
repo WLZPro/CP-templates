@@ -1,28 +1,80 @@
-#ifndef DATA_STRUCTURES_TREAP_IMPLICIT_HPP
-#define DATA_STRUCTURES_TREAP_IMPLICIT_HPP 1
+#pragma once
+
+#include "util/abstract_types.hpp"
 
 #include <random>
 #include <chrono>
 #include <vector>
 
 // https://cp-algorithms.com/data_structures/treap.html
-template<typename T, auto f, typename TMap, auto apply, auto combine, auto id>
+template<typename _Mn, typename _Hm = id_map<typename _Mn::T>, int cache_size = 1 << 20>
 class implicit_treap {
+    using T = typename _Mn::T;
+    using F = typename _Hm::T;
+
+    public:
+    using value_type = T;
+    using mapping_type = F;
+
+    implicit_treap() : implicit_treap(std::vector<T>(), std::chrono::steady_clock().now().time_since_epoch().count()) {}
+
+    explicit implicit_treap(const std::vector<T> &a) : implicit_treap(a, std::chrono::steady_clock().now().time_since_epoch().count()) {}
+
+    implicit_treap(const std::vector<T> &a, const int &seed) {
+        rng.seed(seed);
+        root = build(a, 0, static_cast<int>(a.size()));
+    }
+
+    void insert(int idx, const T &val) {
+        node *t_r;
+        split(root, root, t_r, idx);
+        merge(root, root, fetch(val, rng())); merge(root, root, t_r);
+    }
+
+    T query(int l, int r) { return query(root, l, r); }
+
+    void update(int l, int r, const F &f) { update(root, l, r, f); }
+
+    void erase(int idx) { erase(root, idx); }
+
+    void reverse(int l, int r) {
+        node *t_l, *t_r;
+        split(root, t_l, root, l); split(root, root, t_r, r - l + 1);
+        root->rev = !root->rev;
+        merge(root, t_l, root); merge(root, root, t_r);
+    }
+
+    T operator[](int idx) { return query(idx, idx); }
+
+    int size() const { return root->cnt; }
+    
     private:
     std::mt19937 rng;
 
     struct node {
         T val, range_val;
         int pr, cnt;
-        TMap lazy;
+        F lazy;
         bool rev;
         node *l, *r;
 
         node() {}
-        node(const T &_val, const int &_pr) : val(_val), range_val(_val), pr(_pr), cnt(1), lazy(id()), rev(false), l(nullptr), r(nullptr) {}
-    } *root;
+        node(const T &_val, const int &_pr) : val(_val), range_val(_val), pr(_pr), cnt(1), lazy(_Hm::id), rev(false), l(nullptr), r(nullptr) {}
+    } cache[cache_size], *root;
 
-    #define CNT(t) ((t) == nullptr ? 0 : (t)->cnt)
+    inline node *fetch(const T &val, const int &pr) {
+        static int cache_idx = 0;
+        node *r = &cache[cache_idx++];
+        r->val = r->range_val = val;
+        r->pr = pr;
+        r->cnt = 1;
+        r->lazy = _Hm::id;
+        r->rev = false;
+        r->l = r->r = nullptr;
+        return r;
+    }
+
+    inline int cnt(node *t) { return t == nullptr ? 0 : t->cnt; }
 
     inline void push(node *t) {
         if (t == nullptr) return;
@@ -32,20 +84,20 @@ class implicit_treap {
             if (t->l != nullptr) t->l->rev = !t->l->rev;
             if (t->r != nullptr) t->r->rev = !t->r->rev;
         }
-        t->val = apply(t->lazy, t->val); t->range_val = apply(t->lazy, t->range_val);
-        if (t->l != nullptr) t->l->lazy = combine(t->lazy, t->l->lazy);
-        if (t->r != nullptr) t->r->lazy = combine(t->lazy, t->r->lazy);
-        t->lazy = id();
+        t->val = _Hm::map(t->lazy, t->val); t->range_val = _Hm::map(t->lazy, t->range_val);
+        if (t->l != nullptr) t->l->lazy = _Hm::comp(t->lazy, t->l->lazy);
+        if (t->r != nullptr) t->r->lazy = _Hm::comp(t->lazy, t->r->lazy);
+        t->lazy = _Hm::id;
     }
 
     inline void update_from_children(node *t) {
         if (t == nullptr) return;
         if (t->l != nullptr) push(t->l);
         if (t->r != nullptr) push(t->r);
-        t->cnt = CNT(t->l) + CNT(t->r) + 1;
+        t->cnt = cnt(t->l) + cnt(t->r) + 1;
         t->range_val = t->val;
-        if (t->l != nullptr) t->range_val = f(t->l->range_val, t->range_val);
-        if (t->r != nullptr) t->range_val = f(t->range_val, t->r->range_val);
+        if (t->l != nullptr) t->range_val = _Mn::op(t->l->range_val, t->range_val);
+        if (t->r != nullptr) t->range_val = _Mn::op(t->range_val, t->r->range_val);
     }
 
     inline void heapify(node *t) {
@@ -62,7 +114,7 @@ class implicit_treap {
     node *build(const std::vector<T> &a, int l, int r) {
         if (l >= r) return nullptr;
         int m = (l + r) >> 1;
-        node *t = new node(a[m], rng());
+        node *t = fetch(a[m], rng());
         t->l = build(a, l, m); t->r = build(a, m + 1, r);
         heapify(t);
         update_from_children(t);
@@ -75,8 +127,8 @@ class implicit_treap {
             return;
         }
         push(t);
-        if (idx <= add + CNT(t->l)) split(t->l, l, t->l, idx, add), r = t;
-        else                        split(t->r, t->r, r, idx, add + CNT(t->l) + 1), l = t;
+        if (idx <= add + cnt(t->l)) split(t->l, l, t->l, idx, add), r = t;
+        else                        split(t->r, t->r, r, idx, add + cnt(t->l) + 1), l = t;
         update_from_children(t);
     }
 
@@ -91,90 +143,41 @@ class implicit_treap {
 
     T query(node *t, int l, int r, int add = 0) {
         push(t);
-        if (l <= add && add + CNT(t) - 1 <= r) return t->range_val;
+        if (l <= add && add + cnt(t) - 1 <= r) return t->range_val;
         bool ans_def = false; T ans{};
-        int cur_idx = add + CNT(t->l);
+        int cur_idx = add + cnt(t->l);
         if (l < cur_idx && t->l != nullptr) ans = query(t->l, l, r, add), ans_def = true;
         if (l <= cur_idx && cur_idx <= r) {
             if (!ans_def) ans = t->val, ans_def = true;
-            else ans = f(ans, t->val);
+            else ans = _Mn::op(ans, t->val);
         }
         if (r > cur_idx && t->r != nullptr) {
             if (!ans_def) ans = query(t->r, l, r, cur_idx + 1), ans_def = true;
-            else ans = f(ans, query(t->r, l, r, add + CNT(t->l) + 1));
+            else ans = _Mn::op(ans, query(t->r, l, r, add + cnt(t->l) + 1));
         }
         return ans;
     }
 
-    void update(node *t, int l, int r, const TMap &mp, int add = 0) {
+    void update(node *t, int l, int r, const F &f, int add = 0) {
         push(t);
-        if (l <= add && add + CNT(t) - 1 <= r) {
-            t->lazy = mp;
+        if (l <= add && add + cnt(t) - 1 <= r) {
+            t->lazy = f;
             push(t);
             return;
         }
-        int cur_idx = add + CNT(t->l);
-        if (l < cur_idx && t->l != nullptr) update(t->l, l, r, mp, add);
-        if (l <= cur_idx && cur_idx <= r) t->val = apply(mp, t->val);
-        if (r > cur_idx && t->r != nullptr) update(t->r, l, r, mp, cur_idx + 1);
+        int cur_idx = add + cnt(t->l);
+        if (l < cur_idx && t->l != nullptr) update(t->l, l, r, f, add);
+        if (l <= cur_idx && cur_idx <= r) t->val = _Hm::map(f, t->val);
+        if (r > cur_idx && t->r != nullptr) update(t->r, l, r, f, cur_idx + 1);
         update_from_children(t);
     }
 
     void erase(node *&t, int idx, int add = 0) {
         push(t);
-        int cur_idx = add + CNT(t->l);
-        if (cur_idx == idx) {
-            node *rm = t;
-            merge(t, t->l, t->r);
-            delete rm;
-        } else if (idx < cur_idx) erase(t->l, idx, add);
-          else                    erase(t->r, idx, add + CNT(t->l) + 1);
+        int cur_idx = add + cnt(t->l);
+        if (cur_idx == idx) merge(t, t->l, t->r);
+        else if (idx < cur_idx) erase(t->l, idx, add);
+        else                    erase(t->r, idx, add + cnt(t->l) + 1);
         update_from_children(t);
     }
-
-    void destroy(node *t) {
-        if (t == nullptr) return;
-        if (t->l != nullptr) destroy(t->l);
-        if (t->r != nullptr) destroy(t->r);
-        delete t;
-    }
-
-    #undef CNT
-
-    public:
-    implicit_treap() : implicit_treap(std::vector<T>(), std::chrono::steady_clock().now().time_since_epoch().count()) {}
-
-    explicit implicit_treap(const std::vector<T> &a) : implicit_treap(a, std::chrono::steady_clock().now().time_since_epoch().count()) {}
-
-    implicit_treap(const std::vector<T> &a, const int &seed) {
-        rng.seed(seed);
-        root = build(a, 0, static_cast<int>(a.size()));
-    }
-
-    ~implicit_treap() { destroy(root); }
-
-    void insert(int idx, const T &val) {
-        node *t_r;
-        split(root, root, t_r, idx);
-        merge(root, root, new node(val, rng())); merge(root, root, t_r);
-    }
-
-    T query(int l, int r) { return query(root, l, r); }
-
-    void update(int l, int r, const TMap &mp) { update(root, l, r, mp); }
-
-    void erase(int idx) { erase(root, idx); }
-
-    void reverse(int l, int r) {
-        node *t_l, *t_r;
-        split(root, t_l, root, l); split(root, root, t_r, r - l + 1);
-        root->rev = !root->rev;
-        merge(root, t_l, root); merge(root, root, t_r);
-    }
-
-    T operator[](int idx) { return query(idx, idx); }
-
-    int size() const { return root->cnt; }
 };
-
-#endif // DATA_STRUCTURES_TREAP_IMPLICIT_HPP

@@ -29,3 +29,12 @@ struct maximum {
     static constexpr T e = std::numeric_limits<T>::min();
     static constexpr const T &op(const T &a, const T &b) { return a < b ? b : a; }
 };
+
+template<typename S>
+struct id_map {
+    using T = bool;
+
+    static constexpr T id = false;
+    static constexpr const S &map(const bool &b, const S &s) { (void) b; return s; } 
+    static constexpr const bool &comp(const bool &a, const bool &b) { (void) b; return a; }
+};

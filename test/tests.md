@@ -24,7 +24,8 @@
 - [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [92 ms](https://judge.yosupo.jp/submission/175614)
 
 ### Implicit Treap (treap_implicit.hpp)
-- [Point insertion and deletion, range $a_i \leftarrow c \cdot a_i + d$ updates, range reversals, range sum queries](https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [3742 ms](https://judge.yosupo.jp/submission/168888)
+- [Point insertion and deletion, range $a_i \leftarrow c \cdot a_i + d$ updates, range reversals, range sum queries](https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [3908 ms	](https://judge.yosupo.jp/submission/176532)
+- [Static range reversals](https://codeforces.com/contest/1878/problem/D) ($N, Q \leq 2 \times 10^5$): [436 ms](https://codeforces.com/contest/1878/submission/236327907)
 
 ### Union Find (union_find.hpp)
 - [Union find](https://judge.yosupo.jp/problem/unionfind) ($N, Q \leq 2 \times 10^5$): [10 ms](https://judge.yosupo.jp/submission/175863)
