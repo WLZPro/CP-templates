@@ -1,22 +1,26 @@
-#ifndef MATH_MATH_UTILS_HPP
-#define MATH_MATH_UTILS_HPP 1
+#pragma once
 
-#include <tuple>
 #include <utility>
+#include <vector>
+
+template<typename T>
+constexpr T mod_inv(const T &a, const T &mod) {
+    if (a <= 1) return a;
+    return mod - (unsigned long long) (mod / a) * mod_inv(mod % a, mod) % mod;
+}
 
 // https://cp-algorithms.com/algebra/extended-euclid-algorithm.html#iterative-version
 template<typename T1, typename T2>
-T1 extgcd(const T1& a, const T1& b, T2 &x, T2 &y) {
+constexpr T1 extgcd(T1 a, T1 b, T2 &x, T2 &y) {
     x = 1; y = 0;
-    T1 a1(a), b1(b);
-    T2 x1 = 0, y1 = 1;
-    while (b1 != 0) {
-        T1 q = a1 / b1;
-        std::tie(x, x1) = std::make_pair(x1, x - q * x1);
-        std::tie(y, y1) = std::make_pair(y1, y - q * y1);
-        std::tie(a1, b1) = std::make_pair(b1, a1 - q * b1);
+    T2 x1(0), y1(1);
+    while (b != 0) {
+        T1 q = a / b;
+        x = std::exchange(x1, x - q * x1);
+        y = std::exchange(y1, y - q * y1);
+        a = std::exchange(b, a - q * b);
     }
-    return a1;
+    return a;
 }
 
 template<typename T, typename TExp>
@@ -43,5 +47,3 @@ T linear_floor_sum(const T &n, const T &m, const T &a, const T &b) {
     T tmp = (a * (n - 1) + b) / m;
     return (n - 1) * tmp - linear_floor_sum(tmp, a, m, m - b - 1);
 }
-
-#endif // MATH_MATH_UTILS_HPP

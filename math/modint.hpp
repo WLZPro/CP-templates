@@ -1,99 +1,114 @@
-#ifndef MATH_MODINT_HPP
-#define MATH_MODINT_HPP 1
+#pragma once
 
-#include "math/math_utils.hpp"
-
-#include <algorithm>
-#include <iostream>
 #include <string>
 
-template<const int MOD>
+#include "atcoder/internal_math.hpp"
+#include "math/math_utils.hpp"
+
+template<unsigned int md>
 class modint {
-    private: int x;
+    using mint = modint;
 
     public:
-    
-    // Assignment/constuctors
-    modint() : x(0) {}
+    static constexpr unsigned int mod = md;
+
+    constexpr modint() : x(0) {}
 
     template<typename T>
-    void set(const T _x, bool raw = false) {
-        if (raw || (0 <= _x && _x < MOD)) x = _x;
+    constexpr modint(const T &_x, bool raw = false) { set(_x, raw); }
+
+    template<typename T>
+    constexpr mint &operator=(const T &_x) { set(_x); return *this; }
+
+    template<typename T>
+    constexpr void set(const T &_x, bool raw = false) {
+        if (raw || (0 <= _x && static_cast<unsigned int>(_x) < md)) x = _x;
         else {
-            x = _x % MOD;
-            if (x < 0) x += MOD;
+            long long tmp = _x % md;
+            if (tmp < 0) tmp += md;
+            x = (unsigned int) tmp;
         }
     }
 
-    template<typename T>
-    modint(const T &_x, bool raw = false) { set(_x, raw); }
+    constexpr unsigned int val() const { return x; }
 
     template<typename T>
-    constexpr modint &operator=(const T &_x) { set(_x); return *this; }
+    constexpr operator T() const { return (T) x; }
 
-    // Binary arithmetic operators
-    constexpr modint &operator+=(const modint &rhs) { x += rhs.x; if (x >= MOD) x -= MOD; return *this; }
-    constexpr friend modint operator+(modint lhs, const modint &rhs) { return lhs += rhs; }
-
-    constexpr modint &operator-=(const modint &rhs) { x -= rhs.x; if (x < 0) x += MOD; return *this; }
-    constexpr friend modint operator-(modint lhs, const modint &rhs) { return lhs -= rhs; }
-
-    constexpr modint &operator*=(const modint &rhs) { x = (unsigned long long) x * rhs.x % MOD; return *this; }
-    constexpr friend modint operator*(modint lhs, const modint &rhs) { return lhs *= rhs; }
-
-    constexpr modint inv() const { modint x1, y1; extgcd(x, MOD, x1, y1); return x1; }
-
-    constexpr modint &operator/=(const modint &rhs) { operator*=(rhs.inv()); return *this; }
-    constexpr friend modint operator/(modint lhs, const modint &rhs) { return lhs /= rhs; }
-
-    constexpr modint &operator%=(const modint &rhs) { x %= rhs.val(); return *this; }
-    constexpr friend modint operator%(modint lhs, const modint &rhs) { return lhs %= rhs; }
-
-    // Unary arithemtic operators
-    constexpr modint operator-() const { return modint(MOD - x, true); }
-    constexpr modint operator+() const { return modint(*this); }
-
-    // Increment/decrement
-    constexpr modint &operator++() { if (++x == MOD) x = 0; return *this; }
-    constexpr modint operator++(int) { modint cpy(*this); operator++(); return cpy; }
-
-    constexpr modint &operator--() { if (--x < 0) x = MOD - 1; return *this; }
-    constexpr modint operator--(int) { modint cpy(*this); operator--(); return cpy; }
-
-    // Comparison operators
-#if __cplusplus < 202002L
-    constexpr friend bool operator==(const modint &lhs, const modint &rhs) { return lhs.val() == rhs.val(); }
-    constexpr friend bool operator!=(const modint &lhs, const modint &rhs) { return !(lhs == rhs); }
-    constexpr friend bool operator< (const modint &lhs, const modint &rhs) { return lhs.val() < rhs.val(); }
-    constexpr friend bool operator> (const modint &lhs, const modint &rhs) { return rhs < lhs; }
-    constexpr friend bool operator<=(const modint &lhs, const modint &rhs) { return !(lhs > rhs); }
-    constexpr friend bool operator>=(const modint &lhs, const modint &rhs) { return !(lhs < rhs); }
-#else
-    constexpr auto operator<=>(const modint&) const = default;
-#endif
-
-    // Input/output
-    friend std::istream &operator>>(std::istream &is, modint &m) { is >> m.x; return is; }
-    friend std::ostream &operator<<(std::ostream &os, const modint &m) { os << m.x; return os; }
-
-    // Casting
-    template<typename T>
-    constexpr operator T() const { return x; }
-
-    // Value extraction
-    constexpr int val() const { return x; }
-
-    // Debugging
-    inline friend std::string to_string(const modint &m) {
-        using namespace std;
-        return to_string(m.x);
+    constexpr mint &operator++() {
+        if (++x == md) x = 0;
+        return *this;
     }
+
+    constexpr mint operator++(int) {
+        mint cpy(*this); operator++();
+        return cpy;
+    }
+
+    constexpr mint &operator--() {
+        if (x == 0) x = md;
+        x--;
+        return *this;
+    }
+
+    constexpr mint operator--(int) {
+        mint cpy(*this); operator--();
+        return cpy;
+    }
+
+    constexpr mint &operator+=(const mint &rhs) {
+        if ((x += rhs.x) >= md) x -= md;
+        return *this;
+    }
+    constexpr friend mint operator+(mint lhs, const mint &rhs) { return lhs += rhs; }
+
+    constexpr mint &operator-=(const mint &rhs) {
+        if ((x -= rhs.x) >= md) x += md;
+        return *this;
+    }
+    constexpr friend mint operator-(mint lhs, const mint &rhs) { return lhs -= rhs; }
+
+    constexpr mint &operator*=(const mint &rhs) {
+        x = (unsigned long long) x * rhs.x % md;
+        return *this;
+    }
+    constexpr friend mint operator*(mint lhs, const mint &rhs) { return lhs *= rhs; }
+
+    constexpr mint &operator/=(const mint &rhs) {
+        operator*=(rhs.inv());
+        return *this;
+    }
+
+    constexpr friend mint operator/(mint lhs, const mint &rhs) { return lhs /= rhs; }
+
+    constexpr mint operator+() const { return *this; }
+    constexpr mint operator-() const { return mint(md - x, true); }
+
+    constexpr mint inv() const {
+        if constexpr (atcoder::internal::is_prime<md>) return mod_inv(x, md);
+        else {
+            mint x1, y1; extgcd(x, md, x1, y1);
+            return x1;
+        }
+    }
+
+    constexpr friend bool operator==(const mint &a, const mint &b) { return a.x == b.x; }
+    constexpr friend bool operator!=(const mint &a, const mint &b) { return a.x != b.x; }
+    constexpr friend bool operator< (const mint &a, const mint &b) { return a.x <  b.x; }
+    constexpr friend bool operator> (const mint &a, const mint &b) { return a.x >  b.x; }
+    constexpr friend bool operator<=(const mint &a, const mint &b) { return a.x <= b.x; }
+    constexpr friend bool operator>=(const mint &a, const mint &b) { return a.x >= b.x; }
+
+    template<typename InputStream>
+    friend InputStream  &operator>>(InputStream  &is, mint &m) { return is >> m.x; }
+    template<typename OutputStream>
+    friend OutputStream &operator<<(OutputStream &os, const mint &m) { return os << m.x; }
+
+    inline friend std::string to_string(const mint &m) { return std::to_string(m.x); }
+
+    private:
+    unsigned int x;
 };
 
-template<const int MOD, typename T, typename S>
-modint<MOD> mpow(const T &a, const S &b) { return bpow(modint<MOD>(a), b); }
-
 using modint1000000007 = modint<1000000007>;
-using modint998244353 = modint<998244353>;
-
-#endif // MATH_MODINT_HPP
+using modint998244353  = modint<998244353>;

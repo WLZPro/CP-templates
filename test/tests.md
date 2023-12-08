@@ -15,7 +15,7 @@
 - [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [75 ms](https://judge.yosupo.jp/submission/168740)
 
 ### Lazy Segment Tree (segment_tree_lazy.hpp)
-- [Range $a_i \leftarrow c \cdot a_i + d$ updates, range sums](https://judge.yosupo.jp/problem/range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [635 ms](https://judge.yosupo.jp/submission/175771)
+- [Range $a_i \leftarrow c \cdot a_i + d$ updates, range sums](https://judge.yosupo.jp/problem/range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [595 ms](https://judge.yosupo.jp/submission/176505)
 
 ### Persistent Segment Tree (segment_tree_persistent.hpp)
 - [Correctness](https://oj.uz/problem/view/COCI21_index): [882940](https://oj.uz/submission/882940)
@@ -51,9 +51,9 @@
 - [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [205 ms](https://judge.yosupo.jp/submission/168967)
 
 ### Power series (power_series.hpp)
-- [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [659 ms](https://judge.yosupo.jp/submission/168989)
-- [Logarithm of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [932 ms](https://judge.yosupo.jp/submission/168990)
-- [Exponential of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/exp_of_formal_power_series) ($N \leq 5 \times 10^5$): [1278 ms](https://judge.yosupo.jp/submission/169042)
+- [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [641 ms](https://judge.yosupo.jp/submission/176511)
+- [Logarithm of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [958 ms](https://judge.yosupo.jp/submission/176510)
+- [Exponential of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/exp_of_formal_power_series) ($N \leq 5 \times 10^5$): [1245 ms](https://judge.yosupo.jp/submission/176508)
 
 ## Utilities
 
