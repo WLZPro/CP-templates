@@ -36,6 +36,7 @@
 - [Linear floor sum](https://judge.yosupo.jp/problem/sum_of_floor_of_linear) ($N, M \leq 10^9$): [52 ms](https://judge.yosupo.jp/submission/173167)
 
 ### Prime numbers and arithmetic functions (primes.hpp)
+- [Deterministic primality check](https://www.spoj.com/problems/PON/) ($T \leq 500, N < 2^{63}$): [30 ms](https://www.spoj.com/status/ns=32323234#)
 - Correctness of Möbius function: [231246540](https://codeforces.com/contest/1845/submission/231246540)
 - Correctness of Euler phi function: [231246194](https://codeforces.com/contest/1797/submission/231246194)
 
