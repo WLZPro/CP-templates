@@ -84,7 +84,7 @@ class modint {
     constexpr mint operator+() const { return *this; }
     constexpr mint operator-() const { return mint(md - x, true); }
 
-    constexpr mint inv() const { return inv_mod<uint32_t, md>(x); }
+    constexpr mint inv() const { return invs_mod<md>::get(x); }
 
     constexpr friend bool operator==(const mint &a, const mint &b) { return a.x == b.x; }
     constexpr friend bool operator!=(const mint &a, const mint &b) { return a.x != b.x; }
