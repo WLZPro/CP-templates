@@ -8,7 +8,7 @@ using namespace std;
 #endif
 
 #include "util/fast_io.hpp"
-#include "data_structures/union_find.hpp"
+#include "data_structure/union_find.hpp"
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);

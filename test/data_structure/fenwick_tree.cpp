@@ -10,7 +10,7 @@ using namespace std;
 #endif
 
 #include "util/fast_io.hpp"
-#include "data_structures/fenwick_tree.hpp"
+#include "data_structure/fenwick_tree.hpp"
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(0);

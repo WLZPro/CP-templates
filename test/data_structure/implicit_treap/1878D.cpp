@@ -9,7 +9,7 @@ using namespace std;
 #endif
 
 #include "util/fast_io.hpp"
-#include "data_structures/treap_implicit.hpp"
+#include "data_structure/treap_implicit.hpp"
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(0);

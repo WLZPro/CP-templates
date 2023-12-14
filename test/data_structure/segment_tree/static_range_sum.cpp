@@ -1,4 +1,4 @@
-// https://judge.yosupo.jp/problem/point_add_range_sum
+// https://judge.yosupo.jp/problem/static_range_sum
 
 #include <iostream>
 using namespace std;
@@ -10,7 +10,7 @@ using namespace std;
 #endif
 
 #include "util/fast_io.hpp"
-#include "data_structures/segment_tree.hpp"
+#include "data_structure/segment_tree.hpp"
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(0);
@@ -24,15 +24,8 @@ int main() {
     debug(st);
 
     while (q--) {
-        int t; cin >> t;
-        if (t == 0) {
-            int p, x; cin >> p >> x;
-            st.update(p, st[p] + x);
-            debug(st);
-        } else {
-            int l, r; cin >> l >> r;
-            cout << st.query(l, r - 1) << '\n';
-        }
+        int l, r; cin >> l >> r;
+        cout << st.query(l, r - 1) << '\n';
     }
 
     return 0;

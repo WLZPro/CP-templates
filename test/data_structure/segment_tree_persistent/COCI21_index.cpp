@@ -11,7 +11,7 @@ using namespace std;
 #endif
 
 #include "util/fast_io.hpp"
-#include "data_structures/segment_tree_persistent.hpp"
+#include "data_structure/segment_tree_persistent.hpp"
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);

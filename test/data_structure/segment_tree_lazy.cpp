@@ -11,7 +11,7 @@ using namespace std;
 #endif
 
 #include "util/fast_io.hpp"
-#include "data_structures/segment_tree_lazy.hpp"
+#include "data_structure/segment_tree_lazy.hpp"
 #include "math/modint.hpp"
 
 using mint = modint998244353;
