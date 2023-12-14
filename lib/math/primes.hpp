@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/math_utils.hpp"
+#include "math/mod_operations.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -8,9 +8,9 @@
 
 namespace primes {
 
-    int n = -1;
+    int computed_up_to = -1;
     std::vector<int> primes;
-    std::vector<bool> is_prime;
+    std::vector<bool> is_prime_v = {false, false};
 
     // Smallest prime factor
     std::vector<int> spf;
@@ -22,24 +22,20 @@ namespace primes {
     std::vector<int> phi;
 
     // https://cp-algorithms.com/algebra/prime-sieve-linear.html
-    void sieve(int _n) {
-        if (_n <= n) return;
-        _n = std::max(_n, 2);
+    void sieve_up_to(int n) {
+        if (n <= computed_up_to) return;
+        computed_up_to = n;
 
-        spf.resize(_n + 1);
-        std::fill(spf.begin() + n + 1, spf.end(), 0);
+        spf.assign(n + 1, 0);
+        is_prime_v.assign(n + 1, true); is_prime_v[0] = is_prime_v[1] = false;
+        mu.resize(n + 1); mu[1] = 1;
+        phi.resize(n + 1); phi[1] = 1;
 
-        is_prime.resize(_n + 1); is_prime[0] = is_prime[1] = false;
-        std::fill(is_prime.begin() + n + 1, is_prime.end(), true); 
-
-        mu.resize(_n + 1); mu[1] = 1;
-        phi.resize(_n + 1); phi[1] = 1;
-
-        for (int i = 2; i <= _n; i++) {
+        for (int i = 2; i <= n; i++) {
             if (spf[i] == 0) spf[i] = i, primes.push_back(i);
-            for (int j = 0; i * primes[j] <= _n; j++) {
+            for (int j = 0; i * primes[j] <= n; j++) {
                 spf[i * primes[j]] = primes[j];
-                is_prime[i * primes[j]] = false;
+                is_prime_v[i * primes[j]] = false;
                 if (primes[j] == spf[i]) break;
             }
 
@@ -51,45 +47,61 @@ namespace primes {
                 phi[i] = phi[i / spf[i]] * (spf[i] - 1);
             }
         }
-
-        n = _n;
     }
 
-    // https://cp-algorithms.com/algebra/primality_tests.html#miller-rabin-primality-test
+    // https://github.com/atcoder/ac-library/blob/master/atcoder/internal_math.hpp
     template<typename T>
-    bool __check_composite(T x, T a, T d, int s) {
-        T y = mod_pow(a, d, x);
-        if (y == 1 || y == x - 1) return false;
-        for (int r = 1; r < s; r++) if ((y = ((__uint128_t) y * y) % x) == x - 1) return false;
-        return true;
-    } 
-
-    // https://cp-algorithms.com/algebra/primality_tests.html#miller-rabin-primality-test
-    template<typename T, int seed = -1>
-    bool is_probably_prime(const T &x, int k = 5) {
-        if (x <= n) return is_prime[x];
-        static std::mt19937_64 rng(seed == -1 ? std::chrono::steady_clock().now().time_since_epoch().count() : seed);
-        int s = 0; T d = x - 1;
-        while (!(d & 1)) d >>= 1, s++;
-
-        for (int i = 0; i < k; i++) {
-            if (__check_composite(x, std::uniform_int_distribution<T>(static_cast<T>(2), x - 2)(rng), d, s)) return false;
+    constexpr bool is_prime_32_bit(const T &n) {
+        if (n <= 1) return false;
+        if (n == 2 || n == 7 || n == 61) return true;
+        if (!(n & 1)) return false;
+        T d = n - 1;
+        while (!(d & 1)) d >>= 1;
+        constexpr T bases[] = {2, 7, 61};
+        for (const T &a : bases) {
+            T t = d, y = pow_mod(a, t, n);
+            while (t != n - 1 && y != 1 && y != n - 1) y = mul_mod(y, y, n), t <<= 1;
+            if (y != n - 1 && !(t & 1)) return false;
         }
         return true;
     }
 
-    // https://cp-algorithms.com/algebra/primality_tests.html#miller-rabin-primality-test
+    // https://cp-algorithms.com/algebra/primality_tests.html#deterministic-version
+    // Assumptions: `is_prime_32_bit` fails on `n`
     template<typename T>
-    bool is_definitely_prime(const T &x) {
-        if (x <= n) return is_prime[x];
-        int s = 0; T d = x - 1;
+    constexpr bool is_prime_64_bit(const T &n) {
+        int s = 0; T d = n - 1;
         while (!(d & 1)) d >>= 1, s++;
 
-        for (T a : {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}) {
-            if (x == a) return true;
-            if (__check_composite(x, a, d, s)) return false;
-            if (a == 7 && x <= std::numeric_limits<unsigned int>::max()) return true;
+        auto check_composite = [&](const T &a) -> bool {
+            T y = pow_mod(a, d, n);
+            if (y == 1 || y == n - 1) return false;
+            for (int r = 1; r < s; r++) if ((y = mul_mod(y, y, n)) == n - 1) return false;
+            return true;
+        };
+
+        constexpr T bases[] = {2, 325, 9375, 28178, 450775, 9780504, 1795265022};
+        for (const T &a : bases) {
+            if (n == a) return true;
+            if (check_composite(a)) return false;
         }
         return true;
+    }
+    template<uint32_t n> constexpr bool is_prime_32_bit_v = is_prime_32_bit(n);
+
+    template<typename T>
+    constexpr bool is_prime_constexpr(const T &n) {
+        if constexpr (sizeof(T) <= 4) return is_prime_32_bit(n);
+        else {
+            if (n <= std::numeric_limits<uint32_t>::max()) return is_prime_32_bit(n);
+            else return is_prime_64_bit(n);
+        }
+    }
+    template<uint64_t n> constexpr bool is_prime_64_bit_v = is_prime_constexpr(n);
+
+    template<typename T>
+    bool is_prime(const T &n) {
+        if (n <= computed_up_to) return is_prime_v[n];
+        return is_prime_constexpr(n);
     }
 };

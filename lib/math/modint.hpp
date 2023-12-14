@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "atcoder/internal_math.hpp"
-#include "math/math_utils.hpp"
+#include "math/mod_operations.hpp"
+#include "math/mod_inverse.hpp"
 
 template<unsigned int md>
 class modint {
@@ -69,7 +69,7 @@ class modint {
     constexpr friend mint operator-(mint lhs, const mint &rhs) { return lhs -= rhs; }
 
     constexpr mint &operator*=(const mint &rhs) {
-        x = (unsigned long long) x * rhs.x % md;
+        x = mul_mod(x, rhs.x, md);
         return *this;
     }
     constexpr friend mint operator*(mint lhs, const mint &rhs) { return lhs *= rhs; }
@@ -84,13 +84,7 @@ class modint {
     constexpr mint operator+() const { return *this; }
     constexpr mint operator-() const { return mint(md - x, true); }
 
-    constexpr mint inv() const {
-        if constexpr (atcoder::internal::is_prime<md>) return mod_inv(x, md);
-        else {
-            mint x1, y1; extgcd(x, md, x1, y1);
-            return x1;
-        }
-    }
+    constexpr mint inv() const { return inv_mod<uint32_t, md>(x); }
 
     constexpr friend bool operator==(const mint &a, const mint &b) { return a.x == b.x; }
     constexpr friend bool operator!=(const mint &a, const mint &b) { return a.x != b.x; }
