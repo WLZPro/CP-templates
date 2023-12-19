@@ -2,6 +2,9 @@
 
 ## Data Structures
 
+### Hash Map (hash_map.hpp)
+- [Large index accesses](https://judge.yosupo.jp/problem/associative_array) ($Q \leq 10^6$): `safe_unordered_map`: [528 ms](https://judge.yosupo.jp/submission/178294), `safe_gp_hash_table`: [243 ms](https://judge.yosupo.jp/submission/178295)
+
 ### Fenwick Tree (fenwick_tree.hpp)
 - [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [57 ms](https://judge.yosupo.jp/submission/175608)
 
