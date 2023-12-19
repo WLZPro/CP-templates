@@ -1,79 +1,89 @@
-#ifndef UTIL_FAST_IO_HPP
-#define UTIL_FAST_IO_HPP 1
+#pragma once
 
-#include <cassert>
 #include <cstdio>
-#include <cctype>
-#include <cstdlib>
+#include <cstdint>
+#include <cassert>
 #include <string>
+#include <type_traits>
 
-namespace fast_input {
+namespace std {
 
-    constexpr int BUF_SZ = 1 << 18;
-    char buf[BUF_SZ];
-    int pos = 0, len = 0;
+namespace fast_io {
 
-    struct fast_reader { void tie(int *x) { (void) x; } } fcin;
+constexpr int IN_BUF_SZ = 1 << 17;
+char in_buf[IN_BUF_SZ];
 
-    #define rd (pos == len ? (pos = 0, (!(len = (int) fread(buf, 1, BUF_SZ, stdin)) ? EOF : buf[pos++])) : buf[pos++])
+size_t in_ptr = 0, in_len = 0;
+inline char rd() {
+    if (in_ptr == in_len) in_ptr = 0, in_len = fread(in_buf, 1, IN_BUF_SZ, stdin);
+    return in_buf[in_ptr++];
+}
 
-    template<typename T>
-    inline void read(T &x) {
-        short sgn = 1; char c;
-        while (!std::isdigit(c = rd)) if (c == '-') sgn = -sgn;
-        x = c - '0';
-        while (std::isdigit(c = rd)) { x = x * 10 + (c - '0'); }
-        x *= sgn;
-    }
+struct fast_reader { void tie(int *) {} };
 
-    fast_reader &getline(fast_reader &in, std::string &s) {
-        s.clear(); char c;
-        while ((c = rd) != '\n') s += c;
-        return in;
-    }
+inline fast_reader &operator>>(fast_reader &in, char &c) { c = rd(); return in; }
 
-    #undef rd
-} // namespace fast_input
+template<typename T, enable_if_t<((is_integral_v<T> && !is_same_v<T, char>)
+    || is_same_v<T, __int128_t> || is_same_v<T, __uint128_t>)>* = nullptr>
+inline fast_reader &operator>>(fast_reader &in, T &x) {
+    bool sgn = 1; char c;
+    while (!isdigit(c = rd())) if (c == '-') sgn = 0;
+    x = c - '0';
+    while (isdigit(c = rd())) x = x * 10 + (c - '0');
+    if (!sgn) x = -x;
+    return in;
+}
 
-template<typename T>
-fast_input::fast_reader &operator>>(fast_input::fast_reader &in, T &x) { fast_input::read(x); return in; }
+inline fast_reader &operator>>(fast_reader &in, string &s) {
+    char c;
+    while (isspace(c = rd()));
+    s = string(1, c);
+    while (!isspace(c = rd())) s += c;
+    return in;
+}
 
-namespace fast_output {
+constexpr int OUT_BUF_SZ = 1 << 17;
+char out_buf[OUT_BUF_SZ];
 
-    constexpr int BUF_SZ = 1 << 18;
-    char buf[BUF_SZ];
-    int pos;
+size_t out_ptr = 0;
+inline void flush_out() { fwrite(out_buf, 1, out_ptr, stdout); out_ptr = 0; }
+inline void wt(char c) {
+    static bool atexit_set = false;
+    if (!atexit_set) assert(atexit(flush_out) == 0), atexit_set = true;
 
-    struct fast_writer {} fcout;
+    if (out_ptr == OUT_BUF_SZ) flush_out();
+    out_buf[out_ptr++] = c;
+}
 
-    void flush() { fwrite(buf, 1, pos, stdout); pos = 0; }
-    void sync_with_stdio(bool b) { (void) b; assert(std::atexit(flush) == 0); }
+struct fast_writer {};
 
-    #define wt(c) ((pos == BUF_SZ ? flush() : (void) 0), buf[pos++] = (c))
+inline fast_writer &operator<<(fast_writer &out, char c) { wt(c); return out; }
 
-    template<typename T>
-    inline void write(const T &y) {
-        T x = y;
-        static char num_buf[100];
-        if (x < 0) wt('-'), x = -x;
-        int len = 0;
-        for (; x >= 10; x /= 10) num_buf[len++] = (x % 10) + '0';
-        wt(x + '0');
-        while (len) wt(num_buf[--len]);
-    }
+template<typename T, enable_if_t<((is_integral_v<T> && !is_same_v<T, char>)
+    || is_same_v<T, __int128_t> || is_same_v<T, __uint128_t>)>* = nullptr>
+inline fast_writer &operator<<(fast_writer &out, T x) {
+    static char num_buf[40];
+    if (x < 0) wt('-'), x = -x;
+    size_t i = 0;
+    for (; x >= 10; x /= 10) num_buf[i++] = (x % 10) + '0';
+    wt(x + '0');
+    while (i) wt(num_buf[--i]);
+    return out;
+}
 
-    template<>
-    inline void write(const char &c) { wt(c); }
+inline fast_writer &operator<<(fast_writer &out, const string &s) {
+    for (const char &c : s) wt(c);
+    return out;
+}
 
-    #undef wt
-} // namespace fast_output
+} // namespace fast_io
 
-template<typename T>
-fast_output::fast_writer &operator<<(fast_output::fast_writer &out, const T &x) { fast_output::write(x); return out; }
+fast_io::fast_reader fcin;
+fast_io::fast_writer fcout;
 
-#define cin fast_input::fcin
-#define ios fast_output
-#define cout fast_output::fcout
-#define getline fast_input::getline
+} // namespace std
 
-#endif // UTIL_FAST_IO_HPP
+using std::fcin, std::fcout;
+
+#define cin fcin
+#define cout fcout

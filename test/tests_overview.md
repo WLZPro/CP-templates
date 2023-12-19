@@ -63,4 +63,4 @@
 ## Utilities
 
 ### Fast IO (fast_io.hpp)
-- [Many A + B](https://judge.yosupo.jp/problem/many_aplusb) ($N \leq 10^6$): [107 ms](https://judge.yosupo.jp/submission/168745)
+- [Many A + B](https://judge.yosupo.jp/problem/many_aplusb) ($N \leq 10^6$): [107 ms](https://judge.yosupo.jp/submission/178270)
