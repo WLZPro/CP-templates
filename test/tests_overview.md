@@ -50,6 +50,9 @@
 ### GCD Convolution (gcd_convolution.hpp)
 - [GCD Convolution (mod 998244353)](https://judge.yosupo.jp/problem/gcd_convolution) ($N \leq 10^6$): [123 ms](https://judge.yosupo.jp/submission/170565)
 
+## 128-bit Integers (int128.hpp)
+- [Many A + B (128 bit)](https://judge.yosupo.jp/problem/many_aplusb_128bit) ($N \leq 5 \times 10^5$): [568 ms](https://judge.yosupo.jp/submission/178276)
+
 ## Polynomials
 
 ### Fast Fourier Transform (fft.hpp)
@@ -64,3 +67,4 @@
 
 ### Fast IO (fast_io.hpp)
 - [Many A + B](https://judge.yosupo.jp/problem/many_aplusb) ($N \leq 10^6$): [107 ms](https://judge.yosupo.jp/submission/178270)
+- [Many A + B (128 bit)](https://judge.yosupo.jp/problem/many_aplusb_128bit) ($N \leq 5 \times 10^5$) ($$): [293 ms](https://judge.yosupo.jp/submission/178273)
