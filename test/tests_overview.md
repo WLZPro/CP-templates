@@ -33,6 +33,11 @@
 ### Union Find (union_find.hpp)
 - [Union find](https://judge.yosupo.jp/problem/unionfind) ($N, Q \leq 2 \times 10^5$): [10 ms](https://judge.yosupo.jp/submission/175863)
 
+## Dynamic Programming
+
+### (min, +) convolution
+- [(min, +) convolution (convex-convex)](https://judge.yosupo.jp/problem/min_plus_convolution_convex_convex) ($N, M \leq 2^19$): [48 ms](https://judge.yosupo.jp/submission/178370)
+
 ## Graphs
 
 ### Lowest Common Ancestor (jump pointers) (lca_jump_pointers.hpp)
