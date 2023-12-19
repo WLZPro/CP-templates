@@ -1,43 +1,38 @@
-#ifndef GRAPHS_LCA_FARACH_COLTON_BENDER
-#define GRAPHS_LCA_FARACH_COLTON_BENDER 1
+#pragma once
 
-#include <functional>
+#include "graph/graph.hpp"
+
 #include <algorithm>
 
-// LCA using the Farach-Colton and Bender Algorithm
-// See https://cp-algorithms.com/graph/lca_farachcoltonbender.html
+// https://cp-algorithms.com/graph/lca_farachcoltonbender.html
+template<typename Graph = graph>
 class lowest_common_ancestor {
-    private:
-    int n, block_sz, block_cnt;
-    std::vector< std::vector<int> > g;
-    std::vector<int> first_visit, d, euler_tour, lg, block_mask, st;
-    std::vector< std::vector< std::vector<int> > > blocks;
-
-    int mn(int a, int b) const {
-        return d[euler_tour[a]] < d[euler_tour[b]] ? a : b;
-    }
+    using W = typename Graph::weight_type;
 
     public:
+    using weight_type = W;
+
     lowest_common_ancestor() {}
 
-    explicit lowest_common_ancestor(const std::vector< std::vector<int> > &_g, const std::vector<int> roots = {1})
-    : n(static_cast<int>(_g.size())), g(_g), first_visit(n), d(n, 0), euler_tour(n << 1), lg(n << 1) {
-
+    explicit lowest_common_ancestor(const Graph &g)
+     : n(static_cast<int>(g.size())), first_visit(n, -1), d(n, 0), euler_tour(n << 1), lg(n << 1) {
+        if constexpr (is_weighted_graph_v<Graph>) wd.assign(n, W());
         int euler_tour_sz = 0;
 
-        std::function<void(int, int)> dfs = [&](int u, int p) {
+        auto dfs = [&](auto &&self, int u, int p) -> void {
             first_visit[u] = euler_tour_sz;
             euler_tour[euler_tour_sz++] = u;
 
-            for (auto v : g[u]) {
+            for (const auto &out_edge : g[u]) {
+                int v = g.get_end(out_edge);
                 if (v == p) continue;
                 d[v] = d[u] + 1;
-                dfs(v, u);
+                self(self, v, u);
                 euler_tour[euler_tour_sz++] = u;
             }
         };
 
-        for (const int &root : roots) dfs(root, -1);
+        for (int r = 0; r < n; r++) if (first_visit[r] == -1) dfs(dfs, r, -1);
 
         lg[0] = -1;
         for (int i = 1; i <= euler_tour_sz; i++) lg[i] = lg[i >> 1] + 1;
@@ -93,6 +88,29 @@ class lowest_common_ancestor {
         }
         return euler_tour[ans];
     }
-};
 
-#endif // GRAPHS_LCA_FARACH_COLTON_BENDER
+    int query(int u, int v, int r) const { return query(u, v) ^ query(u, r) ^ query(v, r); }
+
+    const W &depth(int u) const {
+        if constexpr (is_weighted_graph_v<Graph>) return wd[u];
+        else return d[u];
+    }
+
+    W dist(int u, int v) const  {
+        if constexpr (is_weighted_graph_v<Graph>) return wd[u] + wd[v] - wd[query(u, v)] * 2;
+        else return d[u] + d[v] - d[query(u, v)] * 2;
+    }
+
+    int unweighted_depth(int u) const { return d[u]; }
+    int unweighted_dist(int u, int v) const { return d[u] + d[v] - d[query(u, v)] * 2; }
+
+    int size() const { return n; }
+
+    private:
+    int n, block_sz, block_cnt;
+    std::vector<int> first_visit, d, euler_tour, lg, block_mask, st;
+    std::vector< std::vector< std::vector<int> > > blocks;
+    std::vector<W> wd;
+
+    inline int mn(int a, int b) const { return d[euler_tour[a]] < d[euler_tour[b]] ? a : b; }
+};

@@ -33,6 +33,14 @@
 ### Union Find (union_find.hpp)
 - [Union find](https://judge.yosupo.jp/problem/unionfind) ($N, Q \leq 2 \times 10^5$): [10 ms](https://judge.yosupo.jp/submission/175863)
 
+## Graphs
+
+### Lowest Common Ancestor (jump pointers) (lca_jump_pointers.hpp)
+- [Lowest Common Ancestor](https://judge.yosupo.jp/problem/lca) ($N, Q \leq 5 \times 10^5$): [408 ms](https://judge.yosupo.jp/submission/178320)
+
+### Lowest Common Ancestor (Farach-Colton and Bender) (lca_farach_colton_bender.hpp)
+- [Lowest Common Ancestor](https://judge.yosupo.jp/problem/lca) ($N, Q \leq 5 \times 10^5$): [276 ms](https://judge.yosupo.jp/submission/178321)
+
 ## Math
 
 ### Linear floor sum (linear_floor_sum.hpp)
