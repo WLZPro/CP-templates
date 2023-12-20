@@ -46,6 +46,9 @@
 ### Lowest Common Ancestor (Farach-Colton and Bender) (lca_farach_colton_bender.hpp)
 - [Lowest Common Ancestor](https://judge.yosupo.jp/problem/lca) ($N, Q \leq 5 \times 10^5$): [276 ms](https://judge.yosupo.jp/submission/178321)
 
+### Strongly Connected Components (scc.hpp)
+- [Strongly Connected Components](https://judge.yosupo.jp/problem/scc) ($N, M \leq 5 \times 10^5$): [269 ms](https://judge.yosupo.jp/submission/178430)
+
 ## Math
 
 ### Linear floor sum (linear_floor_sum.hpp)
