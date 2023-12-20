@@ -49,6 +49,9 @@
 ### Strongly Connected Components (scc.hpp)
 - [Strongly Connected Components](https://judge.yosupo.jp/problem/scc) ($N, M \leq 5 \times 10^5$): [269 ms](https://judge.yosupo.jp/submission/178430)
 
+### 2-SAT (two_sat.hpp)
+- [2-SAT](https://judge.yosupo.jp/problem/two_sat) ($N, M \leq 5 \times 10^5$): [460 ms](https://judge.yosupo.jp/submission/178524)
+
 ## Math
 
 ### Linear floor sum (linear_floor_sum.hpp)
