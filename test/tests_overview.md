@@ -85,6 +85,11 @@
 - [Logarithm of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [958 ms](https://judge.yosupo.jp/submission/176510)
 - [Exponential of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/exp_of_formal_power_series) ($N \leq 5 \times 10^5$): [1245 ms](https://judge.yosupo.jp/submission/176508)
 
+## Strings
+
+### Z-function (z_function.hpp)
+- [Z-function](https://judge.yosupo.jp/problem/zalgorithm) ($N \leq 5 \times 10^5$) : [13 ms](https://judge.yosupo.jp/submission/179218)
+
 ## Utilities
 
 ### Fast IO (fast_io.hpp)
