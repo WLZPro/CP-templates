@@ -32,7 +32,6 @@ struct hm {
     struct func { mint a, b; };
     using T = func;
 
-    static constexpr func id = {1, 0};
     static constexpr info map(const func &f, const info &x) {
         return {f.a * x.a + f.b * x.sz, x.sz};
     }
@@ -47,8 +46,7 @@ int main() {
 
     vector<info> a(n);
     for (int i = 0; i < n; i++) {
-        int x; cin >> x;
-        a[i].a = x; a[i].sz = 1;
+        cin >> a[i].a; a[i].sz = 1;
     }
 
     lazy_segtree< addition<info>, hm> st(a);
