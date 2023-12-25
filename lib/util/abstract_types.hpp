@@ -30,6 +30,8 @@ struct maximum {
     static constexpr const T &op(const T &a, const T &b) { return a < b ? b : a; }
 };
 
+template<typename T> constexpr bool has_map_with_implicit_size_v = false;
+
 template<typename S>
 struct id_map {
     using T = bool;
@@ -37,3 +39,14 @@ struct id_map {
     static constexpr const S &map(const bool &b, const S &s) { (void) b; return s; } 
     static constexpr const bool &comp(const bool &a, const bool &b) { (void) b; return a; }
 };
+
+template<typename S>
+struct range_affine {
+    struct func { S a, b; }; 
+    using T = func;
+
+    static constexpr S map(const func &f, const S &x) { return f.a * x + f.b; }
+    static constexpr S map(const func &f, const S &x, int sz) { return f.a * x + f.b * sz; }
+    static constexpr func comp(const func &f, const func &g) { return {f.a * g.a, f.a * g.b + f.b}; }
+};
+template<typename T> constexpr bool has_map_with_implicit_size_v< range_affine<T> > = true;

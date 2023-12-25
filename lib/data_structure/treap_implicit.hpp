@@ -80,7 +80,9 @@ class implicit_treap {
             if (t->r != nullptr) t->r->rev = !t->r->rev;
         }
         if (!t->has_lazy) return;
-        t->val = _Hm::map(t->lazy, t->val); t->range_val = _Hm::map(t->lazy, t->range_val);
+        t->val = _Hm::map(t->lazy, t->val);
+        if constexpr (has_map_with_implicit_size_v<_Hm>) t->range_val = _Hm::map(t->lazy, t->range_val, cnt(t));
+        else t->range_val = _Hm::map(t->lazy, t->range_val);
         if (t->l != nullptr) {
             if (t->l->has_lazy) t->l->lazy = _Hm::comp(t->lazy, t->l->lazy);
             else t->l->lazy = t->lazy, t->l->has_lazy = true;

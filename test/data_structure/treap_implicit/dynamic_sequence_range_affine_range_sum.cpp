@@ -1,5 +1,4 @@
-// https://judge.yosupo.jp/problem/range_affine_range_sum
-
+// https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -16,48 +15,23 @@ using namespace std;
 
 using mint = modint998244353;
 
-struct info { mint a; int sz; };
-
-template<>
-struct addition<info> {
-    using T = info;
-
-    static constexpr info e = {0, 0};
-    static constexpr info op(const info &lhs, const info &rhs) {
-        return {lhs.a + rhs.a, lhs.sz + rhs.sz};
-    }
-};
-
-struct hm {
-    struct func { mint a, b; };
-    using T = func;
-
-    static constexpr info map(const func &f, const info &x) {
-        return {f.a * x.a + f.b * x.sz, x.sz};
-    }
-    static constexpr func comp(const func &f, const func &g) {
-        return {f.a * g.a, f.a * g.b + f.b};
-    }
-};
-
 int main() {
     ios::sync_with_stdio(false); cin.tie(0);
 
     int n, q; cin >> n >> q;
 
-    vector<info> a(n);
+    vector<mint> a(n);
     for (int i = 0; i < n; i++) {
-        cin >> a[i].a;
-        a[i].sz = 1;
+        cin >> a[i];
     }
 
-    implicit_treap< addition<info>, hm> tr(a);
+    implicit_treap< addition<mint>, range_affine<mint> > tr(a);
 
     while (q--) {
         int t; cin >> t;
         if (t == 0) {
             int i; mint x; cin >> i >> x;
-            tr.insert(i, {x, 1});
+            tr.insert(i, x);
         } else if (t == 1) {
             int i; cin >> i;
             tr.erase(i);
@@ -70,7 +44,7 @@ int main() {
             tr.update(l, r - 1, {b, c});
         } else {
             int l, r; cin >> l >> r;
-            cout << tr.query(l, r - 1).a << '\n';
+            cout << tr.query(l, r - 1) << '\n';
         }
     }
     
