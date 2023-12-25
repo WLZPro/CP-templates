@@ -32,7 +32,6 @@ struct hm {
     struct func { mint a, b; };
     using T = func;
 
-    static constexpr func id = {1, 0};
     static constexpr info map(const func &f, const info &x) {
         return {f.a * x.a + f.b * x.sz, x.sz};
     }
@@ -48,8 +47,7 @@ int main() {
 
     vector<info> a(n);
     for (int i = 0; i < n; i++) {
-        int x; cin >> x;
-        a[i].a.set(x, true);
+        cin >> a[i].a;
         a[i].sz = 1;
     }
 
@@ -58,7 +56,7 @@ int main() {
     while (q--) {
         int t; cin >> t;
         if (t == 0) {
-            int i, x; cin >> i >> x;
+            int i; mint x; cin >> i >> x;
             tr.insert(i, {x, 1});
         } else if (t == 1) {
             int i; cin >> i;
@@ -67,12 +65,12 @@ int main() {
             int l, r; cin >> l >> r;
             tr.reverse(l, r - 1);
         } else if (t == 3) {
-            int l, r, b, c;
+            int l, r; mint b, c;
             cin >> l >> r >> b >> c;
-            tr.update(l, r - 1, {mint(b, true), mint(c, true)});
+            tr.update(l, r - 1, {b, c});
         } else {
             int l, r; cin >> l >> r;
-            cout << tr.query(l, r - 1).a.val() << '\n';
+            cout << tr.query(l, r - 1).a << '\n';
         }
     }
     

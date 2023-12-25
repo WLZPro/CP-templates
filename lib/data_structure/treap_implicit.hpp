@@ -55,28 +55,23 @@ class implicit_treap {
         T val, range_val;
         int pr, cnt;
         F lazy;
-        bool rev;
+        bool has_lazy, rev;
         node *l, *r;
-
-        node() {}
-        node(const T &_val, const int &_pr) : val(_val), range_val(_val), pr(_pr), cnt(1), lazy(_Hm::id), rev(false), l(nullptr), r(nullptr) {}
     } cache[cache_size], *root;
 
-    inline node *fetch(const T &val, const int &pr) {
-        static int cache_idx = 0;
+    int cache_idx = 0;
+    node *fetch(const T &val, const int &pr) {
         node *r = &cache[cache_idx++];
         r->val = r->range_val = val;
-        r->pr = pr;
-        r->cnt = 1;
-        r->lazy = _Hm::id;
-        r->rev = false;
+        r->pr = pr; r->cnt = 1;
+        r->has_lazy = r->rev = false;
         r->l = r->r = nullptr;
         return r;
     }
 
-    inline int cnt(node *t) { return t == nullptr ? 0 : t->cnt; }
+    int cnt(node *t) { return t == nullptr ? 0 : t->cnt; }
 
-    inline void push(node *t) {
+    void push(node *t) {
         if (t == nullptr) return;
         if (t->rev) {
             t->rev = false;
@@ -84,13 +79,20 @@ class implicit_treap {
             if (t->l != nullptr) t->l->rev = !t->l->rev;
             if (t->r != nullptr) t->r->rev = !t->r->rev;
         }
+        if (!t->has_lazy) return;
         t->val = _Hm::map(t->lazy, t->val); t->range_val = _Hm::map(t->lazy, t->range_val);
-        if (t->l != nullptr) t->l->lazy = _Hm::comp(t->lazy, t->l->lazy);
-        if (t->r != nullptr) t->r->lazy = _Hm::comp(t->lazy, t->r->lazy);
-        t->lazy = _Hm::id;
+        if (t->l != nullptr) {
+            if (t->l->has_lazy) t->l->lazy = _Hm::comp(t->lazy, t->l->lazy);
+            else t->l->lazy = t->lazy, t->l->has_lazy = true;
+        }
+        if (t->r != nullptr) {
+            if (t->r->has_lazy) t->r->lazy = _Hm::comp(t->lazy, t->r->lazy);
+            else t->r->lazy = t->lazy, t->r->has_lazy = true;
+        }
+        t->has_lazy = false;
     }
 
-    inline void update_from_children(node *t) {
+    void pull(node *t) {
         if (t == nullptr) return;
         if (t->l != nullptr) push(t->l);
         if (t->r != nullptr) push(t->r);
@@ -100,7 +102,7 @@ class implicit_treap {
         if (t->r != nullptr) t->range_val = _Mn::op(t->range_val, t->r->range_val);
     }
 
-    inline void heapify(node *t) {
+    void heapify(node *t) {
         if (t == nullptr) return;
         node *mx_pr = t;
         if (t->l != nullptr && t->l->pr > mx_pr->pr) mx_pr = t->l;
@@ -117,7 +119,7 @@ class implicit_treap {
         node *t = fetch(a[m], rng());
         t->l = build(a, l, m); t->r = build(a, m + 1, r);
         heapify(t);
-        update_from_children(t);
+        pull(t);
         return t;
     }
 
@@ -129,7 +131,7 @@ class implicit_treap {
         push(t);
         if (idx <= add + cnt(t->l)) split(t->l, l, t->l, idx, add), r = t;
         else                        split(t->r, t->r, r, idx, add + cnt(t->l) + 1), l = t;
-        update_from_children(t);
+        pull(t);
     }
 
     void merge(node *&t, node *l, node *r) {
@@ -138,7 +140,7 @@ class implicit_treap {
         else if (r == nullptr) t = l;
         else if (l->pr > r->pr) merge(l->r, l->r, r), t = l;
         else                    merge(r->l, l, r->l), t = r;
-        update_from_children(t);
+        pull(t);
     }
 
     T query(node *t, int l, int r, int add = 0) {
@@ -161,7 +163,7 @@ class implicit_treap {
     void update(node *t, int l, int r, const F &f, int add = 0) {
         push(t);
         if (l <= add && add + cnt(t) - 1 <= r) {
-            t->lazy = f;
+            t->has_lazy = true; t->lazy = f;
             push(t);
             return;
         }
@@ -169,7 +171,7 @@ class implicit_treap {
         if (l < cur_idx && t->l != nullptr) update(t->l, l, r, f, add);
         if (l <= cur_idx && cur_idx <= r) t->val = _Hm::map(f, t->val);
         if (r > cur_idx && t->r != nullptr) update(t->r, l, r, f, cur_idx + 1);
-        update_from_children(t);
+        pull(t);
     }
 
     void erase(node *&t, int idx, int add = 0) {
@@ -178,6 +180,6 @@ class implicit_treap {
         if (cur_idx == idx) merge(t, t->l, t->r);
         else if (idx < cur_idx) erase(t->l, idx, add);
         else                    erase(t->r, idx, add + cnt(t->l) + 1);
-        update_from_children(t);
+        pull(t);
     }
 };

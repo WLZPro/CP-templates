@@ -34,7 +34,6 @@ template<typename S>
 struct id_map {
     using T = bool;
 
-    static constexpr T id = false;
     static constexpr const S &map(const bool &b, const S &s) { (void) b; return s; } 
     static constexpr const bool &comp(const bool &a, const bool &b) { (void) b; return a; }
 };
