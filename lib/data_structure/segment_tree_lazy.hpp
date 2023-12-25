@@ -18,7 +18,7 @@ class lazy_segment_tree {
     
     explicit lazy_segment_tree(int _n)
         : lg((sizeof(int) << 3) - __builtin_clz(_n)), n(1 << lg), len(_n),
-          st(n << 1, _Mn::e), lazy(n, _Hm::id) {
+          st(n << 1, _Mn::e), lazy(n), has_lazy(n, false) {
         #ifdef DEBUG
         _dbg.assign(n << 1, _Mn::e);
         #endif
@@ -47,7 +47,7 @@ class lazy_segment_tree {
         std::fill(st.begin() + n + len, st.end(), _Mn::e);
         for (int i = n - 1; i > 0; i--) pull(i);
 
-        lazy.assign(n, _Hm::id);        
+        lazy.resize(n); has_lazy.assign(n, false);
     }
 
     void set(int idx, const T &val) {
@@ -148,6 +148,7 @@ class lazy_segment_tree {
     int lg, n, len;
     std::vector<T> st;
     std::vector<F> lazy;
+    std::vector<bool> has_lazy;
 
     #ifdef DEBUG
     std::vector<T> _dbg;
@@ -157,12 +158,18 @@ class lazy_segment_tree {
 
     inline void apply(const F &f, int idx) {
         st[idx] = _Hm::map(f, st[idx]);
-        if (idx < n) lazy[idx] = _Hm::comp(f, lazy[idx]);
+        if (idx < n) {
+            if (has_lazy[idx]) lazy[idx] = _Hm::comp(f, lazy[idx]);
+            else lazy[idx] = f, has_lazy[idx] = true;
+        }
     }
 
     inline void push(int idx) {
-        apply(lazy[idx], idx << 1); apply(lazy[idx], idx << 1 | 1);
-        lazy[idx] = _Hm::id;
+        if (has_lazy[idx]) {
+            apply(lazy[idx], idx << 1);
+            apply(lazy[idx], idx << 1 | 1);
+            has_lazy[idx] = false;
+        }
     }
 };
 
