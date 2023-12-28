@@ -41,6 +41,11 @@
 
 ## Graphs
 
+### Heavy-light Decomposition (hld.hpp)
+- [Vertex addition, path sum](https://judge.yosupo.jp/problem/vertex_add_path_sum) ($N, Q \leq 5 \times 10^5$): [1042 ms](https://judge.yosupo.jp/submission/179969)
+- [Vertex modification, path linear function composition](https://judge.yosupo.jp/problem/vertex_set_path_composite) ($N, Q \leq 2 \times 10^5$): [367 ms](https://judge.yosupo.jp/submission/179970)
+- [Vertex addition, subtree sum](https://judge.yosupo.jp/problem/vertex_add_subtree_sum) ($N, Q \leq 5 \times 10^5$): [442 ms](https://judge.yosupo.jp/submission/179971)
+
 ### Lowest Common Ancestor (jump pointers) (lca_jump_pointers.hpp)
 - [Lowest Common Ancestor](https://judge.yosupo.jp/problem/lca) ($N, Q \leq 5 \times 10^5$): [408 ms](https://judge.yosupo.jp/submission/178320)
 
