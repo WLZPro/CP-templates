@@ -157,7 +157,8 @@ class lazy_segment_tree {
     inline void pull(int idx) { st[idx] = _Mn::op(st[idx << 1], st[idx << 1 | 1]); }
 
     inline void apply(const F &f, int idx) {
-        st[idx] = _Hm::map(f, st[idx]);
+        if constexpr (has_map_with_implicit_size_v<_Hm>) st[idx] = _Hm::map(f, st[idx], 1 << (lg - __lg(idx)));
+        else st[idx] = _Hm::map(f, st[idx]);
         if (idx < n) {
             if (has_lazy[idx]) lazy[idx] = _Hm::comp(f, lazy[idx]);
             else lazy[idx] = f, has_lazy[idx] = true;

@@ -18,7 +18,7 @@
 - [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [75 ms](https://judge.yosupo.jp/submission/168740)
 
 ### Lazy Segment Tree (segment_tree_lazy.hpp)
-- [Range $a_i \leftarrow c \cdot a_i + d$ updates, range sums](https://judge.yosupo.jp/problem/range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [653 ms](https://judge.yosupo.jp/submission/179318)
+- [Range $a_i \leftarrow c \cdot a_i + d$ updates, range sums](https://judge.yosupo.jp/problem/range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [588 ms](https://judge.yosupo.jp/submission/179964)
 
 ### Persistent Segment Tree (segment_tree_persistent.hpp)
 - [Correctness](https://oj.uz/problem/view/COCI21_index): [882940](https://oj.uz/submission/882940)
