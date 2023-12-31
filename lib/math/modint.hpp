@@ -84,7 +84,8 @@ class modint {
     constexpr mint operator+() const { return *this; }
     constexpr mint operator-() const { return mint(md - x, true); }
 
-    constexpr mint inv() const { return inv(x); }
+    mint inv() const { return inv(x); }
+    constexpr mint inv_constexpr() const { return inv_constexpr(x); }
 
     constexpr friend bool operator==(const mint &a, const mint &b) { return a.x == b.x; }
     constexpr friend bool operator!=(const mint &a, const mint &b) { return a.x != b.x; }
@@ -119,12 +120,16 @@ class modint {
         fact_up_to = n;
     }
 
-    static mint inv(int n) {
-        if (n <= invs_up_to) return mint(_inv[n], true);
+    static constexpr mint inv_constexpr(int n) {
         return mint(inv_mod<uint32_t, md>(static_cast<uint32_t>(n)), true);
     }
-    static mint fact(int n) { compute_factorials(n); return mint(fact[n], true); }
-    static mint inv_fact(int n) { compute_factorials(n); return mint(inv_fact[n], true); }
+
+    static mint inv(int n) {
+        if (n <= invs_up_to) return mint(_inv[n], true);
+        return inv_constexpr(n);
+    }
+    static mint fact(int n) { compute_factorials(n); return mint(_fact[n], true); }
+    static mint inv_fact(int n) { compute_factorials(n); return mint(_inv_fact[n], true); }
 
     static mint binom(int n, int k) {
         if (k < 0 || k > n) return mint(0, true);
