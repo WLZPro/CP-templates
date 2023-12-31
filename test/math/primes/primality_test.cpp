@@ -8,13 +8,11 @@ using namespace std;
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
 
-    primes::sieve_up_to((int) 1e6);
-
     int t; cin >> t;
     while (t--) {
         long long n; cin >> n;
-        if (primes::is_prime(n)) cout << 'Y' << 'e' << 's' << '\n';
-        else cout << 'N' << 'o' << '\n';
+        if (primes::is_prime_constexpr(n)) cout << "Yes\n";
+        else cout << "No\n";
     }
     return 0;
 }

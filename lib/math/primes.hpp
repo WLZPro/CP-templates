@@ -50,12 +50,13 @@ namespace primes {
     }
 
     // https://github.com/atcoder/ac-library/blob/master/atcoder/internal_math.hpp
+    // Assumptions: `1 <= n <= UINT_MAX`
     template<typename T>
     constexpr bool is_prime_32_bit(const T &n) {
         if (n <= 1) return false;
         if (n == 2 || n == 7 || n == 61) return true;
         if (!(n & 1)) return false;
-        T d = n - 1;
+        T d = (n - 1);
         while (!(d & 1)) d >>= 1;
         constexpr T bases[] = {2, 7, 61};
         for (const T &a : bases) {
@@ -66,24 +67,17 @@ namespace primes {
         return true;
     }
 
-    // https://cp-algorithms.com/algebra/primality_tests.html#deterministic-version
-    // Assumptions: `is_prime_32_bit` fails on `n`
+    // https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/MillerRabin.h
+    // Assumptions: `1 <= n <= 7.2e18`, `is_prime_32_bit` fails on `n`
     template<typename T>
-    constexpr bool is_prime_64_bit(const T &n) {
-        int s = 0; T d = n - 1;
-        while (!(d & 1)) d >>= 1, s++;
-
-        auto check_composite = [&](const T &a) -> bool {
-            T y = pow_mod(a, d, n);
-            if (y == 1 || y == n - 1) return false;
-            for (int r = 1; r < s; r++) if ((y = mul_mod(y, y, n)) == n - 1) return false;
-            return true;
-        };
+    constexpr bool is_prime_64_bit(T n) {
+        int s = __builtin_ctzll(n - 1); T d = n >> s;
 
         constexpr T bases[] = {2, 325, 9375, 28178, 450775, 9780504, 1795265022};
         for (const T &a : bases) {
-            if (n == a) return true;
-            if (check_composite(a)) return false;
+            T p = pow_mod(a, d, n); int i = s;
+            while (p != 1 && p != n - 1 && i--) p = mul_mod(p, p, n);
+            if (p != n - 1 && i != s) return false;
         }
         return true;
     }

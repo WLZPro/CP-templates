@@ -20,7 +20,7 @@ constexpr T sub_mod(T a, T b, T md) {
 
 // Assumptions: `0 <= a, b < md`
 template<typename T>
-constexpr T mul_mod(T a, T b, T md) {
+constexpr T mul_mod_safe(T a, T b, T md) {
     if constexpr (sizeof(T) <= 4) return (static_cast<uint64_t>(a) * b) % md;
     else {
         if (a <= std::numeric_limits<uint32_t>::max() && b <= std::numeric_limits<uint32_t>::max())
@@ -29,6 +29,16 @@ constexpr T mul_mod(T a, T b, T md) {
     }
 }
 
+// https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/ModMulLL.h
+// Assumptions: `0 <= a, b < md <= 7e18`
+template<typename T>
+constexpr T mul_mod(T a, T b, T md) {
+    if constexpr (sizeof(T) <= 4) return (static_cast<uint64_t>(a) * b) % md;
+    long long ret = static_cast<long long>(a) * b - md * static_cast<unsigned long long>(1.0l / md * a * b);
+	return ret + md * (ret < 0) - md * (ret >= static_cast<long long>(md));
+}
+
+// Assumptions: `0 <= a < md`
 template<typename T, typename TExp>
 constexpr T pow_mod(T a, TExp b, const T &md) {
     T ans = 1;
