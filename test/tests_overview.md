@@ -74,7 +74,7 @@
 - Correctness of Euler phi function: [231246194](https://codeforces.com/contest/1797/submission/231246194)
 
 ### Integer factorization (factorization.cpp)
-- [Integer factorization](https://judge.yosupo.jp/problem/factorize) ($T \leq 100$, $N \leq 10^{18}$): [795 ms](https://judge.yosupo.jp/submission/177372)
+- [Integer factorization](https://judge.yosupo.jp/problem/factorize) ($T \leq 100$, $N \leq 10^{18}$): [249 ms](https://judge.yosupo.jp/submission/180586)
 
 ### Matrices (matrix.hpp)
 - [Matrix multiplication (mod 998244353)](https://judge.yosupo.jp/problem/matrix_product) ($N, M, K \leq 1024$): [1515 ms](https://judge.yosupo.jp/submission/170039)

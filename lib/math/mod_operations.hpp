@@ -30,7 +30,7 @@ constexpr T mul_mod_safe(T a, T b, T md) {
 }
 
 // https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/ModMulLL.h
-// Assumptions: `0 <= a, b < md <= 7e18`
+// Assumptions: `0 <= a, b < md <= 7.2e18`
 template<typename T>
 constexpr T mul_mod(T a, T b, T md) {
     if constexpr (sizeof(T) <= 4) return (static_cast<uint64_t>(a) * b) % md;

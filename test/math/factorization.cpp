@@ -15,7 +15,7 @@ using namespace std;
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
 
-    primes::sieve((int) 1e6);
+    primes::sieve_up_to((int) 1e6);
 
     int t; cin >> t;
     while (t--) {
