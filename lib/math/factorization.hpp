@@ -25,9 +25,7 @@ constexpr T nontrivial_divisor(T n, const T &x0 = 2, T c = 1) {
         uintx_t x = mm.convert(x0), g = 1, q = mm.convert(1), xs, y;
 
         auto f_eq = [&mm, &n, &c](uintx_t &a) -> void {
-            a = mm.reduce(mm.mul(a, a));
-            if ((a += c) >= (static_cast<uintx_t>(n) << 1)) a -= n;
-            a = mm.convert(a);
+            a = mm.reduce(static_cast<uint2x_t>(a) * a + c);
         };
 
         int m = 1 << 7, l = 1;
@@ -54,6 +52,10 @@ constexpr T nontrivial_divisor(T n, const T &x0 = 2, T c = 1) {
         }
         if (g != 1 && g != static_cast<uintx_t>(n)) return g;
     }
+
+    #undef abs_diff
+
+    __builtin_unreachable();
 }
 
 template<typename T>

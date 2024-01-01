@@ -15,15 +15,13 @@ using namespace std;
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
 
-    primes::sieve_up_to((int) 1e6);
-
     int t; cin >> t;
     while (t--) {
-        long long n; cin >> n;
-        vector<long long> ans = factorize(n);
+        unsigned long long n; cin >> n;
+        vector<unsigned long long> ans = factorize(n);
         sort(ans.begin(), ans.end());
         cout << (int) ans.size();
-        for (const long long &x : ans) cout << ' ' << x;
+        for (const unsigned long long &x : ans) cout << ' ' << x;
         cout << '\n';
     }
 
