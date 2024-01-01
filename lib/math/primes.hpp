@@ -1,6 +1,5 @@
 #pragma once
 
-#include "math/mod_operations.hpp"
 #include "math/montgomery_multiplication.hpp"
 
 #include <vector>
@@ -49,59 +48,35 @@ namespace primes {
             }
         }
     }
-
-    #define equiv(x, y, n) (((x) >= (n) ? (x) - (n) : (x)) == ((y) >= (n) ? (y) - (n) : (y)))
-
-    // https://github.com/atcoder/ac-library/blob/master/atcoder/internal_math.hpp
-    // Assumptions: `1 <= n <= UINT_MAX`
-    constexpr bool is_prime_32_bit(uint32_t n) {
-        if (n <= 1) return false;
-        if (n == 2 || n == 7 || n == 61) return true;
-        if (!(n & 1)) return false;
-
-        montgomery_multiplication_32 &mm = global_montgomery_multiplication_32<-1>;
-        mm.set_mod(n);
-        uint32_t d = n - 1;
-        while (!(d & 1)) d >>= 1;
-        constexpr uint32_t bases[] = {2, 7, 61};
-        const uint32_t one = mm.convert(1), minus_one = mm.convert(n - 1);
-        for (uint32_t a : bases) {
-            uint32_t t = d, y = mm.pow(mm.convert(a), d);
-            while (t != n - 1 && !equiv(y, one, n) && !equiv(y, minus_one, n)) y = mm.mul(y, y), t <<= 1;
-            if (!equiv(y, minus_one, n) && !(t & 1)) return false;
-        }
-        return true;
-    }
-    template<uint32_t n> constexpr bool is_prime_32_bit_v = is_prime_32_bit(n);
-
-    // https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/MillerRabin.h
-    // Assumptions: `UINT_MAX < n <= 7.2e18`
-    constexpr bool is_prime_64_bit(uint64_t n) {
-        if (!(n & 1)) return false;
-
-        montgomery_multiplication_64 &mm = global_montgomery_multiplication_64<-1>;
-        mm.set_mod(n);
-        uint64_t d = n - 1;
-        while (!(d & 1)) d >>= 1;
-        constexpr uint64_t bases[] = {2, 325, 9375, 28178, 450775, 9780504, 1795265022};
-        const uint64_t one = mm.convert(1), minus_one = mm.convert(n - 1);
-        for (uint64_t a : bases) {
-            uint64_t t = d, y = mm.pow(mm.convert(a), d);
-            while (t != n - 1 && !equiv(y, one, n) && !equiv(y, minus_one, n)) y = mm.mul(y, y), t <<= 1;
-            if (!equiv(y, minus_one, n) && !(t & 1)) return false;
-        }
-        return true;
-    }
     
-    #undef equiv
-
+    // Assumptions: `1 <= n <= 1e18`
     template<typename T>
     constexpr bool is_prime_constexpr(T n) {
-        if constexpr (sizeof(T) <= 4) return is_prime_32_bit(n);
-        else {
-            if (n <= std::numeric_limits<uint32_t>::max()) return is_prime_32_bit(n);
-            else return is_prime_64_bit(n);
+        if constexpr (sizeof(T) > 4) if (n <= std::numeric_limits<uint32_t>::max()) return is_prime_constexpr<uint32_t>(n);
+        if constexpr (sizeof(T) <= 4) {
+            if (n == 1) return false;
+            if (n == 2 || n == 7 || n == 61) return true;
         }
+        if (!(n & 1)) return false;
+
+        using uintx_t = std::conditional_t<(sizeof(T) <= 4), uint32_t, uint64_t>;
+        using uint2x_t = std::conditional_t<(sizeof(T) <= 4), uint64_t, __uint128_t>;
+        
+        auto mm = montgomery_multiplication<uintx_t, uint2x_t>(n);
+        const uintx_t one = mm.convert(1), minus_one = mm.convert(n - 1);
+        uintx_t d = n - 1;
+        while (!(d & 1)) d >>= 1;
+
+        #define LOOP uintx_t t = d, y = mm.pow(mm.convert(a), d); \
+                     while (t != n - 1 && !mm.equiv(y, one) && !mm.equiv(y, minus_one)) y = mm.mul(y, y), t <<= 1; \
+                     if (!mm.equiv(y, minus_one) && !(t & 1)) return false
+        
+        if constexpr (sizeof(T) <= 4) for (uintx_t a : {2, 7, 61}) { LOOP; }
+        else                          for (uintx_t a : {2, 325, 9375, 28178, 450775, 9780504, 1795265022}) { LOOP; }
+
+        #undef LOOP
+
+        return true;
     }
     template<uint64_t n> constexpr bool is_prime_64_bit_v = is_prime_constexpr(n);
 

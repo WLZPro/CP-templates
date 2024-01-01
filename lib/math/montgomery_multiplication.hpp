@@ -27,6 +27,8 @@ class montgomery_multiplication {
         return ans;
     }
 
+    constexpr bool equiv(uintx_t x, uintx_t y) { return (x >= md ? x - md : x) == (y >= md ? y - md : y); }    
+
     constexpr uintx_t mod() const { return md; }
 
     constexpr uintx_t convert(uintx_t x) const { return reduce(static_cast<uint2x_t>(x) * n2); }
@@ -42,5 +44,6 @@ class montgomery_multiplication {
 using montgomery_multiplication_32 = montgomery_multiplication<uint32_t, uint64_t>;
 using montgomery_multiplication_64 = montgomery_multiplication<uint64_t, __uint128_t>;
 
-template<int id> montgomery_multiplication_32 global_montgomery_multiplication_32;
-template<int id> montgomery_multiplication_64 global_montgomery_multiplication_64;
+template<typename uintx_t, typename uint2x_t, int id> montgomery_multiplication<uintx_t, uint2x_t> global_montgomery_multiplication;
+template<int id> montgomery_multiplication_32 &global_montgomery_multiplication_32 = global_montgomery_multiplication<uint32_t, uint64_t, id>;
+template<int id> montgomery_multiplication_64 &global_montgomery_multiplication_64 = global_montgomery_multiplication<uint64_t, __uint128_t, id>;
