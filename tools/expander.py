@@ -65,7 +65,9 @@ class Expander:
 
     def expand(self, source: str) -> str:
         self.included = set()
-        result = []  # type: List[str]
+        result = ["#pragma GCC optimize(\"O3,unroll-loops\")",
+                  "#pragma GCC target(\"avx2,bmi,bmi2,lzcnt,popcnt\")",
+                  ""]  # type: List[str]
         for line in source.splitlines():
             m = self.atcoder_include.match(line)
             if m:
