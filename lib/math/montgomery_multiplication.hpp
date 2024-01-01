@@ -27,13 +27,18 @@ class montgomery_multiplication {
         return ans;
     }
 
-    constexpr bool equiv(uintx_t x, uintx_t y) { return (x >= md ? x - md : x) == (y >= md ? y - md : y); }    
+    constexpr bool equiv(uintx_t x, uintx_t y) const { return (x >= md ? x - md : x) == (y >= md ? y - md : y); }    
 
     constexpr uintx_t mod() const { return md; }
 
     constexpr uintx_t convert(uintx_t x) const { return reduce(static_cast<uint2x_t>(x) * n2); }
 
     constexpr uintx_t reduce(uint2x_t x) const { return (x + static_cast<uint2x_t>(static_cast<uintx_t>(x) * r) * md) >> w; }
+
+    constexpr uintx_t val(uintx_t x) const {
+        uintx_t y = reduce(x);
+        return y >= md ? y - md : y;
+    }
 
     private:
     static constexpr int w = std::numeric_limits<uintx_t>::digits;
