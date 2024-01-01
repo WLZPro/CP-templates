@@ -2,6 +2,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#ifdef DEBUG
+#include "debug.hpp"
+#else
+#define debug(...)
+#endif
+
 #include "util/fast_io.hpp"
 #include "math/primes.hpp"
 
