@@ -8,7 +8,7 @@
 
 namespace primes {
 
-    int computed_up_to = -1;
+    int computed_up_to = 0;
     std::vector<int> primes;
     std::vector<bool> is_prime_v = {false, false};
 
@@ -52,8 +52,9 @@ namespace primes {
     // Assumptions: `1 <= n <= 1e18`
     template<typename T>
     constexpr bool is_prime_constexpr(T n) {
-        if constexpr (sizeof(T) > 4) if (n <= std::numeric_limits<uint32_t>::max()) return is_prime_constexpr<uint32_t>(n);
+        if constexpr (sizeof(T) > 4) if (n <= (std::numeric_limits<uint32_t>::max() >> 2)) return is_prime_constexpr<uint32_t>(n);
         if constexpr (sizeof(T) <= 4) {
+            if (n > (std::numeric_limits<uint32_t>::max() >> 2)) return is_prime_constexpr<uint64_t>(n);
             if (n == 1) return false;
             if (n == 2 || n == 7 || n == 61) return true;
         }
@@ -82,7 +83,7 @@ namespace primes {
 
     template<typename T>
     bool is_prime(T n) {
-        if (n <= computed_up_to) return is_prime_v[n];
+        if (n <= static_cast<T>(computed_up_to)) return is_prime_v[n];
         return is_prime_constexpr(n);
     }
 };
