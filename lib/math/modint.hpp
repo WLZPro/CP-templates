@@ -15,7 +15,7 @@ class modint {
     constexpr modint() : x(0) {}
 
     template<typename T>
-    constexpr modint(const T &_x, bool raw = false) { set(_x, raw); }
+    constexpr modint(const T &_x, bool raw = false) : x() { set(_x, raw); }
 
     template<typename T>
     constexpr mint &operator=(const T &_x) { set(_x); return *this; }

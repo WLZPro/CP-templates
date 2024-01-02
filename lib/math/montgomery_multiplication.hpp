@@ -8,7 +8,7 @@ template<typename uintx_t, typename uint2x_t>
 class montgomery_multiplication {
     public:
     constexpr montgomery_multiplication() {}
-    constexpr montgomery_multiplication(uintx_t _md) { set_mod(_md); }
+    constexpr montgomery_multiplication(uintx_t _md) : md(), n2(), r() { set_mod(_md); }
 
     constexpr void set_mod(uintx_t _md) {
         md = _md; n2 = -static_cast<uint2x_t>(md) % md; r = md;
