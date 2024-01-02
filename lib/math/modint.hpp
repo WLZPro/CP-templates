@@ -4,6 +4,7 @@
 
 #include "math/mod_operations.hpp"
 #include "math/mod_inverse.hpp"
+#include "math/miller_rabin.hpp"
 
 template<uint32_t md>
 class modint {
@@ -106,7 +107,7 @@ class modint {
     static void compute_inverses(int n) {
         if (n <= invs_up_to) return;
         _inv.resize(n + 1);
-        if constexpr (primes::is_prime_64_bit_v<md>)
+        if constexpr (is_prime(md))
             for (uint32_t a = invs_up_to + 1; a <= static_cast<uint32_t>(n); a++) _inv[a] = md - mul_mod(md / a, _inv[md % a], md);
         else 
             for (uint32_t a = invs_up_to + 1; a <= static_cast<uint32_t>(n); a++) _inv[a] = inv_constexpr(a);

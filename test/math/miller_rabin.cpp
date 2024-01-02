@@ -9,15 +9,15 @@ using namespace std;
 #endif
 
 #include "util/fast_io.hpp"
-#include "math/primes.hpp"
+#include "math/miller_rabin.hpp"
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
 
     int t; cin >> t;
     while (t--) {
-        unsigned long long n; cin >> n;
-        if (primes::is_prime_constexpr(n)) cout << "Yes\n";
+        long long n; cin >> n;
+        if (is_prime(n)) cout << "Yes\n";
         else cout << "No\n";
     }
     return 0;

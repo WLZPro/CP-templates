@@ -1,6 +1,7 @@
 #pragma once
 
 #include "math/montgomery_multiplication.hpp"
+#include "math/miller_rabin.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -49,38 +50,6 @@ namespace primes {
         }
     }
     
-    // Assumptions: `1 <= n <= 1e18`
-    template<typename T>
-    constexpr bool is_prime_constexpr(T n) {
-        if constexpr (sizeof(T) > 4) if (n <= (std::numeric_limits<uint32_t>::max() >> 2)) return is_prime_constexpr<uint32_t>(n);
-        if constexpr (sizeof(T) <= 4) {
-            if (n > (std::numeric_limits<uint32_t>::max() >> 2)) return is_prime_constexpr<uint64_t>(n);
-            if (n == 1) return false;
-            if (n == 2 || n == 7 || n == 61) return true;
-        }
-        if (!(n & 1)) return false;
-
-        using uintx_t = std::conditional_t<(sizeof(T) <= 4), uint32_t, uint64_t>;
-        using uint2x_t = std::conditional_t<(sizeof(T) <= 4), uint64_t, __uint128_t>;
-        
-        const montgomery_multiplication<uintx_t, uint2x_t> mm(n);
-        const uintx_t one = mm.convert(1), minus_one = mm.convert(n - 1);
-        uintx_t d = n - 1;
-        while (!(d & 1)) d >>= 1;
-
-        #define LOOP uintx_t t = d, y = mm.pow(mm.convert(a), d); \
-                     while (t != static_cast<uintx_t>(n - 1) && !mm.equiv(y, one) && !mm.equiv(y, minus_one)) y = mm.mul(y, y), t <<= 1; \
-                     if (!mm.equiv(y, minus_one) && !(t & 1)) return false
-        
-        if constexpr (sizeof(T) <= 4) for (uintx_t a : {2, 7, 61}) { LOOP; }
-        else                          for (uintx_t a : {2, 325, 9375, 28178, 450775, 9780504, 1795265022}) { LOOP; }
-
-        #undef LOOP
-
-        return true;
-    }
-    template<uint64_t n> constexpr bool is_prime_64_bit_v = is_prime_constexpr(n);
-
     template<typename T>
     bool is_prime(T n) {
         if (n <= static_cast<T>(computed_up_to)) return is_prime_v[n];

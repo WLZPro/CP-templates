@@ -13,18 +13,19 @@ using namespace std;
 
 using mint = modint998244353;
 
-constexpr mint a = 5;
-constexpr mint b = a + a, c = b - a, d = a * a;
-constexpr mint e = a.inv_constexpr(), f = a * e;
-constexpr int g = a.val();
-constexpr long long h = (long long) a;
-constexpr bool b1 = f == 1;
-
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
 
+    constexpr mint a = 5;
+    constexpr mint b = a + a, c = b - a, d = a * a;
+    constexpr mint e = a.inv_constexpr(), f = a * e;
+    constexpr int g = a.val();
+    constexpr long long h = (long long) a;
+    constexpr bool b1 = f == 1;
+
     mint x = 1; x++; x--; ++x; --x;
     mint y = 1; x += y; x -= y; x *= y; x /= y;
+    x == y; x != y; x > y; x < y; x >= y; x <= y;
 
     cin >> y; cout << y;
 

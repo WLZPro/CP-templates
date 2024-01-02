@@ -1,7 +1,7 @@
 #pragma once
 
 #include "math/mod_operations.hpp"
-#include "math/primes.hpp"
+#include "math/miller_rabin.hpp"
 
 // Assumptions: `0 <= a < md`
 template<typename T>
@@ -20,6 +20,6 @@ constexpr T inv_mod(const T &a, const T &md) {
 // Assumptions: `0 <= a < md`
 template<typename T, T md>
 constexpr T inv_mod(const T &a) {
-    if constexpr (primes::is_prime_64_bit_v<static_cast<uint64_t>(md)>) return inv_mod_prime(a, md);
+    if constexpr (is_prime(md)) return inv_mod_prime(a, md);
     return inv_mod(a, md);
 }

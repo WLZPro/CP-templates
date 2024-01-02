@@ -69,9 +69,11 @@
 - [Linear floor sum](https://judge.yosupo.jp/problem/sum_of_floor_of_linear) ($N, M \leq 10^9$): [52 ms](https://judge.yosupo.jp/submission/173167)
 
 ### Prime numbers and arithmetic functions (primes.hpp)
-- [Deterministic primality test](https://judge.yosupo.jp/problem/primality_test) ($T \leq 10^5$, $N \leq 10^{18}$): [149 ms](https://judge.yosupo.jp/submission/180791)
 - Correctness of Möbius function: [231246540](https://codeforces.com/contest/1845/submission/231246540)
 - Correctness of Euler phi function: [231246194](https://codeforces.com/contest/1797/submission/231246194)
+
+### Miller-Rabin Primality Test (miller_rabin.hpp)
+- [Deterministic primality test](https://judge.yosupo.jp/problem/primality_test) ($T \leq 10^5$, $N \leq 10^{18}$): [147 ms](https://judge.yosupo.jp/submission/181021)
 
 ### Integer factorization (factorization.cpp)
 - [Integer factorization](https://judge.yosupo.jp/problem/factorize) ($T \leq 100$, $N \leq 10^{18}$): [24 ms](https://judge.yosupo.jp/submission/180838)
