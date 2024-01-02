@@ -2,20 +2,23 @@
 
 #include <numeric>
 #include <vector>
+#include <type_traits>
 
 #include "math/primes.hpp"
 #include "math/mod_operations.hpp"
 
 // https://cp-algorithms.com/algebra/factorization.html#implementation_1
-// Assumptions: `1 <= n <= 7.2e18`, `n` is not prime
-template<typename T>
+// Assumptions: `1 <= n <= 1e18`, `n` is not prime
+template<typename T, std::enable_if_t<(std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>)>* = nullptr>
 constexpr T nontrivial_divisor(T n, const T &x0 = 2, T c = 1) {
     if (!(n & 1)) return 2;
-    if constexpr (sizeof(T) > 4)  if (n <= (std::numeric_limits<uint32_t>::max() >> 2)) return nontrivial_divisor<uint32_t>(n);
-    if constexpr (sizeof(T) <= 4) if (n >  (std::numeric_limits<uint32_t>::max() >> 2)) return nontrivial_divisor<uint64_t>(n);
 
-    using uintx_t  = std::conditional_t<(sizeof(T) <= 4), uint32_t, uint64_t>;
-    using uint2x_t = std::conditional_t<(sizeof(T) <= 4), uint64_t, __uint128_t>;
+    constexpr uint32_t uint32_t_threshold = std::numeric_limits<uint32_t>::max() >> 2;
+    if constexpr (sizeof(T) == 8) if (n <= uint32_t_threshold) return nontrivial_divisor<uint32_t>(n);
+    if constexpr (sizeof(T) == 4) if (n >  uint32_t_threshold) return nontrivial_divisor<uint64_t>(n);
+
+    using uintx_t  = T;
+    using uint2x_t = std::conditional_t<(sizeof(T) == 4), uint64_t, __uint128_t>;
 
     const montgomery_multiplication<uintx_t, uint2x_t> mm(n);
 
@@ -44,18 +47,25 @@ constexpr T nontrivial_divisor(T n, const T &x0 = 2, T c = 1) {
             }
             l <<= 1;
         }
-        if (g == static_cast<uintx_t>(n)) {
+        if (g == n) {
             do {
                 f_eq(xs);
                 g = std::gcd(abs_diff(mm.val(xs), mm.val(y)), n);
             } while (g == 1);
         }
-        if (g != 1 && g != static_cast<uintx_t>(n)) return g;
+        if (g != 1 && g != n) return g;
     }
 
     #undef abs_diff
 
     __builtin_unreachable();
+}
+
+// Assumptions: `1 <= n <= 1e18`, `n` is not prime
+template<typename T, std::enable_if_t<(!std::is_same_v<T, uint32_t> && !std::is_same_v<T, uint64_t>)>* = nullptr>
+constexpr T nontrivial_divisor(T n) {
+    if constexpr (sizeof(T) <= 4) return nontrivial_divisor<uint32_t>(n);
+    else                          return nontrivial_divisor<uint64_t>(n);
 }
 
 template<typename T>

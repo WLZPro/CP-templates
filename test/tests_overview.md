@@ -76,7 +76,7 @@
 - [Deterministic primality test](https://judge.yosupo.jp/problem/primality_test) ($T \leq 10^5$, $N \leq 10^{18}$): [147 ms](https://judge.yosupo.jp/submission/181021)
 
 ### Integer factorization (factorization.cpp)
-- [Integer factorization](https://judge.yosupo.jp/problem/factorize) ($T \leq 100$, $N \leq 10^{18}$): [24 ms](https://judge.yosupo.jp/submission/180838)
+- [Integer factorization](https://judge.yosupo.jp/problem/factorize) ($T \leq 100$, $N \leq 10^{18}$): [23 ms](https://judge.yosupo.jp/submission/181023)
 
 ### Matrices (matrix.hpp)
 - [Matrix multiplication (mod 998244353)](https://judge.yosupo.jp/problem/matrix_product) ($N, M, K \leq 1024$): [1515 ms](https://judge.yosupo.jp/submission/170039)

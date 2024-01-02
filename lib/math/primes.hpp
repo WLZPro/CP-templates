@@ -53,6 +53,6 @@ namespace primes {
     template<typename T>
     bool is_prime(T n) {
         if (n <= static_cast<T>(computed_up_to)) return is_prime_v[n];
-        return is_prime_constexpr(n);
+        return ::is_prime(n);
     }
 };
