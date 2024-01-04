@@ -78,6 +78,9 @@
 ### Integer factorization (factorization.cpp)
 - [Integer factorization](https://judge.yosupo.jp/problem/factorize) ($T \leq 100$, $N \leq 10^{18}$): [23 ms](https://judge.yosupo.jp/submission/181023)
 
+### Primitive Root (primitive_root.hpp)
+- [Primitive root modulo a prime](https://judge.yosupo.jp/problem/primitive_root) ($T \leq 100, p \leq 10^{18}$): [12 ms](https://judge.yosupo.jp/submission/181478)
+
 ### Matrices (matrix.hpp)
 - [Matrix multiplication (mod 998244353)](https://judge.yosupo.jp/problem/matrix_product) ($N, M, K \leq 1024$): [1515 ms](https://judge.yosupo.jp/submission/170039)
 - [Correctness of matrix exponentiation (mod 1000000007)](https://cses.fi/problemset/task/1096/): [7595524](https://cses.fi/paste/8ecd1ba48e13c19873e604/)
