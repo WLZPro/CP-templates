@@ -115,6 +115,7 @@ class modint {
     }
 
     static void compute_factorials(int n) {
+        if (n <= fact_up_to) return;
         compute_inverses(n);
         _fact.resize(n + 1); _inv_fact.resize(n + 1);
         for (uint32_t a = fact_up_to + 1; a <= static_cast<uint32_t>(n); a++) {
@@ -132,8 +133,14 @@ class modint {
         if (n <= invs_up_to) return mint(_inv[n], true);
         return inv_constexpr(n);
     }
-    static mint fact(int n) { compute_factorials(n); return mint(_fact[n], true); }
-    static mint inv_fact(int n) { compute_factorials(n); return mint(_inv_fact[n], true); }
+    static mint fact(int n) {
+        if (n > fact_up_to) compute_factorials(n);
+        return mint(_fact[n], true);
+    }
+    static mint inv_fact(int n) {
+        if (n > fact_up_to) compute_factorials(n);
+        return mint(_inv_fact[n], true);
+    }
 
     static mint binom(int n, int k) {
         if (k < 0 || k > n) return mint(0, true);
