@@ -23,7 +23,7 @@ class modint {
 
     template<typename T>
     constexpr void set(const T &_x, bool raw = false) {
-        if (raw || (0 <= _x && _x < static_cast<T>(md))) x = _x;
+        if (raw || (0 <= _x && static_cast< std::make_unsigned_t<T> >(_x) < md)) x = _x;
         else {
             long long tmp = _x % static_cast<int>(md);
             if (tmp < 0) tmp += md;

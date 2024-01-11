@@ -22,6 +22,7 @@ int main() {
     constexpr int g = a.val();
     constexpr long long h = (long long) a;
     constexpr bool b1 = f == 1;
+    constexpr mint i(100000000ull * mint::mod + 12480593ull), j((char) 20);
 
     mint x = 1; x++; x--; ++x; --x;
     mint y = 1; x += y; x -= y; x *= y; x /= y;
