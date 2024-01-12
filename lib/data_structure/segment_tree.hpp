@@ -40,6 +40,7 @@ class segment_tree {
         for (st[idx += n] = val; idx >>= 1; ) st[idx] = _Mn::op(st[idx << 1], st[idx << 1 | 1]);
     }
 
+    // Warning: arbitary order
     const T &query_all() const { return st[1]; }
 
     const T &query(int idx) const { return st[idx + n]; }

@@ -99,6 +99,7 @@ class lazy_segment_tree {
         }
     }
 
+    // // Warning: arbitary order
     const T &query_all() const { return st[1]; }
 
     const T &query(int idx) {
