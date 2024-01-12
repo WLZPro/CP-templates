@@ -17,11 +17,10 @@ int main() {
 
     int n, q; cin >> n >> q;
     
-    fenwick_tree< addition<long long> > fenw(n);
-    for (int i = 0; i < n; i++) {
-        int a; cin >> a;
-        fenw.update(i, a);
-    }
+    vector<long long> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+
+    fenwick_tree< addition<long long> > fenw(a);
 
     while (q--) {
         int t, x, y; cin >> t >> x >> y;

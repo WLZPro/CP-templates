@@ -4,36 +4,49 @@
 
 #include <vector>
 
-template<typename _Ag>
+// https://github.com/the-tourist/algo/blob/master/data/fenwick.cpp
+template<typename G>
 class fenwick_tree {
     public:
-    using T = typename _Ag::T;
+    using T = typename G::T;
 
     fenwick_tree() : n(0) {}
-    explicit fenwick_tree(int _n) : n(_n), fenw(n, _Ag::e) {
+    explicit fenwick_tree(int _n) : n(_n), fenw(n, G::e) {
         #ifdef DEBUG
-        _dbg.assign(n, _Ag::e);
+        _dbg.assign(n, G::e);
         #endif
     }
     
-    void update(int idx, const T &val) {
+    // https://codeforces.com/blog/entry/63064
+    explicit fenwick_tree(const std::vector<T> &a) : fenwick_tree(a.size()) {
         #ifdef DEBUG
-        _dbg[idx] = _Ag::op(_dbg[idx], val);
+        _dbg = a;
         #endif
 
-        for (; idx < n; idx |= (idx + 1)) fenw[idx] = _Ag::op(fenw[idx], val);
+        for (int i = 0; i < n; i++) {
+            fenw[i] = G::op(fenw[i], a[i]);
+            if ((i | (i + 1)) < n) fenw[i | (i + 1)] = G::op(fenw[i | (i + 1)], fenw[i]);
+        }
+    }
+
+    void update(int idx, const T &val) {
+        #ifdef DEBUG
+        _dbg[idx] = G::op(_dbg[idx], val);
+        #endif
+
+        for (; idx < n; idx |= (idx + 1)) fenw[idx] = G::op(fenw[idx], val);
     }
 
     T query(int idx) const {
-        T ans = _Ag::e;
-        for (; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = _Ag::op(ans, fenw[idx]);
+        T ans = G::e;
+        for (; idx >= 0; idx = (idx & (idx + 1)) - 1) ans = G::op(ans, fenw[idx]);
         return ans;
     }
 
     T query(int l, int r) const {
-        if (l > r) return _Ag::e;
+        if (l > r) return G::e;
         if (l == 0) return query(r);
-        return _Ag::op(query(r), _Ag::inv(query(l - 1)));
+        return G::op(query(r), G::inv(query(l - 1)));
     };
 
     T operator[](int idx) const { return query(idx, idx); }

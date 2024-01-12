@@ -6,7 +6,7 @@
 - [Large index accesses](https://judge.yosupo.jp/problem/associative_array) ($Q \leq 10^6$): `safe_unordered_map`: [528 ms](https://judge.yosupo.jp/submission/178294), `safe_gp_hash_table`: [243 ms](https://judge.yosupo.jp/submission/178295)
 
 ### Fenwick Tree (fenwick_tree.hpp)
-- [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [57 ms](https://judge.yosupo.jp/submission/175608)
+- [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [57 ms](https://judge.yosupo.jp/submission/183061)
 
 ### Segment Tree (segment_tree.hpp)
 - [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [98 ms](https://judge.yosupo.jp/submission/175610)
