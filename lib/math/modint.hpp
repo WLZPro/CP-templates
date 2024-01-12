@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "util/type_traits.hpp"
 #include "math/mod_operations.hpp"
 #include "math/mod_inverse.hpp"
 #include "math/miller_rabin.hpp"
@@ -23,9 +24,9 @@ class modint {
 
     template<typename T>
     constexpr void set(const T &_x, bool raw = false) {
-        if (raw || (0 <= _x && static_cast< std::make_unsigned_t<T> >(_x) < md)) x = _x;
+        if (raw || (0 <= _x && static_cast< make_unsigned_better_t<T> >(_x) < md)) x = _x;
         else {
-            long long tmp = _x % static_cast<int>(md);
+            int32_t tmp = _x % static_cast<int32_t>(md);
             if (tmp < 0) tmp += md;
             x = static_cast<uint32_t>(tmp);
         }
