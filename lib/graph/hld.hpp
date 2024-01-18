@@ -110,8 +110,8 @@ class heavy_light_decomposition {
             st_up.update(n - tin[v] - 1, n - tin[head[v]] - 1, f);
         }
         if (d[u] > d[v]) std::swap(u, v);
-        st_down.update(tin[u], tin[v]);
-        st_up.update(n - tin[v] - 1, n - tin[u] - 1);
+        st_down.update(tin[u], tin[v], f);
+        st_up.update(n - tin[v] - 1, n - tin[u] - 1, f);
     }
 
     // Warning: arbitary order
