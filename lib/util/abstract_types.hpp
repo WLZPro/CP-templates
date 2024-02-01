@@ -5,6 +5,7 @@
 struct _null_t { using T = _null_t; };
 
 // Semigroup, Monoid, Group, AbelianGroup
+// DO NOT use as update with addition
 template<typename _T>
 struct addition {
     using T = _T;
@@ -54,6 +55,7 @@ struct addition_with_sum {
 };
 template<typename T> constexpr bool has_map_with_implicit_size_v< addition_with_sum<T> > = true;
 
+// DO NOT use with addition
 template<typename _T>
 struct assignment {
     using T = _T;
@@ -61,6 +63,16 @@ struct assignment {
     static constexpr T map(const T &x, const T&) { return x; }
     static constexpr T comp(const T &x, const T&) { return x; }
 };
+
+template<typename _T>
+struct assignment_with_sum {
+    using T = _T;
+
+    static constexpr T map(const T &x, const T&) { return x; }
+    static constexpr T map(const T &x, const T&, int sz) { return x * sz; }
+    static constexpr T comp(const T &x, const T&) { return x; }
+};
+template<typename T> constexpr bool has_map_with_implicit_size_v< assignment_with_sum<T> > = true;
 
 template<typename S>
 struct range_affine {
