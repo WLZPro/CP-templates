@@ -14,8 +14,8 @@
 - [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [93 ms](https://judge.yosupo.jp/submission/175612)
 - [Point modification, range linear function composition](https://judge.yosupo.jp/problem/point_set_range_composite) ($N, Q \leq 5 \times 10^5$): [149 ms](https://judge.yosupo.jp/submission/168743)
 
-### crazySegmentTree (segment_tree_crazy.hpp)
-- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [75 ms](https://judge.yosupo.jp/submission/168740)
+### AVX Segment Tree (segment_tree_avx.hpp)
+- [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [103 ms](https://judge.yosupo.jp/submission/188379)
 
 ### Lazy Segment Tree (segment_tree_lazy.hpp)
 - [Range $a_i \leftarrow c \cdot a_i + d$ updates, range sums](https://judge.yosupo.jp/problem/range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [588 ms](https://judge.yosupo.jp/submission/179964)
