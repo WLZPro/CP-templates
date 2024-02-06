@@ -36,6 +36,9 @@
 - [Range reversals, range sum](https://judge.yosupo.jp/problem/range_reverse_range_sum) ($N, Q \leq 2 \times 10^5$): [450 ms](https://judge.yosupo.jp/submission/179324)
 - [Static range reversals](https://codeforces.com/contest/1878/problem/D) ($N, Q \leq 2 \times 10^5$): [436 ms](https://codeforces.com/contest/1878/submission/236327907)
 
+### Wavelet Tree (wavelet_tree.hpp)
+- [Range k-th smallest](https://judge.yosupo.jp/problem/range_kth_smallest) ($N, Q \leq 2 \times 10^5$): [442 ms](https://judge.yosupo.jp/submission/188997)
+
 ### Union Find (union_find.hpp)
 - [Union find](https://judge.yosupo.jp/problem/unionfind) ($N, Q \leq 2 \times 10^5$): [10 ms](https://judge.yosupo.jp/submission/175863)
 
