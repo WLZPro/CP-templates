@@ -66,6 +66,9 @@
 ### 2-SAT (two_sat.hpp)
 - [2-SAT](https://judge.yosupo.jp/problem/two_sat) ($N, M \leq 5 \times 10^5$): [460 ms](https://judge.yosupo.jp/submission/178524)
 
+### $k$ Shortest Walks (k_shortest_walks.cpp)
+- [$k$ Shortest Walks](https://judge.yosupo.jp/problem/k_shortest_walk) ($N, M, K \leq 3 \times 10^5$): [181 ms](https://judge.yosupo.jp/submission/192151)
+
 ## Math
 
 ### Linear floor sum (linear_floor_sum.hpp)
