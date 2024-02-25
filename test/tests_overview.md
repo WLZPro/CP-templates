@@ -69,6 +69,10 @@
 ### $k$ Shortest Walks (k_shortest_walks.cpp)
 - [$k$ Shortest Walks](https://judge.yosupo.jp/problem/k_shortest_walk) ($N, M, K \leq 3 \times 10^5$): [181 ms](https://judge.yosupo.jp/submission/192151)
 
+### Maximum Flow - Dinic's Algorithm (flow/dinic.cpp)
+- [Maximum Flow](https://cses.fi/problemset/task/1694/): ($N \leq 500, M \leq 1000$): [8561749](https://cses.fi/paste/956a8ab820c14c0382a0e2/)
+- [Maximum Flow, undirected](https://www.spoj.com/problems/FASTFLOW/) ($N \leq 5000, M \leq 3 \times 10^4$): [32684599](https://www.spoj.com/status/ns=32684599)
+
 ## Math
 
 ### Linear floor sum (linear_floor_sum.hpp)
