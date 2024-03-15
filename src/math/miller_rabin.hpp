@@ -17,7 +17,11 @@ constexpr bool is_prime(T n) {
     if (!(n & 1)) return false;
 
     using uintx_t  = T;
+    #ifdef __SIZEOF_INT128__
     using uint2x_t = std::conditional_t<(sizeof(T) == 4), uint64_t, __uint128_t>;
+    #else
+    using uint2x_t = uint64_t;
+    #endif
     
     const montgomery_multiplication<uintx_t, uint2x_t> mm(n);
     const uintx_t one = mm.convert(1), minus_one = mm.convert(n - 1);

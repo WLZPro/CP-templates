@@ -47,8 +47,7 @@ class montgomery_multiplication {
 };
 
 using montgomery_multiplication_32 = montgomery_multiplication<uint32_t, uint64_t>;
-using montgomery_multiplication_64 = montgomery_multiplication<uint64_t, __uint128_t>;
 
-template<typename uintx_t, typename uint2x_t, int id> montgomery_multiplication<uintx_t, uint2x_t> global_montgomery_multiplication;
-template<int id> montgomery_multiplication_32 &global_montgomery_multiplication_32 = global_montgomery_multiplication<uint32_t, uint64_t, id>;
-template<int id> montgomery_multiplication_64 &global_montgomery_multiplication_64 = global_montgomery_multiplication<uint64_t, __uint128_t, id>;
+#ifdef __SIZEOF_INT128__
+using montgomery_multiplication_64 = montgomery_multiplication<uint64_t, __uint128_t>;
+#endif

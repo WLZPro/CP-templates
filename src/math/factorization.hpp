@@ -18,7 +18,9 @@ constexpr T nontrivial_divisor(T n, const T &x0 = 2, T c = 1) {
     if constexpr (sizeof(T) == 4) if (n >  uint32_t_threshold) return nontrivial_divisor<uint64_t>(n);
 
     using uintx_t  = T;
+    #ifdef __SIZEOF_INT128__
     using uint2x_t = std::conditional_t<(sizeof(T) == 4), uint64_t, __uint128_t>;
+    #endif
 
     const montgomery_multiplication<uintx_t, uint2x_t> mm(n);
 

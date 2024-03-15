@@ -18,6 +18,7 @@ constexpr T sub_mod(T a, T b, T md) {
     return a - b;
 }
 
+#ifdef __SIZEOF_INT128__
 // Assumptions: `0 <= a, b < md`
 template<typename T>
 constexpr T mul_mod_safe(T a, T b, T md) {
@@ -28,6 +29,7 @@ constexpr T mul_mod_safe(T a, T b, T md) {
         return (static_cast<__uint128_t>(a) * b) % md;
     }
 }
+#endif
 
 // https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/ModMulLL.h
 // Assumptions: `0 <= a, b < md <= 7.2e18`
