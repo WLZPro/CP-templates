@@ -2,7 +2,7 @@
 #define POLYNOMIAL_FFT_HPP 1
 
 #include "math/modint.hpp"
-#include "polynomial/polynomial.hpp"
+#include "math/polynomial/polynomial.hpp"
 
 #include <complex>
 #include <vector>

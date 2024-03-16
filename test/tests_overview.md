@@ -98,15 +98,16 @@
 ### GCD Convolution (gcd_convolution.hpp)
 - [GCD Convolution (mod 998244353)](https://judge.yosupo.jp/problem/gcd_convolution) ($N \leq 10^6$): [123 ms](https://judge.yosupo.jp/submission/170565)
 
-## 128-bit Integers (int128.hpp)
+### 128-bit Integers (int128.hpp)
 - [Many A + B (128 bit)](https://judge.yosupo.jp/problem/many_aplusb_128bit) ($N \leq 5 \times 10^5$): [568 ms](https://judge.yosupo.jp/submission/178276)
 
-## Polynomials
-
-### Fast Fourier Transform (fft.hpp)
+### Fast Fourier Transform (polynomial/fft.hpp)
 - [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [205 ms](https://judge.yosupo.jp/submission/168967)
 
-### Power series (power_series.hpp)
+### Number Theoretic Transform using Montgomery Multiplication (polynomial/ntt_montgomery.hpp)
+- [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [79 ms](https://judge.yosupo.jp/submission/197143)
+
+### Power series (polynomial/power_series.hpp)
 - [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [641 ms](https://judge.yosupo.jp/submission/176511)
 - [Logarithm of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [958 ms](https://judge.yosupo.jp/submission/176510)
 - [Exponential of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/exp_of_formal_power_series) ($N \leq 5 \times 10^5$): [1245 ms](https://judge.yosupo.jp/submission/176508)

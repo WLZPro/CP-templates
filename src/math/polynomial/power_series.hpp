@@ -1,8 +1,8 @@
 #ifndef POLYNOMIAL_POWER_SERIES_HPP
 #define POLYNOMIAL_POWER_SERIES_HPP 1
 
-#include "polynomial/polynomial.hpp"
-#include "polynomial/fft.hpp"
+#include "math/polynomial/polynomial.hpp"
+#include "math/polynomial/fft.hpp"
 
 #include <algorithm>
 
