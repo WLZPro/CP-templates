@@ -113,6 +113,9 @@
 ### Power Series Logarithm (polynomial/power_series_log.hpp)
 - [Logarithm of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [199 ms](https://judge.yosupo.jp/submission/197425)
 
+### Euclidean Division (div_mod) of Polynomials (polynomial/euclidean_division.hpp)
+- [Euclidean Division of Polynomials](https://judge.yosupo.jp/problem/division_of_polynomials) ($N, M \leq 5 \times 10^5$): [329 ms](https://judge.yosupo.jp/submission/197988)
+
 ### Power series (polynomial/power_series.hpp)
 - [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [641 ms](https://judge.yosupo.jp/submission/176511)
 - [Logarithm of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [958 ms](https://judge.yosupo.jp/submission/176510)
