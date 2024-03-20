@@ -1,4 +1,9 @@
 // https://judge.yosupo.jp/submission/193613
+#include <cstring>
+#include <cstdint>
+#include <array>
+#include <tuple>
+
 struct IOPre {
     static constexpr int TEN = 10, SZ = TEN * TEN * TEN * TEN;
     std::array<char, 4 * SZ> num;
