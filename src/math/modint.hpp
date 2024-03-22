@@ -71,7 +71,7 @@ class modint {
     constexpr friend mint operator-(mint lhs, const mint &rhs) { return lhs -= rhs; }
 
     constexpr mint &operator*=(const mint &rhs) {
-        x = mul_mod(x, rhs.x, md);
+        x = mul(x, rhs.x);
         return *this;
     }
     constexpr friend mint operator*(mint lhs, const mint &rhs) { return lhs *= rhs; }
@@ -109,7 +109,7 @@ class modint {
         if (n <= invs_up_to) return;
         _inv.resize(n + 1);
         if constexpr (is_prime(md))
-            for (uint32_t a = invs_up_to + 1; a <= static_cast<uint32_t>(n); a++) _inv[a] = md - mul_mod(md / a, _inv[md % a], md);
+            for (uint32_t a = invs_up_to + 1; a <= static_cast<uint32_t>(n); a++) _inv[a] = md - mul(md / a, _inv[md % a]);
         else 
             for (uint32_t a = invs_up_to + 1; a <= static_cast<uint32_t>(n); a++) _inv[a] = inv_constexpr(a);
         invs_up_to = n;
@@ -120,8 +120,8 @@ class modint {
         compute_inverses(n);
         _fact.resize(n + 1); _inv_fact.resize(n + 1);
         for (uint32_t a = fact_up_to + 1; a <= static_cast<uint32_t>(n); a++) {
-            _fact[a] = mul_mod(_fact[a - 1], a, md);
-            _inv_fact[a] = mul_mod(_inv_fact[a - 1], _inv[a], md);
+            _fact[a] = mul(_fact[a - 1], a);
+            _inv_fact[a] = mul(_inv_fact[a - 1], _inv[a]);
         }
         fact_up_to = n;
     }
@@ -154,6 +154,18 @@ class modint {
     uint32_t x;
 
     static inline std::vector<uint32_t> _inv = {0, 1}, _fact = {1, 1}, _inv_fact = {1, 1};
+
+    // https://codeforces.com/blog/entry/73451
+    static constexpr uint32_t mul(uint32_t a, uint32_t b) {
+        uint64_t x = uint64_t(a) * b;
+        uint32_t xh = x >> 32, x1 = x, d, m;
+        asm(
+            "divl %4; \n\t"
+            : "=a" (d), "=d" (m)
+            : "d" (xh), "a" (x1), "r" (md)
+        );
+        return m;
+    }
 };
 
 using modint1000000007 = modint<1000000007>;
