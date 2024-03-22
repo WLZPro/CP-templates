@@ -36,6 +36,10 @@
 - [Range reversals, range sum](https://judge.yosupo.jp/problem/range_reverse_range_sum) ($N, Q \leq 2 \times 10^5$): [450 ms](https://judge.yosupo.jp/submission/179324)
 - [Static range reversals](https://codeforces.com/contest/1878/problem/D) ($N, Q \leq 2 \times 10^5$): [436 ms](https://codeforces.com/contest/1878/submission/236327907)
 
+### Implicit Splay Tree (splay_tree_implicit.hpp)
+- [Point insertion and deletion, range $a_i \leftarrow c \cdot a_i + d$ updates, range reversals, range sum queries](https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum) ($N, Q \leq 5 \times 10^5$): [1688 ms](https://judge.yosupo.jp/submission/198474)
+- [Range reversals, range sum](https://judge.yosupo.jp/problem/range_reverse_range_sum) ($N, Q \leq 2 \times 10^5$): [490 ms](https://judge.yosupo.jp/submission/198478)
+
 ### Wavelet Tree (wavelet_tree.hpp)
 - [Range k-th smallest](https://judge.yosupo.jp/problem/range_kth_smallest) ($N, Q \leq 2 \times 10^5$): [442 ms](https://judge.yosupo.jp/submission/188997)
 
