@@ -7,6 +7,7 @@
 
 ### Fenwick Tree (fenwick_tree.hpp)
 - [Point addition, range sum](https://judge.yosupo.jp/problem/point_add_range_sum) ($N, Q \leq 5 \times 10^5$): [57 ms](https://judge.yosupo.jp/submission/183061)
+- [Binary search function](https://codeforces.com/contest/1354/problem/D): [correctness](https://codeforces.com/contest/1354/submission/253465434)
 
 ### Segment Tree (segment_tree.hpp)
 - [Static range minimum](https://judge.yosupo.jp/problem/staticrmq) ($N, Q \leq 5 \times 10^5$): [98 ms](https://judge.yosupo.jp/submission/175610)

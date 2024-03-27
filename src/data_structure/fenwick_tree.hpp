@@ -3,6 +3,7 @@
 #include "util/abstract_types.hpp"
 
 #include <vector>
+#include <functional>
 
 // https://github.com/the-tourist/algo/blob/master/data/fenwick.cpp
 template<typename G>
@@ -44,12 +45,27 @@ class fenwick_tree {
     }
 
     T query(int l, int r) const {
+        l = std::max(0, l); r = std::min(n - 1, r);
         if (l > r) return G::e;
         if (l == 0) return query(r);
         return G::op(query(r), G::inv(query(l - 1)));
     };
 
     T operator[](int idx) const { return query(idx, idx); }
+
+    // https://codeforces.com/blog/entry/61364
+    // Find smallest `i` s.t. `p(a[0..i])` is true (`n` if no such `i`)
+    // Assumptions: `n > 0`, `p(a[0..i])` implies `p(a[0..i+1])`
+    template<typename P>
+    int search(const P &p) const {
+        // static_assert(std::is_convertible_v<P, std::function<bool(T)> >,
+        //               "p must be a unary predicate function");
+        int idx = -1; T v = G::e, nv;
+        for (int i = __lg(n); i >= 0; --i) 
+            if ((idx + (1 << i)) < n && !p(nv = G::op(v, fenw[idx + (1 << i)]))) 
+                idx += 1 << i, v = nv;
+        return idx + 1;
+    }
 
     friend std::string to_string(const fenwick_tree &ft) {
         #ifdef DEBUG
