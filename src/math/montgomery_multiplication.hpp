@@ -40,7 +40,7 @@ class montgomery_multiplication {
         return y >= md ? y - md : y;
     }
 
-    private:
+    protected:
     static constexpr int w = std::numeric_limits<uintx_t>::digits;
 
     uintx_t md, r, n2;

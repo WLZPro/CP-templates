@@ -110,7 +110,10 @@
 - [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [205 ms](https://judge.yosupo.jp/submission/168967)
 
 ### Number Theoretic Transform using Montgomery Multiplication (polynomial/ntt_montgomery.hpp)
-- [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [79 ms](https://judge.yosupo.jp/submission/197143)
+- [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [116 ms](https://judge.yosupo.jp/submission/197143)
+
+### Number Theoretic Transform using Montgomery Multiplication (AVX2) (polynomial/ntt_montgomery_avx2.hpp) 
+- [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [58 ms](https://judge.yosupo.jp/submission/197143)
 
 ### Power Series Inverse (polynomial/power_series_inv.hpp)
 - [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [107 ms](https://judge.yosupo.jp/submission/197344)
