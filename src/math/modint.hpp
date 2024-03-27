@@ -155,8 +155,17 @@ class modint {
 
     static inline std::vector<uint32_t> _inv = {0, 1}, _fact = {1, 1}, _inv_fact = {1, 1};
 
-    // https://codeforces.com/blog/entry/73451
     static constexpr uint32_t mul(uint32_t a, uint32_t b) {
+#if __cplusplus >= 202002L
+        if (std::is_constant_evaluated()) return uint64_t(a) * b % md;
+        else return mul_asm(a, b);
+#else
+        return uint64_t(a) * b % md;
+#endif
+    }
+
+    // https://codeforces.com/blog/entry/73451
+    static uint32_t mul_asm(uint32_t a, uint32_t b) {
         uint64_t x = uint64_t(a) * b;
         uint32_t xh = x >> 32, x1 = x, d, m;
         asm(
