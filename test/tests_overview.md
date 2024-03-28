@@ -116,7 +116,7 @@
 - [Convolution/polynomial multiplication (mod 998244353)](https://judge.yosupo.jp/problem/convolution_mod) ($N, M \leq 524288$): [58 ms](https://judge.yosupo.jp/submission/197143)
 
 ### Power Series Inverse (polynomial/power_series_inv.hpp)
-- [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [107 ms](https://judge.yosupo.jp/submission/197344)
+- [Inverse of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/inv_of_formal_power_series) ($N \leq 5 \times 10^5$): [189 ms](https://judge.yosupo.jp/submission/197344), [79 ms (AVX2)](https://judge.yosupo.jp/submission/199385)
 
 ### Power Series Logarithm (polynomial/power_series_log.hpp)
 - [Logarithm of Formal Power Series (mod 998244353)](https://judge.yosupo.jp/problem/log_of_formal_power_series) ($N \leq 5 \times 10^5$): [199 ms](https://judge.yosupo.jp/submission/197425)
